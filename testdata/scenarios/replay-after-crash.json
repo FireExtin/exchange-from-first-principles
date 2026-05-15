@@ -1,0 +1,5 @@
+{
+  "name": "replay-after-crash",
+  "description": "rebuild state from command log after a simulated crash"
+}
+

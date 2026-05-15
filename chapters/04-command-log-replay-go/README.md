@@ -1,0 +1,38 @@
+# 04 Command Log Replay
+
+Primitive: state changes are written as commands and events.
+
+Question: how do we recover after a crash and explain what happened?
+
+This chapter introduces an append-only command log, strict sequence checks, and
+deterministic replay into account state.
+
+It also contains a small equivalence test: a serializable DB transaction model
+and a sequenced state machine apply the same ordered commands and reach the
+same balances. This is the bridge from "DB rows are truth" to "ordered facts are
+truth".
+
+Run:
+
+```bash
+go test ./...
+```
+
+---
+
+## 中文
+
+原语：状态变更作为命令和事件写入。
+
+问题：崩溃后如何恢复并解释发生了什么？
+
+本章在账户状态中引入追加写命令日志、严格序列检查和确定性重放。
+
+它还包含一个小等价测试：可串行化 DB 事务模型和排序状态机应用相同的排序命令
+并达到相同的余额。这是"DB 行是真相"到"有序事实是真相"的桥梁。
+
+运行：
+
+```bash
+go test ./...
+```

@@ -1,0 +1,5 @@
+{"type":"deposited","seq":1,"account_id":1,"asset":"USD","amount":1000000}
+{"type":"deposited","seq":2,"account_id":2,"asset":"BTC","amount":100}
+{"type":"order_rested","seq":3,"order_id":1,"remaining":2}
+{"type":"trade_executed","seq":4,"maker_order_id":1,"taker_order_id":2,"price":10000,"quantity":1}
+

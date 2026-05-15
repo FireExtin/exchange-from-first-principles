@@ -1,0 +1,4 @@
+{"seq":1,"type":"account_credited","account_id":"alice","asset":"USD","amount":1000000,"ref":"initial-funding"}
+{"seq":2,"type":"account_credited","account_id":"bob","asset":"BTC","amount":100000000,"ref":"initial-funding"}
+{"seq":3,"type":"funds_reserved","account_id":"alice","asset":"USD","amount":10000,"ref":"order-1001"}
+{"seq":4,"type":"trade_settled","buyer":"alice","seller":"bob","base_asset":"BTC","quote_asset":"USD","base_amount":1000000,"quote_amount":10000,"ref":"trade-1"}

@@ -1,0 +1,25 @@
+plugins {
+    id "java"
+}
+
+group = "com.cheng.exchange"
+version = "0.1.0"
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+dependencies {
+    implementation "io.aeron:aeron-cluster:1.51.0"
+
+    testImplementation platform("org.junit:junit-bom:5.13.2")
+    testImplementation "org.junit.jupiter:junit-jupiter"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher"
+}
+
+test {
+    useJUnitPlatform()
+    jvmArgs "--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED"
+}

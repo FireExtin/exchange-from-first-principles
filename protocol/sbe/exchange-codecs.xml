@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messageSchema package="com.cheng.exchange.protocol"
+               id="1"
+               version="0"
+               semanticVersion="0.1.0"
+               byteOrder="littleEndian">
+    <types>
+        <type name="accountId" primitiveType="uint64"/>
+        <type name="instrumentId" primitiveType="uint32"/>
+        <type name="orderId" primitiveType="uint64"/>
+        <type name="price" primitiveType="int64"/>
+        <type name="quantity" primitiveType="int64"/>
+        <enum name="side" encodingType="uint8">
+            <validValue name="Buy">1</validValue>
+            <validValue name="Sell">2</validValue>
+        </enum>
+    </types>
+
+    <message name="PlaceLimit" id="1">
+        <field name="clientOrderId" id="1" type="orderId"/>
+        <field name="accountId" id="2" type="accountId"/>
+        <field name="instrumentId" id="3" type="instrumentId"/>
+        <field name="side" id="4" type="side"/>
+        <field name="price" id="5" type="price"/>
+        <field name="quantity" id="6" type="quantity"/>
+    </message>
+</messageSchema>
+

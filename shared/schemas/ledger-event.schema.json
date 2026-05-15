@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/FireExtin/exchange-from-first-principles/shared/schemas/ledger-event.schema.json",
+  "title": "LedgerEvent",
+  "type": "object",
+  "required": ["seq", "type", "ref"],
+  "properties": {
+    "seq": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "type": {
+      "type": "string"
+    },
+    "account_id": {
+      "type": "string"
+    },
+    "asset": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "integer"
+    },
+    "ref": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true
+}

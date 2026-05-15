@@ -1,0 +1,5 @@
+{
+  "name": "insufficient-balance",
+  "description": "reject an order when available balance cannot cover reservation"
+}
+

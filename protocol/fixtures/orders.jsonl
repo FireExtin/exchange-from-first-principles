@@ -1,0 +1,5 @@
+{"type":"deposit","seq":1,"account_id":1,"asset":"USD","amount":1000000}
+{"type":"deposit","seq":2,"account_id":2,"asset":"BTC","amount":100}
+{"type":"place_limit","seq":3,"client_order_id":1001,"account_id":2,"instrument_id":1,"side":"sell","price":10000,"quantity":2}
+{"type":"place_limit","seq":4,"client_order_id":1002,"account_id":1,"instrument_id":1,"side":"buy","price":10000,"quantity":1}
+

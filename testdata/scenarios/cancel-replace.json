@@ -1,0 +1,5 @@
+{
+  "name": "cancel-replace",
+  "description": "rest an order, cancel it, then submit a replacement"
+}
+

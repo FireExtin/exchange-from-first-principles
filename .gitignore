@@ -1,0 +1,10 @@
+target/
+.gradle/
+build/
+*.log
+*.segments
+.DS_Store
+docs/05-interview-talk-track.md
+docs/superpowers/
+.codex/
+.agents/

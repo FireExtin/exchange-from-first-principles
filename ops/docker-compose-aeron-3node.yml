@@ -1,0 +1,11 @@
+services:
+  aeron-node-0:
+    image: eclipse-temurin:21
+    command: ["java", "-version"]
+  aeron-node-1:
+    image: eclipse-temurin:21
+    command: ["java", "-version"]
+  aeron-node-2:
+    image: eclipse-temurin:21
+    command: ["java", "-version"]
+

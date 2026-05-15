@@ -1,0 +1,9 @@
+{
+  "name": "simple-cross",
+  "description": "seller rests one lot, buyer crosses at same price",
+  "expected": {
+    "trades": 1,
+    "resting_orders": 1
+  }
+}
+
