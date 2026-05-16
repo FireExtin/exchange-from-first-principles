@@ -96,6 +96,22 @@ func (p *Processor) ConfirmWithdrawal(providerEventID, withdrawalID string) (boo
 	return true, nil
 }
 
+func (p *Processor) Transfer(from, to, asset string, amount int64) error {
+	if from == "" || to == "" || asset == "" {
+		return errors.New("from, to, and asset are required")
+	}
+	if amount <= 0 {
+		return errors.New("amount must be positive")
+	}
+	fromKey := key(from, asset)
+	if p.balances[fromKey] < amount {
+		return fmt.Errorf("insufficient funds: account=%s asset=%s", from, asset)
+	}
+	p.balances[fromKey] -= amount
+	p.balances[key(to, asset)] += amount
+	return nil
+}
+
 func (p *Processor) Balance(accountID, asset string) int64 {
 	return p.balances[key(accountID, asset)]
 }

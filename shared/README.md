@@ -11,6 +11,14 @@ chapter can talk about the same facts:
 - amount movement;
 - replay and reconciliation inputs.
 
+The first concrete Go contract lives in `shared/go`. It defines a minimal funds
+language used by chapters 03 and 04:
+
+- deposit;
+- withdrawal request and confirmation;
+- transfer;
+- externally visible success and rejection events.
+
 Rules:
 
 - Shared contracts may be consumed by any chapter.
@@ -33,6 +41,14 @@ Rules:
 - 账户和资产标识；
 - 金额移动；
 - 重放和对账输入。
+
+第一份可运行 Go 契约位于 `shared/go`。它定义了一个最小资金语义语言，
+供第 03 和第 04 章共用：
+
+- 入金；
+- 出金请求与确认；
+- 转账；
+- 外部可见的成功和拒绝事件。
 
 规则：
 

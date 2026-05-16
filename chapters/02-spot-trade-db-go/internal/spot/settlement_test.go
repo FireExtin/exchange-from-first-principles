@@ -1,6 +1,11 @@
 package spot
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+
+	"github.com/FireExtin/exchange-from-first-principles/shared/go/funds"
+)
 
 func TestSettleSpotTradeAtomically(t *testing.T) {
 	store := NewStore()
@@ -31,6 +36,33 @@ func TestSettleSpotTradeAtomically(t *testing.T) {
 	}
 	if got := store.Balance("bob", "BTC"); got != 1 {
 		t.Fatalf("bob BTC = %d, want 1", got)
+	}
+}
+
+func TestSpotSettlementEmitsSharedFundingEvents(t *testing.T) {
+	store := NewStore()
+	store.Deposit("alice", "USD", 10000)
+	store.Deposit("bob", "BTC", 2)
+
+	events, err := store.SettleEvents(Trade{
+		Ref:         "trade-1",
+		Buyer:       "alice",
+		Seller:      "bob",
+		BaseAsset:   "BTC",
+		QuoteAsset:  "USD",
+		BaseAmount:  1,
+		QuoteAmount: 5000,
+	})
+	if err != nil {
+		t.Fatalf("settle events: %v", err)
+	}
+
+	want := []funds.Event{
+		{Ref: "trade-1", Kind: funds.EventTransferred, From: "alice", To: "bob", Asset: "USD", Amount: 5000},
+		{Ref: "trade-1", Kind: funds.EventTransferred, From: "bob", To: "alice", Asset: "BTC", Amount: 1},
+	}
+	if !reflect.DeepEqual(events, want) {
+		t.Fatalf("events mismatch\n got: %#v\nwant: %#v", events, want)
 	}
 }
 

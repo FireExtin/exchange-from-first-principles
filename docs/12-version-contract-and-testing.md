@@ -34,6 +34,10 @@ If the storage engine changes from SQL rows to an in-memory state machine, the
 business rule should not silently change. If replication is added, the state
 transition should still mean the same thing.
 
+The first concrete contract in this repository is the Go funds contract in
+`shared/go`: command in, facts out, then the same observable balances and
+withdrawal states across implementations.
+
 ## README Comparison Format
 
 Every implemented version or major chapter should eventually include:
@@ -56,13 +60,16 @@ That sentence is only credible if the tests make it true.
 
 ## Same Tests Across Versions
 
-The target is one integration test suite with thin adapters:
+The current Go suite already has the first thin-adapter shape:
 
 ```bash
-go test ./integration-tests/... -version=db
-go test ./integration-tests/... -version=single-writer
-go test ./integration-tests/... -version=replicated-state-machine
+go test ./integration-tests/...
 ```
+
+It currently compares the chapter 03 wallet workflow with the chapter 04
+command-log replay engine through the same shared funds contract. Later
+versions can add DB, single-writer, and replicated-state-machine adapters
+without changing the scenario assertions.
 
 The user-facing examples can also be presented as separate directories:
 
@@ -78,12 +85,17 @@ internal structure.
 
 ## Scenarios To Preserve
 
-Initial scenarios:
+Already covered by the current Go conformance suite:
 
-- deposits conserve value;
 - duplicate deposits are idempotent;
 - withdrawals cannot spend unavailable funds;
-- spot trade settlement is atomic;
+- duplicate withdrawal confirmations are idempotent;
+- transfers emit replayable facts and move balances.
+
+Next scenarios to add as the project grows:
+
+- deposits conserve value across ledger entries;
+- spot trade settlement is atomic and emits standard funding facts;
 - replay produces the same balance state as the original run;
 - price-time order determines fills;
 - execution reports update positions deterministically;
@@ -148,6 +160,9 @@ ordered input + deterministic transition -> state change + emitted facts
 如果存储引擎从 SQL 行变为内存状态机，业务规则不应静默改变。
 如果添加了复制，状态转换仍应意味着相同的事情。
 
+本仓库的第一份具体契约是 `shared/go` 中的 Go 资金契约：输入命令、输出事实，
+并在不同实现之间保持相同的可观察余额和出金状态。
+
 ### README 比较格式
 
 每个已实现的版本或主要章节最终应包含：
@@ -170,13 +185,15 @@ None. The same external scenario suite passes unchanged.
 
 ### 跨版本相同测试
 
-目标是带有薄适配器的一个集成测试套件：
+当前 Go 套件已经具备第一版薄适配器形态：
 
 ```bash
-go test ./integration-tests/... -version=db
-go test ./integration-tests/... -version=single-writer
-go test ./integration-tests/... -version=replicated-state-machine
+go test ./integration-tests/...
 ```
+
+它当前通过同一份共享资金契约，对比第 03 章的钱包工作流和第 04 章的
+命令日志重放引擎。后续可以继续加入 DB、单写者、复制状态机适配器，
+而不改变场景断言。
 
 用户面向的示例也可以呈现为单独的目录：
 
@@ -191,11 +208,16 @@ cd exchange-v2-raft && go test ../integration-tests/...
 
 ### 要保留的场景
 
-初始场景：
+当前 Go 一致性测试已经覆盖：
 
-- 入金守恒价值；
 - 重复入金是幂等的；
 - 出金不能花费不可用资金；
+- 重复出金确认是幂等的；
+- 转账会产生可重放事实并移动余额。
+
+项目继续演进时需要补充：
+
+- 入金在账务分录上守恒；
 - 现货交易结算是原子的；
 - 重放产生与原始运行相同的余额状态；
 - 价格-时间顺序决定成交；

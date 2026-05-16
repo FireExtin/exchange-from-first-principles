@@ -49,14 +49,18 @@
 同样的业务语义，可以有不同的技术实现。
 ```
 
-第一批目标实现是：
+第一条可运行主线先放在资金域：
 
 ```text
-dbtx      - 基于数据库事务的引擎
-memstate  - 基于内存确定性状态机的引擎
+shared/go  - 共享资金命令、事件和类型
+chapter 02 - 现货结算暴露为共享资金事件
+chapter 03 - 直接钱包工作流
+chapter 04 - 命令日志重放工作流
+integration-tests - 同一套场景验证 03 和 04 的外部语义一致
 ```
 
-这两个实现都必须遵守同一个核心语义接口，并通过同一套一致性测试。
+后续交易热路径、单写者状态机和复制日志都应该沿用同一个原则：技术底座可以变化，
+但外部可观察的业务事实和不变量不能悄悄变化。
 
 ## 3. 工程原则
 
@@ -66,14 +70,16 @@ memstate  - 基于内存确定性状态机的引擎
 
 > 业务语义应该保持稳定，技术实现可以持续演进。
 
-核心契约应该描述系统能接受什么命令、产生什么事实、暴露什么错误，而不是
+核心契约应该描述系统能接受什么命令、产生什么事实、暴露什么拒绝原因，而不是
 绑定到某个数据库、消息队列或运行时。
 
-建议的最小接口：
+当前 Go 资金契约的最小接口：
 
 ```go
 type Engine interface {
-    Apply(ctx context.Context, cmd Command) ([]Event, error)
+    Handle(Command) ([]Event, error)
+    Balance(AccountID, Asset) Amount
+    Withdrawal(WithdrawalID) (Withdrawal, bool)
 }
 ```
 
@@ -83,22 +89,24 @@ type Engine interface {
 old_state + command -> new_state + events
 ```
 
-数据库事务引擎可以实现这个接口。内存状态机也可以实现这个接口。未来的复制
-状态机可以先把 command 提交到复制日志，再 apply 到状态机。
+直接钱包工作流可以实现这个接口。命令日志重放引擎也可以实现这个接口。
+未来的数据库事务、单写者状态机和复制状态机也应该实现同一个语义面：
+先决定命令是否成功，再产生可重放、可审计的事实。
 
 ### 3.2 命令表达意图
 
 Command 表示用户或系统的意图。
 
-初始 command 类型只需要覆盖：
+资金域当前只需要覆盖：
 
 ```text
-CreateAccount
 Deposit
-SubmitLimitOrder
-CancelOrder
+RequestWithdrawal
+ConfirmWithdrawal
+Transfer
 ```
 
+交易域以后再添加 `SubmitLimitOrder`、`CancelOrder`、`ApplyExecution` 等命令。
 Command 应该保持明确、小而具体。不要过早添加市价单、止损单、杠杆、合约、
 强平等复杂能力。
 
@@ -106,17 +114,14 @@ Command 应该保持明确、小而具体。不要过早添加市价单、止损
 
 Event 表示引擎已经产生的事实。
 
-初始 event 类型只需要覆盖：
+资金域当前只需要覆盖：
 
 ```text
-AccountCreated
-BalanceDeposited
-OrderAccepted
-OrderRejected
-OrderMatched
-TradeExecuted
-OrderCancelled
-LedgerEntryCreated
+Deposited
+WithdrawalRequested
+WithdrawalConfirmed
+Transferred
+Rejected
 ```
 
 Event 很重要，因为后续阶段会基于事件日志、重放、projection 和审计路径继续
@@ -124,16 +129,19 @@ Event 很重要，因为后续阶段会基于事件日志、重放、projection 
 
 ### 3.4 错误表达业务语义
 
-Error 应该表达业务语义失败，而不是实现细节。
+拒绝原因应该表达业务语义失败，而不是实现细节。
 
 例如：
 
 ```text
-ErrAccountNotFound
-ErrInsufficientBalance
-ErrOrderNotFound
-ErrOrderAlreadyClosed
-ErrInvalidCommand
+InvalidAmount
+DuplicateCallback
+DuplicateWithdrawal
+DuplicateProviderEvent
+UnknownWithdrawal
+InsufficientFunds
+SequenceGap
+InvalidCommand
 ```
 
 不要让 SQL 错误、数据库驱动错误、内部 map 查询错误直接泄漏到语义接口。
@@ -143,63 +151,39 @@ ErrInvalidCommand
 
 最重要的测试套件是一致性测试套件。
 
-一致性测试只验证核心语义，不依赖具体实现内部细节。每个具体实现把自己传入
-共享测试套件。
+一致性测试只验证核心语义，不依赖具体实现内部细节。每个具体实现通过一个薄
+适配器接入共享测试套件。
 
-示例结构：
+当前可运行命令：
 
-```go
-func RunEngineConformanceSuite(t *testing.T, newEngine func(t *testing.T) core.Engine) {
-    t.Run("simple full match", func(t *testing.T) {
-        engine := newEngine(t)
-        // run shared scenario
-    })
-
-    t.Run("partial fill", func(t *testing.T) {
-        engine := newEngine(t)
-        // run shared scenario
-    })
-
-    t.Run("cancel resting order", func(t *testing.T) {
-        engine := newEngine(t)
-        // run shared scenario
-    })
-
-    t.Run("reject insufficient balance", func(t *testing.T) {
-        engine := newEngine(t)
-        // run shared scenario
-    })
-}
+```bash
+go test ./integration-tests/...
 ```
 
 测试应该证明：
 
 ```text
-给定同样的入金和订单，
+给定同样的资金命令，
 当这些 command 被应用到不同 engine 上时，
-最终得到的成交、余额、订单状态和账务流水应该等价。
+最终得到的事件、余额和出金状态应该等价。
 ```
 
-初始测试场景：
+当前已有测试场景：
 
 ```text
-1. 创建两个账户
-2. 给卖方账户充值 BTC
-3. 给买方账户充值 USDT
-4. 卖方提交限价卖单
-5. 买方提交可成交限价买单
-6. 引擎产生成交事件
-7. 余额正确更新
-8. 账务流水正确生成
+1. 重复入金回调只生效一次
+2. 出金不能透支
+3. 出金确认重复到达不重复生效
+4. 转账产生可重放事实并移动余额
 ```
 
 之后再添加：
 
 ```text
-1. 部分成交
-2. 取消挂单
-3. 因余额不足拒单
-4. 拒绝重复或非法 command
+1. 将现货成交资金结算接入跨章节一致性测试
+2. 部分成交
+3. 取消挂单
+4. 因余额不足拒单
 5. 保持价格时间优先
 ```
 
@@ -294,11 +278,9 @@ Accepted
 初始命令：
 
 ```bash
-make test
-make test-dbtx
-make test-memstate
-make run-dbtx
-make run-memstate
+make test-go
+go test ./integration-tests/...
+cd chapters/01-double-entry-ledger-go && go run ./cmd/demo
 ```
 
 后续可以添加：
@@ -310,9 +292,9 @@ make report
 
 现阶段保持执行方式简单。
 
-除非必要，不要构建复杂的 Docker Compose 基础设施。如果 `dbtx` 需要数据库，
-第一版优先使用 SQLite 降低本地启动成本。如果需要更真实的事务行为，再使用
-PostgreSQL 和本地容器编排。
+除非必要，不要构建复杂的 Docker Compose 基础设施。如果后续章节需要数据库，
+第一版优先使用 SQLite 或内存模型降低本地启动成本。如果需要更真实的事务行为，
+再使用 PostgreSQL 和本地容器编排。
 
 第一阶段应该优先保证可理解和可复现，而不是生产级真实感。
 
@@ -342,9 +324,9 @@ OMS 微服务
 第一阶段只专注于：
 
 ```text
-核心语义契约
-数据库事务实现
-内存状态机实现
+共享资金语义契约
+事务边界形状
+命令日志重放形状
 共享一致性测试
 清晰文档
 简单可执行脚本
@@ -375,32 +357,30 @@ OMS 微服务
 第一里程碑是：
 
 ```text
-M1: Database Transaction as Source of Truth
+M1: Funds Semantics Contract
 ```
 
 完成标准：
 
 ```text
-1. 存在核心 Engine 接口
-2. 存在基础 Command 和 Event 类型
-3. dbtx engine 实现 Engine
+1. 存在共享资金 Command 和 Event 类型
+2. 第 03 章钱包工作流实现共享语义接口
+3. 第 04 章命令日志重放实现共享语义接口
 4. 存在一致性测试套件
-5. dbtx 通过一致性测试
-6. README 解释为什么数据库事务是第一版真相源
-7. make test 可以运行
-8. make run-dbtx 可以运行一个简单 demo
+5. 第 03 和第 04 章通过同一套一致性测试
+6. 第 02 章现货结算能输出共享资金转账事件
+7. make test-go 可以运行
+8. 文档解释为什么语义契约先于实现细节
 ```
 
 Demo 场景应该展示：
 
 ```text
-1. 创建卖方和买方账户
-2. 给卖方充值 BTC
-3. 给买方充值 USDT
-4. 卖方提交卖单
-5. 买方提交买单
-6. 成交执行
-7. 打印余额和账务流水
+1. 入金回调幂等
+2. 出金不能透支
+3. 出金确认重复到达不重复生效
+4. 转账移动余额
+5. 钱包工作流和重放工作流产生相同事件与状态
 ```
 
 ## 10. 第二里程碑
@@ -408,17 +388,17 @@ Demo 场景应该展示：
 第二里程碑是：
 
 ```text
-M2: In-Memory State Machine with Same Semantics
+M2: Trading State Machine With Same Semantics
 ```
 
 完成标准：
 
 ```text
-1. memstate engine 实现 Engine
-2. memstate 通过完全相同的一致性测试
-3. README 解释为什么撮合热路径会移出数据库
-4. make run-memstate 可以运行同样的 demo 场景
-5. 文档对比 dbtx 和 memstate
+1. 明确订单、成交、仓位和资金之间的命令/事件边界
+2. 单写者或内存状态机实现交易热路径
+3. 交易状态机通过同一套可扩展一致性测试
+4. README 解释为什么撮合热路径会移出数据库
+5. 文档对比事务边界、命令日志和状态机的语义变化
 ```
 
 这个里程碑应该证明核心论点：

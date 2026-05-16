@@ -177,22 +177,28 @@ It becomes:
 
 ## Code Map
 
+- `shared/go` defines the first shared funds command/event contract.
+- `integration-tests/funds_conformance_test.go` compares implementations
+  through that contract instead of through their internal storage shape.
 - `chapters/02-spot-trade-db-go` models the DB-transaction-shaped starting
-  point.
+  point and emits shared funding events for spot settlement.
+- `chapters/03-wallet-deposit-withdrawal-go` models direct wallet workflow:
+  deposits, withdrawal requests, withdrawal confirmations, and transfers.
 - `chapters/04-command-log-replay-go` models ordered commands and deterministic
-  replay.
+  replay over the same funds contract.
 - `chapters/04-command-log-replay-go/internal/replay/replay_test.go` contains a
   tiny equivalence test: serial DB transactions and a sequenced state machine
   reach the same state from the same ordered operations.
-- `chapters/06-aeron-sequencer-java` is the future replicated-log boundary.
+- `chapters/11-replicated-state-machine-aeron-java` is the future replicated-log
+  boundary.
 
 ## Future Work
 
-1. Add SQL-backed command/event tables to chapter 2.
-2. Make chapter 4 replay from a file-backed log.
-3. Add snapshot/replay cut points.
-4. Add a Java single-writer state-machine chapter.
-5. Connect the Aeron adapter to the same command/event contract.
+1. Extend chapter 2 with SQL-backed command/event tables.
+2. Make chapter 4 replay from a file-backed log and add snapshot cut points.
+3. Expand the shared contract from funds into orders, executions, and positions.
+4. Connect the Java single-writer state machine to the same command/event shape.
+5. Connect the Aeron replicated-log boundary to the same semantic contract.
 6. Add cold-path projectors that consume events into query tables.
 
 ---
@@ -364,17 +370,23 @@ replicated ordered command log
 
 ## 代码地图
 
-- `chapters/02-spot-trade-db-go` 建模 DB 事务形状的起点。
-- `chapters/04-command-log-replay-go` 建模有序命令和确定性重放。
+- `shared/go` 定义第一份共享资金命令/事件契约。
+- `integration-tests/funds_conformance_test.go` 通过这份契约比较不同实现，
+  而不是比较它们内部如何存储状态。
+- `chapters/02-spot-trade-db-go` 建模 DB 事务形状的起点，并为现货结算输出
+  共享资金事件。
+- `chapters/03-wallet-deposit-withdrawal-go` 建模直接钱包工作流：入金、出金请求、
+  出金确认和转账。
+- `chapters/04-command-log-replay-go` 基于同一份资金契约建模有序命令和确定性重放。
 - `chapters/04-command-log-replay-go/internal/replay/replay_test.go` 包含一个
   微小等价测试：串行 DB 事务和排序状态机从相同的排序操作达到相同状态。
-- `chapters/06-aeron-sequencer-java` 是未来的复制日志边界。
+- `chapters/11-replicated-state-machine-aeron-java` 是未来的复制日志边界。
 
 ## 未来工作
 
-1. 在第 2 章添加 SQL 支持的命令/事件表。
-2. 让第 4 章从文件支持的日志重放。
-3. 添加快照/重放切分点。
-4. 添加 Java 单写者状态机章节。
-5. 将 Aeron 适配器连接到相同的命令/事件契约。
+1. 在第 2 章扩展 SQL 支持的命令/事件表。
+2. 让第 4 章从文件支持的日志重放，并添加快照切分点。
+3. 将共享契约从资金扩展到订单、成交和仓位。
+4. 将 Java 单写者状态机连接到相同的命令/事件形状。
+5. 将 Aeron 复制日志边界连接到相同的语义契约。
 6. 添加消费事件到查询表的冷路径投影器。

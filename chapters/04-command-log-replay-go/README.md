@@ -12,6 +12,9 @@ and a sequenced state machine apply the same ordered commands and reach the
 same balances. This is the bridge from "DB rows are truth" to "ordered facts are
 truth".
 
+The chapter also exposes a funds replay engine through `adapter`, using the same
+shared command and event contract as chapter 03.
+
 Run:
 
 ```bash
@@ -30,6 +33,9 @@ go test ./...
 
 它还包含一个小等价测试：可串行化 DB 事务模型和排序状态机应用相同的排序命令
 并达到相同的余额。这是"DB 行是真相"到"有序事实是真相"的桥梁。
+
+本章也通过 `adapter` 暴露了一个资金重放引擎，使用与第 03 章相同的共享
+命令和事件契约。
 
 运行：
 

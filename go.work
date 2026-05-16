@@ -1,0 +1,11 @@
+go 1.22
+
+use (
+	./chapters/01-double-entry-ledger-go
+	./chapters/02-spot-trade-db-go
+	./chapters/03-wallet-deposit-withdrawal-go
+	./chapters/04-command-log-replay-go
+	./integration-tests
+	./shared/go
+	./tools/go
+)

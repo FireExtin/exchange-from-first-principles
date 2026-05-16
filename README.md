@@ -176,12 +176,12 @@ Apache-2.0. See `LICENSE`.
 - 真相源；
 - 并发模型；
 - 恢复模型；
-- 热路径事实和下游视图的边界。
+- 事实流和下游视图的边界。
 
 第一版可以把数据库行和 ACID 事务当作真相源。后续版本会逐步走向显式命令日志、
 确定性状态机、复制、projection 和可重放事实。
 
-在这些版本之间，核心业务形状应该保持稳定：
+在这些版本之间，核心业务语义应该保持稳定：
 
 ```text
 old_state + command -> new_state + events
@@ -195,6 +195,10 @@ old_state + command -> new_state + events
 撮合是最干净的例子。谁先下单、谁先撤单、同价位谁排在前面，这些不是实现细节，
 而是正确结果本身。所以交易所是研究“从数据库中心的状态变更，演化到显式日志、
 确定性状态机和复制执行”的一个清晰切片。
+
+当前第一条可运行主线先收在资金域：第 02 章把现货结算暴露为共享资金事件，
+第 03 章用直接钱包工作流处理入金、出金和转账，第 04 章用命令日志重放同一组
+资金命令。跨章节一致性测试证明：实现底座变了，外部可见的资金语义不变。
 
 ### 阶段路线
 
@@ -229,7 +233,8 @@ old_state + command -> new_state + events
 ```text
 chapters/             独立章节项目
 docs/                 设计说明、路线图和项目文档
-shared/               共享事件样例和 schema
+shared/               共享事件样例、schema 和 Go 资金契约
+integration-tests/    跨章节一致性测试
 protocol/             SBE schema 占位和测试数据
 tools/go/             Go 压测器与对账工具占位
 testdata/scenarios/   端到端场景数据
@@ -240,16 +245,16 @@ ops/                  runbook 和部署说明
 
 - 先读项目指导范式：
   `docs/00-project-principles.zh.md`。
-- 先读完整设计叙事：
-  `docs/10-design-paper.md`。
-- 再读排序模型：
-  `docs/11-ordering-and-serial-semantics.md`。
 - 再读跨版本契约：
   `docs/12-version-contract-and-testing.md`。
 - 再读真相源迁移：
   `docs/08-truth-source-migration.md`。
+- 再读排序模型：
+  `docs/11-ordering-and-serial-semantics.md`。
 - 再读交易域边界：
   `docs/09-position-matching-risk-margin.md`。
+- 最后读完整设计叙事：
+  `docs/10-design-paper.md`。
 - 每个模型想清楚以后，再进入对应章节跑代码。
 
 ### 第一组命令
@@ -259,6 +264,7 @@ git clone git@github.com:FireExtin/exchange-from-first-principles.git
 cd exchange-from-first-principles
 make test-go
 make test-rust
+go test ./integration-tests/...
 
 cd chapters/01-double-entry-ledger-go
 go run ./cmd/demo

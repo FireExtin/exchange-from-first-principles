@@ -6,15 +6,16 @@ The goal is to prove that architecture can change while business semantics stay
 stable. A test scenario should be written once, then run against every runnable
 version through a small adapter.
 
-Target shape:
+Current runnable shape:
 
 ```bash
-go test ./integration-tests/... -version=db
-go test ./integration-tests/... -version=single-writer
-go test ./integration-tests/... -version=replicated-state-machine
+go test ./integration-tests/...
 ```
 
-The adapters should expose the same behavioral operations:
+The first suite compares the chapter 03 wallet workflow and the chapter 04
+command-log replay engine through the shared funds contract.
+
+Over time, adapters should expose the same behavioral operations:
 
 - create account;
 - deposit;
@@ -42,15 +43,16 @@ contract survived the architecture migration.
 目标是证明架构可以变化而业务语义保持稳定。测试场景应写一次，然后
 通过一个薄适配器针对每个可运行版本运行。
 
-目标形状：
+当前可运行形态：
 
 ```bash
-go test ./integration-tests/... -version=db
-go test ./integration-tests/... -version=single-writer
-go test ./integration-tests/... -version=replicated-state-machine
+go test ./integration-tests/...
 ```
 
-适配器应暴露相同的行为操作：
+第一套测试通过共享资金契约，对比第 03 章的钱包工作流和第 04 章的
+命令日志重放引擎。
+
+长期来看，适配器应暴露相同的行为操作：
 
 - 创建账户；
 - 入金；
