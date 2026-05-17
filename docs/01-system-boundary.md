@@ -50,12 +50,9 @@ callbacks, and engineering tradeoffs.
 - cluster snapshots;
 - flow control and backpressure.
 
-## Rust Is Parked
+## Rust Is Exploratory
 
-The Rust workspace remains useful for long-term exploration of a clean hot path,
-but it is not the active development track. Do not let Rust absorb time needed
-for Java or Go development.
-
+The Rust workspace is a runnable experiment for long-term exploration of a clean hot-path contract.
 ---
 
 ## 中文
@@ -107,7 +104,6 @@ Go 处理资产、账本、幂等、对账、回调和工程权衡相关的服�
 - 集群快照；
 - 流量控制和背压。
 
-## Rust 暂停
+## Rust 作为探索实验
 
-Rust 工作区对长期探索干净的热路径仍有价值，但它不是活跃的开发主线。
-不要让 Rust 占用 Java 或 Go 开发所需的时间。
+Rust 工作区是一个可运行实验，用于长期探索干净的热路径契约。不是活跃开发主线。

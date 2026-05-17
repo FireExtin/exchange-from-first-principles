@@ -11,6 +11,20 @@ The target is not a full exchange. The target is a clear kernel:
 - every resulting event can be replayed and checked;
 - every balance movement can be reconciled.
 
+## Documentation Shape
+
+The project docs are organized around four layers:
+
+- `README.md` explains the project quickly.
+- `docs/README.md` is the canonical documentation map.
+- `docs/10-design-paper.md` is the full design narrative.
+- chapter READMEs explain local pressure, local guarantees, and how to run the
+  local exercises.
+
+When these files disagree, prefer the more specific source: chapter README for
+chapter behavior, `docs/07-chapter-roadmap.md` for chapter status, and
+`docs/README.md` for document organization.
+
 ## Non-goals
 
 - No hand-written consensus in version one.
@@ -31,6 +45,18 @@ The target is not a full exchange. The target is a clear kernel:
 - 每个状态转换都是确定性的；
 - 每个生成的事件都可以重放和检验；
 - 每笔余额变动都可以对账。
+
+## 文档形状
+
+项目文档分四层：
+
+- `README.md` 快速解释项目；
+- `docs/README.md` 是规范文档地图；
+- `docs/10-design-paper.md` 是完整设计叙事；
+- 各章节 README 解释本章的局部压力、局部保证和运行方式。
+
+如果这些文件出现不一致，优先相信更具体的来源：章节行为看章节 README，
+章节状态看 `docs/07-chapter-roadmap.md`，文档组织看 `docs/README.md`。
 
 ## 非目标
 

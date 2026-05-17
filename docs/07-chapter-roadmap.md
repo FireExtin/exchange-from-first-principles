@@ -9,6 +9,17 @@ trading hot path, then adds replication, warm/cold paths, caches, push, and
 runtime optimization. The point is not to chase advanced infrastructure first;
 it is to make the pressure for that infrastructure visible.
 
+For the full documentation catalog, see [Documentation Map](./README.md).
+
+## Status Vocabulary
+
+- Runnable: normal tests or demos run without special TODO work.
+- Runnable skeleton: the module compiles and tests a boundary, but most
+  business behavior is intentionally absent.
+- Design scaffold: the chapter has a problem statement and target model, but no
+  runnable implementation yet.
+- Planned note: the idea is described in docs, but no chapter directory exists.
+
 ## Phase 1: Funds Correctness
 
 Phase 1 now has a first shared semantic layer: `shared/go` defines the funds
@@ -73,6 +84,7 @@ funds semantics.
       boundary.
     - Question: how do replay, backpressure, and failover preserve the same
       business semantics?
+    - Status: runnable Java skeleton.
 
 12. `12-oms-ledger-compliance-java-go`
     - Primitive: hot facts feed OMS, ledger, reporting, reconciliation, and
@@ -97,6 +109,7 @@ funds semantics.
 15. `15-rust-hot-path`
     - Primitive: isolate a possible Rust hot path.
     - Question: what does Rust improve, and what complexity does it add?
+    - Status: runnable Rust experiment, not the active development track.
 
 16. `16-low-latency-runtime-networking`
     - Primitive: measure and tune the runtime and network path after semantics
@@ -128,6 +141,8 @@ Phase 5 is not part of the exchange core. It models a trading desk, market
 maker, or proprietary trading system built on top of the earlier primitives.
 It appears only after the project has reliable market-data streams, execution
 reports, positions, risk views, and reconciliation boundaries.
+
+These are planned notes only. Chapter directories for 17-21 do not exist yet.
 
 17. `17-external-market-data-ingestion`
     - Primitive: consume external venue books, trades, tickers, and reference
@@ -204,6 +219,15 @@ Each chapter should include:
 缓存、推送和运行时优化。重点不是先追逐高级基础设施，而是让那种基础设施的
 压力变得可见。
 
+完整文档目录见 [Documentation Map](./README.md)。
+
+## 状态术语
+
+- 可运行：常规测试或 demo 可以运行，不依赖 TODO 实现。
+- 可运行骨架：模块能编译并测试边界，但多数业务行为故意留空。
+- 设计脚手架：章节已有问题陈述和目标模型，但还没有可运行实现。
+- 规划笔记：想法已经写进文档，但尚无章节目录。
+
 ## 阶段一：资金正确性
 
 阶段一现在已有第一层共享语义：`shared/go` 定义资金命令、事件和类型化标识；
@@ -258,6 +282,7 @@ Each chapter should include:
 11. `11-replicated-state-machine-aeron-java`
     - 原语：有序命令跨过 Aeron/Raft 风格的复制日志边界。
     - 问题：重放、背压和故障转移如何保持相同的业务语义？
+    - 状态：可运行 Java 骨架。
 
 12. `12-oms-ledger-compliance-java-go`
     - 原语：热事实流向 OMS、账本、报告、对账和合规视图。
@@ -276,6 +301,7 @@ Each chapter should include:
 15. `15-rust-hot-path`
     - 原语：隔离一个可能的 Rust 热路径。
     - 问题：Rust 改进了什么，又增加了什么复杂度？
+    - 状态：可运行 Rust 实验，但不是当前主开发线。
 
 16. `16-low-latency-runtime-networking`
     - 原语：在语义稳定后测量和调优运行时和网络路径。
@@ -299,6 +325,8 @@ Each chapter should include:
 阶段五不是交易所核心。它建模建立在前面原语之上的交易台、做市或自营交易
 系统。只有当项目已经拥有可靠的行情流、成交回报、仓位、风险视图和对账边界
 之后，这一层才自然出现。
+
+这些目前只是规划笔记。第 17-21 章的目录尚不存在。
 
 17. `17-external-market-data-ingestion`
     - 原语：消费外部场所订单簿、成交、ticker 和参考数据。

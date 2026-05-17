@@ -1,6 +1,6 @@
 # 11 Replicated State Machine Aeron Java
 
-This module is intentionally a skeleton.
+This module is a runnable skeleton.
 
 Later boundary:
 
@@ -39,6 +39,23 @@ The adapter boundary should therefore test transport shape separately from
 business semantics. If a message is private, financial, or state-changing, it
 must have a replay story.
 
+## Run
+
+This chapter expects Java 21. The repo has been tested with Azul Zulu 21 and
+Gradle 9.5.
+
+From this directory:
+
+```bash
+gradle --no-daemon clean test
+```
+
+From the repo root:
+
+```bash
+make test-java
+```
+
 On Java 21, tests using Agrona `UnsafeBuffer` need:
 
 ```text
@@ -51,7 +68,7 @@ The Gradle test task already sets this flag.
 
 ## 中文
 
-本模块故意是一个骨架。
+本模块是一个可运行骨架。
 
 后续边界：
 
@@ -86,6 +103,22 @@ Aeron、UDP、多播或任何快速消息层都可以快速移动字节。但本
 
 因此适配器边界应把传输形态和业务语义分开测试。如果消息是私有的、金融性的或
 会改变状态，它就必须有重放故事。
+
+## 运行
+
+本章需要 Java 21。仓库已用 Azul Zulu 21 和 Gradle 9.5 验证。
+
+在本目录运行：
+
+```bash
+gradle --no-daemon clean test
+```
+
+从仓库根目录运行：
+
+```bash
+make test-java
+```
 
 在 Java 21 上，使用 Agrona `UnsafeBuffer` 的测试需要：
 

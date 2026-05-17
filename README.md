@@ -55,6 +55,12 @@ correct result. That makes an exchange a useful lens for studying how systems
 move from database-centered mutation toward explicit logs, deterministic state
 machines, and replicated execution.
 
+### Documentation Map
+
+The canonical documentation index is [docs/README.md](./docs/README.md). Use
+that page when you want the full reading order, document catalog, and current
+source-of-truth map.
+
 ### Roadmap
 
 | Chapter | Topic | Status |
@@ -69,17 +75,13 @@ machines, and replicated execution.
 | 08 | Margin model | Design scaffold |
 | 09 | Desk pre-trade risk | Design scaffold |
 | 10 | Continuous risk cluster projection | Design scaffold |
-| 11 | Aeron/Raft replicated state-machine boundary | Scaffold |
+| 11 | Aeron/Raft replicated state-machine boundary | Runnable Java skeleton |
 | 12 | OMS, ledger, compliance, and hot/warm/cold paths | Scaffold |
 | 13 | Caches for users, accounts, permissions, marks, and exchange state | Design scaffold |
 | 14 | Market-data and execution push | Design scaffold |
-| 15 | Rust hot-path experiment | Experimental |
+| 15 | Rust hot-path experiment | Runnable experiment |
 | 16 | Low-latency runtime and networking | Design scaffold |
-| 17 | External market-data ingestion | Future design note |
-| 18 | Pricing and signal engine | Future design note |
-| 19 | Order router and execution reports | Future design note |
-| 20 | Hedger and best execution | Future design note |
-| 21 | Arbitrage strategy demo | Future design note |
+| 17-21 | Trading desk extension ideas | Planned notes only |
 
 Each chapter answers four questions:
 
@@ -93,7 +95,8 @@ Each chapter answers four questions:
 ```text
 chapters/             independent chapter projects
 docs/                 design notes, roadmap, and project documentation
-shared/               shared event examples and schemas
+shared/               shared event examples, schemas, and Go contracts
+integration-tests/    cross-chapter semantic tests
 protocol/             SBE schema placeholder and fixtures
 tools/go/             Go load generator and reconciler placeholders
 testdata/scenarios/   end-to-end scenario fixtures
@@ -102,21 +105,21 @@ ops/                  runbooks and deployment notes
 
 ### How To Read
 
-- Read the project principles:
-  `docs/00-project-principles.zh.md`.
-- Start with the full design narrative:
-  `docs/10-design-paper.md`.
-- Read the ordering model:
-  `docs/11-ordering-and-serial-semantics.md`.
-- Read the cross-version contract:
-  `docs/12-version-contract-and-testing.md`.
-- Read the model transition:
-  `docs/08-truth-source-migration.md`.
-- Read the trading domain boundary:
-  `docs/09-position-matching-risk-margin.md`.
-- Read the trading-desk extension:
-  `docs/13-trading-desk-extension.md`.
-- Run each chapter independently when its model becomes clear.
+- Start with [docs/README.md](./docs/README.md).
+- Read [docs/00-goal.md](./docs/00-goal.md) and
+  [docs/10-design-paper.md](./docs/10-design-paper.md).
+- Use [docs/07-chapter-roadmap.md](./docs/07-chapter-roadmap.md) to choose the
+  next chapter.
+- Use the chapter README before changing code in that chapter.
+
+### Toolchain
+
+The runnable parts of the repo currently expect:
+
+- Go 1.22 or newer for the Go modules and integration tests;
+- Java 21 for the Aeron/Gradle chapter;
+- Gradle for `make test-java`;
+- Rust stable for the chapter 15 workspace.
 
 ### First Commands
 
@@ -207,6 +210,11 @@ old_state + command -> new_state + events
 第 03 章用直接钱包工作流处理入金、出金和转账，第 04 章用命令日志重放同一组
 资金命令。跨章节一致性测试证明：实现底座变了，外部可见的资金语义不变。
 
+### 文档地图
+
+完整文档索引在 [docs/README.md](./docs/README.md)。如果想知道先读什么、
+每份文档负责什么、当前真相源在哪里，从那里开始。
+
 ### 阶段路线
 
 | 章节 | 主题 | 状态 |
@@ -221,17 +229,13 @@ old_state + command -> new_state + events
 | 08 | 保证金模型 | 设计脚手架 |
 | 09 | 柜台下单前风控 | 设计脚手架 |
 | 10 | 持续风控集群投影 | 设计脚手架 |
-| 11 | Aeron/Raft 复制状态机边界 | 脚手架 |
+| 11 | Aeron/Raft 复制状态机边界 | 可运行 Java 骨架 |
 | 12 | OMS、账本、合规与冷热路径 | 脚手架 |
 | 13 | 用户、账户、权限、标记价格和外部交易所状态缓存 | 设计脚手架 |
 | 14 | 行情推送与成交推送 | 设计脚手架 |
-| 15 | Rust 热路径实验 | 实验中 |
+| 15 | Rust 热路径实验 | 可运行实验 |
 | 16 | 低延迟运行时与网络 | 设计脚手架 |
-| 17 | 外部行情摄入 | 远期设计笔记 |
-| 18 | 定价与信号引擎 | 远期设计笔记 |
-| 19 | 订单路由与成交回报 | 远期设计笔记 |
-| 20 | 对冲器与最优执行 | 远期设计笔记 |
-| 21 | 套利策略演示 | 远期设计笔记 |
+| 17-21 | 交易台扩展想法 | 仅规划笔记 |
 
 每个章节固定回答四个问题：
 
@@ -255,21 +259,20 @@ ops/                  runbook 和部署说明
 
 ### 如何阅读
 
-- 先读项目指导范式：
-  `docs/00-project-principles.zh.md`。
-- 再读跨版本契约：
-  `docs/12-version-contract-and-testing.md`。
-- 再读真相源迁移：
-  `docs/08-truth-source-migration.md`。
-- 再读排序模型：
-  `docs/11-ordering-and-serial-semantics.md`。
-- 再读交易域边界：
-  `docs/09-position-matching-risk-margin.md`。
-- 再读交易台扩展：
-  `docs/13-trading-desk-extension.md`。
-- 最后读完整设计叙事：
-  `docs/10-design-paper.md`。
-- 每个模型想清楚以后，再进入对应章节跑代码。
+- 先从 [docs/README.md](./docs/README.md) 开始。
+- 再读 [docs/00-goal.md](./docs/00-goal.md) 和
+  [docs/10-design-paper.md](./docs/10-design-paper.md)。
+- 用 [docs/07-chapter-roadmap.md](./docs/07-chapter-roadmap.md) 决定下一章。
+- 修改某章代码前，先读该章自己的 README。
+
+### 工具链
+
+当前可运行部分需要：
+
+- Go 1.22 或更新版本，用于 Go modules 和集成测试；
+- Java 21，用于 Aeron/Gradle 章节；
+- Gradle，用于 `make test-java`；
+- Rust stable，用于第 15 章 workspace。
 
 ### 第一组命令
 
