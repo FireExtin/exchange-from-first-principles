@@ -308,10 +308,10 @@ test-go:
 | 文档 | 主要变更 |
 |------|---------|
 | `README.md` | 强调资金语义契约，更新项目结构说明 |
-| `docs/00-project-principles.zh.md` | 更新里程碑定义，强调语义契约优先 |
+| `docs/01-core-principles.md` | 更新里程碑定义，强调语义契约优先 |
 | `docs/07-chapter-roadmap.md` | 说明共享语义层和集成测试的作用 |
-| `docs/08-truth-source-migration.md` | 更新代码地图，说明各章节如何接入共享契约 |
-| `docs/12-version-contract-and-testing.md` | 说明第一份具体契约（Go 资金契约）的作用 |
+| `docs/04-truth-source-migration.md` | 更新代码地图，说明各章节如何接入共享契约 |
+| `docs/06-version-contract-and-testing.md` | 说明第一份具体契约（Go 资金契约）的作用 |
 
 **关键原则更新**:
 

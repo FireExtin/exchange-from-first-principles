@@ -1,7 +1,15 @@
 # 16 Low-Latency Runtime And Networking
 
+[English](#english) · [中文](#中文)
+
+## English
+
 Purpose: optimize the runtime and network path after the semantic model is
 stable.
+
+## Status
+
+Status: design scaffold. No runnable implementation exists here yet.
 
 This chapter intentionally comes late. Low-latency work is valuable only after
 the state transitions, logs, replay, risk boundaries, and push semantics are
@@ -47,6 +55,10 @@ connection setup, the chapter should show that explicitly.
 ## 中文
 
 目的：在语义模型稳定后优化运行时和网络路径。
+
+## 状态
+
+状态：设计脚手架。本目录尚无可运行实现。
 
 本章故意放在后面。低延迟工作只在状态转换、日志、重放、风控边界和推送
 语义足够清晰以至于可以测量时才有价值。

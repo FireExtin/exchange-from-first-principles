@@ -1,5 +1,9 @@
 # Truth Source Migration
 
+[English](#english) · [中文](#中文)
+
+## English
+
 This note is the project spine:
 
 > Start with database ACID as the source of truth, then migrate truth into an

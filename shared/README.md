@@ -1,5 +1,9 @@
 # Shared Contracts
 
+[English](#english) · [中文](#中文)
+
+## English
+
 This directory contains examples and schemas shared across chapters.
 
 The files here are not a framework. They are a small contract layer so each

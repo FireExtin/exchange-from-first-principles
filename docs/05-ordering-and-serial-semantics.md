@@ -1,5 +1,9 @@
 # Ordering And Serial Semantics
 
+[English](#english) · [中文](#中文)
+
+## English
+
 The central claim of this project is that many mechanisms that look different
 are really different ways to choose a successful serial history.
 

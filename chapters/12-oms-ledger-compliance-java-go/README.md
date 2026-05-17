@@ -1,5 +1,9 @@
 # 12 OMS, Ledger, Compliance, And Paths
 
+[English](#english) · [中文](#中文)
+
+## English
+
 Primitive: the trading engine cannot also be every product view.
 
 Question: why separate OMS, risk, ledger, and user-facing state?
@@ -7,6 +11,10 @@ Question: why separate OMS, risk, ledger, and user-facing state?
 This chapter is intentionally empty for now. It will connect the earlier Go
 asset/account chapters with the Java trading-system chapters after the command
 and event contracts stabilize.
+
+## Status
+
+Status: design scaffold. No runnable implementation exists here yet.
 
 Planned split:
 
@@ -25,6 +33,10 @@ Planned split:
 
 本章目前故意留空。它将在命令和事件契约稳定后，连接早期的 Go 资产/账户
 章节和 Java 交易系统章节。
+
+## 状态
+
+状态：设计脚手架。本目录尚无可运行实现。
 
 计划分离：
 

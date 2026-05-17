@@ -1,5 +1,9 @@
 # Flamegraph Notes
 
+[English](#english) · [中文](#中文)
+
+## English
+
 Measure after correctness.
 
 Initial targets:

@@ -1,5 +1,9 @@
 # Chapter Roadmap
 
+[English](#english) · [中文](#中文)
+
+## English
+
 This repo is a long-running explanation project: derive exchange and payment
 systems from small primitives, then show why each new mechanism becomes
 necessary.
@@ -7,7 +11,8 @@ necessary.
 The chapter order intentionally starts with money correctness, then builds the
 trading hot path, then adds replication, warm/cold paths, caches, push, and
 runtime optimization. The point is not to chase advanced infrastructure first;
-it is to make the pressure for that infrastructure visible.
+it is to make the Correctness, Performance, and Reliability pressures for that
+infrastructure visible.
 
 For the full documentation catalog, see [Documentation Map](./README.md).
 
@@ -183,28 +188,28 @@ Each chapter should include:
 
 ## Core Theory Notes
 
-- `docs/00-project-principles.zh.md` records the project-level engineering
+- `docs/01-core-principles.md` records the project-level engineering
   principles: semantic contract first, shared tests, explicit docs, and simple
   executable examples before advanced infrastructure.
 - `shared/go` is the first concrete semantic contract: typed funds commands,
   events, rejection reasons, and a minimal engine interface.
 - `integration-tests` contains the first cross-chapter proof that different
   execution styles can preserve the same external business semantics.
-- `docs/10-design-paper.md` is the full design-paper version of the project:
+- `docs/02-design-paper.md` is the full design-paper version of the project:
   DB truth source, command log, deterministic state machine, replicated log,
   matching, position, risk, margin, caches, push, implementation chapters,
   state ownership, publication, data gravity, and recovery semantics.
-- `docs/11-ordering-and-serial-semantics.md` explains why locks, MVCC/CAS, and
+- `docs/05-ordering-and-serial-semantics.md` explains why locks, MVCC/CAS, and
   Raft/Paxos are all ways to choose a successful serial history.
-- `docs/12-version-contract-and-testing.md` defines the cross-version contract:
+- `docs/06-version-contract-and-testing.md` defines the cross-version contract:
   business semantics should survive architecture changes, and the same
   integration scenarios should run against every version.
-- `docs/08-truth-source-migration.md` explains how the source of truth moves
+- `docs/04-truth-source-migration.md` explains how the source of truth moves
   from DB ACID transactions to ordered facts and a replicated state machine.
-- `docs/09-position-matching-risk-margin.md` defines the trading-domain
+- `docs/08-position-matching-risk-margin.md` defines the trading-domain
   surface: matching, position management, margin, pre-trade risk, continuous
   risk, and hot/warm/cold paths.
-- `docs/13-trading-desk-extension.md` defines the later desk layer: external
+- `docs/09-trading-desk-extension.md` defines the later desk layer: external
   market data, pricing, algos, order routing, hedging, best execution, and
   arbitrage as consumers of exchange-core facts.
 
@@ -217,7 +222,7 @@ Each chapter should include:
 
 章节顺序有意从资金正确性开始，然后构建交易热路径，再添加复制、冷热路径、
 缓存、推送和运行时优化。重点不是先追逐高级基础设施，而是让那种基础设施的
-压力变得可见。
+正确性、性能和可靠性压力变得可见。
 
 完整文档目录见 [Documentation Map](./README.md)。
 
@@ -359,20 +364,20 @@ Each chapter should include:
 
 ## 核心理论笔记
 
-- `docs/00-project-principles.zh.md` 记录项目级工程原则：语义契约优先、
+- `docs/01-core-principles.md` 记录项目级工程原则：语义契约优先、
   共享测试、显式文档，以及在高级基础设施之前先提供简单可执行示例。
 - `shared/go` 是第一份具体语义契约：类型化资金命令、事件、拒绝原因和最小引擎接口。
 - `integration-tests` 包含第一组跨章节证明：不同执行方式可以保持相同的外部业务语义。
-- `docs/10-design-paper.md` 是项目的完整设计论文版本：DB 真相源、命令日志、
+- `docs/02-design-paper.md` 是项目的完整设计论文版本：DB 真相源、命令日志、
   确定性状态机、复制日志、撮合、仓位、风控、保证金、缓存、推送、实现章节、
   状态归属、发布、data gravity 和恢复语义。
-- `docs/11-ordering-and-serial-semantics.md` 解释为什么锁、MVCC/CAS 和 Raft/Paxos
+- `docs/05-ordering-and-serial-semantics.md` 解释为什么锁、MVCC/CAS 和 Raft/Paxos
   都是选择成功串行历史的不同方式。
-- `docs/12-version-contract-and-testing.md` 定义跨版本契约：业务语义应能在
+- `docs/06-version-contract-and-testing.md` 定义跨版本契约：业务语义应能在
   架构变化中存活，相同的集成场景应能针对每个版本运行。
-- `docs/08-truth-source-migration.md` 解释真相源如何从 DB ACID 事务迁移到
+- `docs/04-truth-source-migration.md` 解释真相源如何从 DB ACID 事务迁移到
   有序事实和复制状态机。
-- `docs/09-position-matching-risk-margin.md` 定义交易域表面：撮合、仓位管理、
+- `docs/08-position-matching-risk-margin.md` 定义交易域表面：撮合、仓位管理、
   保证金、下单前风控、持续风控和冷热路径。
-- `docs/13-trading-desk-extension.md` 定义后期交易台层：外部行情、定价、
+- `docs/09-trading-desk-extension.md` 定义后期交易台层：外部行情、定价、
   策略、订单路由、对冲、最优执行和套利，作为交易所核心事实的消费者。

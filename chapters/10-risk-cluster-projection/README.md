@@ -1,6 +1,14 @@
 # 10 Risk Cluster Projection
 
+[English](#english) · [中文](#中文)
+
+## English
+
 Purpose: consume events and maintain continuous exposure views.
+
+## Status
+
+Status: design scaffold. No runnable implementation exists here yet.
 
 First implementation should cover:
 
@@ -17,6 +25,10 @@ This is warm-path state. It should be replayable and observable.
 ## 中文
 
 目的：消费事件并维护持续敞口视图。
+
+## 状态
+
+状态：设计脚手架。本目录尚无可运行实现。
 
 第一个实现应覆盖：
 

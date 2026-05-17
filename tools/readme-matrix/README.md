@@ -1,5 +1,9 @@
 # README Matrix Tool
 
+[English](#english) · [中文](#中文)
+
+## English
+
 Future home for a small tool that extracts comparison sections from chapter or
 version READMEs.
 

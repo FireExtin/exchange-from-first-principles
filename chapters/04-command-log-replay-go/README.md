@@ -1,5 +1,9 @@
 # 04 Command Log Replay
 
+[English](#english) · [中文](#中文)
+
+## English
+
 Primitive: state changes are written as commands and events.
 
 Question: how do we recover after a crash and explain what happened?
@@ -14,6 +18,10 @@ truth".
 
 The chapter also exposes a funds replay engine through `adapter`, using the same
 shared command and event contract as chapter 03.
+
+## Status And Run
+
+Status: runnable Go chapter.
 
 Run:
 
@@ -36,6 +44,10 @@ go test ./...
 
 本章也通过 `adapter` 暴露了一个资金重放引擎，使用与第 03 章相同的共享
 命令和事件契约。
+
+## 状态与运行
+
+状态：可运行 Go 章节。
 
 运行：
 

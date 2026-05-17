@@ -1,7 +1,15 @@
 # 14 Market And Execution Push
 
+[English](#english) · [中文](#中文)
+
+## English
+
 Purpose: define how public market data and private execution updates leave the
 core in a recoverable way.
+
+## Status
+
+Status: design scaffold. No runnable implementation exists here yet.
 
 The trading core emits facts. Push systems turn those facts into client-facing
 streams. The push layer must be fast, but it must also make gaps and recovery
@@ -58,6 +66,10 @@ recovery. Kernel bypass and runtime tuning stay in chapter 16.
 ## 中文
 
 目的：定义公共行情数据和私有成交更新如何以可恢复的方式离开核心。
+
+## 状态
+
+状态：设计脚手架。本目录尚无可运行实现。
 
 交易核心发出事实。推送系统将这些事实转化为面向客户端的流。推送层必须快速，
 但也必须使间隙和恢复显式。

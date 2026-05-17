@@ -1,5 +1,9 @@
 # Integration Test Contract
 
+[English](#english) · [中文](#中文)
+
+## English
+
 This directory is reserved for cross-version scenarios.
 
 The goal is to prove that architecture can change while business semantics stay

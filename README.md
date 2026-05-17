@@ -1,7 +1,7 @@
 # Exchange From First Principles
 
-> Making truth, ordering, recovery, and system boundaries explicit by deriving
-> an exchange from first principles.
+> Deriving exchange architecture from first principles through correctness,
+> performance, and reliability trade-offs.
 
 [English](#english) · [中文](#中文)
 
@@ -20,21 +20,18 @@ This project answers that question by building one stage by stage, with small
 runnable programs and design notes.
 
 It is not a production exchange. It is a systems project about correctness,
-ordering, replay, risk boundaries, and architecture evolution.
+performance, reliability, risk boundaries, and architecture evolution.
 
 ### The Thesis
 
-A modern exchange does not evolve by randomly adding infrastructure. It evolves
-by making four things increasingly explicit:
+A modern exchange does not evolve by randomly adding infrastructure.
+Architecture changes are not goals by themselves. They are trade-offs among
+Correctness, Performance, and Reliability. Each stage chooses where to pay for
+ordering, durability, recovery, latency, and operational complexity.
 
-- the source of truth;
-- the concurrency model;
-- the recovery model;
-- the boundary between hot-path facts and downstream views.
-
-The first version can treat database rows and ACID transactions as truth. Later
-versions move toward explicit command logs, deterministic state machines,
-replication, projections, and replayable facts.
+The project still uses a few concrete Architecture Lenses to make those
+trade-offs visible: source of truth, ordering model, recovery model, and the
+boundary between hot-path facts and downstream views.
 
 Across those versions, the core business shape should remain stable:
 
@@ -83,7 +80,7 @@ source-of-truth map.
 | 16 | Low-latency runtime and networking | Design scaffold |
 | 17-21 | Trading desk extension ideas | Planned notes only |
 
-Each chapter answers four questions:
+Each chapter keeps the trade-off concrete by answering four questions:
 
 1. What model is the system in now?
 2. What semantic guarantees does it provide?
@@ -106,8 +103,9 @@ ops/                  runbooks and deployment notes
 ### How To Read
 
 - Start with [docs/README.md](./docs/README.md).
-- Read [docs/00-goal.md](./docs/00-goal.md) and
-  [docs/10-design-paper.md](./docs/10-design-paper.md).
+- Read [docs/00-goal.md](./docs/00-goal.md),
+  [docs/01-core-principles.md](./docs/01-core-principles.md), and
+  [docs/02-design-paper.md](./docs/02-design-paper.md).
 - Use [docs/07-chapter-roadmap.md](./docs/07-chapter-roadmap.md) to choose the
   next chapter.
 - Use the chapter README before changing code in that chapter.
@@ -177,19 +175,17 @@ Apache-2.0. See `LICENSE`.
 
 每个阶段都配小型可运行代码和设计说明，解释当前阶段的语义模型、保证、瓶颈，以及为什么需要进入下一阶段。
 
-这不是生产级交易所。它是一个系统设计和工程训练项目，重点是正确性、顺序、重放、风控边界和架构演化。
+这不是生产级交易所。它是一个系统设计和工程训练项目，重点是正确性、性能、
+可靠性、风控边界和架构演化。
 
 ### 核心论点
 
-现代交易所的演化，不是随机添加各种技术，而是把四件事一步步显式化：
+现代交易所的演化，不是随机添加各种技术。架构变化本身不是目标。它是在
+正确性、性能和可靠性之间做取舍。每个阶段都在选择：排序、持久化、恢复、
+延迟和运营复杂度分别在哪里付费。
 
-- 真相源；
-- 并发模型；
-- 恢复模型；
-- 事实流和下游视图的边界。
-
-第一版可以把数据库行和 ACID 事务当作真相源。后续版本会逐步走向显式命令日志、
-确定性状态机、复制、projection 和可重放事实。
+本项目仍会使用几个具体的架构分析视角来让这些取舍可见：真相源、排序模型、
+恢复模型，以及热路径事实与下游视图之间的边界。
 
 在这些版本之间，核心业务语义应该保持稳定：
 
@@ -237,7 +233,7 @@ old_state + command -> new_state + events
 | 16 | 低延迟运行时与网络 | 设计脚手架 |
 | 17-21 | 交易台扩展想法 | 仅规划笔记 |
 
-每个章节固定回答四个问题：
+每个章节都通过四个问题把取舍落到具体工程形状上：
 
 1. 当前系统模型是什么？
 2. 它提供了什么语义保证？
@@ -260,8 +256,9 @@ ops/                  runbook 和部署说明
 ### 如何阅读
 
 - 先从 [docs/README.md](./docs/README.md) 开始。
-- 再读 [docs/00-goal.md](./docs/00-goal.md) 和
-  [docs/10-design-paper.md](./docs/10-design-paper.md)。
+- 再读 [docs/00-goal.md](./docs/00-goal.md)、
+  [docs/01-core-principles.md](./docs/01-core-principles.md) 和
+  [docs/02-design-paper.md](./docs/02-design-paper.md)。
 - 用 [docs/07-chapter-roadmap.md](./docs/07-chapter-roadmap.md) 决定下一章。
 - 修改某章代码前，先读该章自己的 README。
 

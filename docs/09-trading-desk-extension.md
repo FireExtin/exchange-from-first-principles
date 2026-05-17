@@ -1,5 +1,9 @@
 # Trading Desk Extension
 
+[English](#english) · [中文](#中文)
+
+## English
+
 This note defines a later extension of the project: a trading desk, market
 maker, or proprietary trading system built on top of the exchange primitives.
 It should not be implemented early. It becomes useful only after the exchange

@@ -1,5 +1,9 @@
 # Version Contract And Testing
 
+[English](#english) · [中文](#中文)
+
+## English
+
 This project should become stronger as its architecture changes. The way to
 prove that is to keep the business contract stable.
 

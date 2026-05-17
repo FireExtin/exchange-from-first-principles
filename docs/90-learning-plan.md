@@ -1,5 +1,9 @@
 # Java And Go Learning Plan
 
+[English](#english) · [中文](#中文)
+
+## English
+
 This is the study spine for the project.
 
 ## Priority
@@ -49,7 +53,8 @@ Minimum exercises:
 Focus on correctness first, then hot-path optimization. The database remains a
 projection and audit surface, not the mutation center.
 
-Rust is not deleted. It is paused.
+Rust is exploratory. Keep it useful for measurement and FFI boundary thinking,
+but do not let it replace the Java and Go learning track.
 
 ---
 
@@ -98,4 +103,5 @@ Java 优先用于交易热路径。Go 对服务边界和资产系统相关工作
 
 先关注正确性，再优化热路径。数据库保持作为投影和审计面，而不是变更中心。
 
-Rust 并未删除，只是暂停。
+Rust 是探索实验。保留它用于测量和 FFI 边界思考，但不要让它替代 Java 和 Go
+学习主线。

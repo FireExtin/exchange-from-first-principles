@@ -1,5 +1,9 @@
 # Go Tools
 
+[English](#english) · [中文](#中文)
+
+## English
+
 Go should own service and operational edges, not the trading hot path:
 
 - load generation;

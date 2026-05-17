@@ -1,6 +1,14 @@
 # 11 Replicated State Machine Aeron Java
 
+[English](#english) · [中文](#中文)
+
+## English
+
 This module is a runnable skeleton.
+
+Aeron Cluster is a later integration path. It owns cluster ordering,
+replication, snapshots, flow control, and failover. The Java trading core
+remains the deterministic business state machine.
 
 Later boundary:
 
@@ -39,10 +47,10 @@ The adapter boundary should therefore test transport shape separately from
 business semantics. If a message is private, financial, or state-changing, it
 must have a replay story.
 
-## Run
+## Status And Run
 
-This chapter expects Java 21. The repo has been tested with Azul Zulu 21 and
-Gradle 9.5.
+Status: runnable Java skeleton. This chapter expects Java 21. The repo has
+been tested with Azul Zulu 21 and Gradle 9.5.
 
 From this directory:
 
@@ -69,6 +77,9 @@ The Gradle test task already sets this flag.
 ## 中文
 
 本模块是一个可运行骨架。
+
+Aeron Cluster 是一个后续集成路径。它负责集群排序、复制、快照、流控和故障转移。
+Java 交易核心仍然是确定性业务状态机。
 
 后续边界：
 
@@ -104,9 +115,10 @@ Aeron、UDP、多播或任何快速消息层都可以快速移动字节。但本
 因此适配器边界应把传输形态和业务语义分开测试。如果消息是私有的、金融性的或
 会改变状态，它就必须有重放故事。
 
-## 运行
+## 状态与运行
 
-本章需要 Java 21。仓库已用 Azul Zulu 21 和 Gradle 9.5 验证。
+状态：可运行 Java 骨架。本章需要 Java 21。仓库已用 Azul Zulu 21 和 Gradle
+9.5 验证。
 
 在本目录运行：
 

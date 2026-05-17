@@ -32,7 +32,7 @@ For new readers:
 1. `README.md`
 2. `docs/README.md`
 3. `docs/00-goal.md`
-4. `docs/10-design-paper.md`
+4. `docs/02-design-paper.md`
 5. `docs/07-chapter-roadmap.md`
 6. The README for the chapter being run or changed
 
@@ -40,7 +40,7 @@ For implementation work:
 
 1. `shared/README.md`
 2. `integration-tests/README.md`
-3. `docs/12-version-contract-and-testing.md`
+3. `docs/06-version-contract-and-testing.md`
 4. The target chapter README
 
 ## 4. Verification

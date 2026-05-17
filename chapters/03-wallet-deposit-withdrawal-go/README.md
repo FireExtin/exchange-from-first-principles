@@ -1,5 +1,9 @@
 # 03 Wallet Deposit Withdrawal
 
+[English](#english) · [中文](#中文)
+
+## English
+
 Primitive: outside money enters and leaves the system.
 
 Question: why do callbacks, retries, and duplicate notifications need
@@ -17,6 +21,11 @@ It adds definitions and opt-in tests for provider callbacks, settlement reports,
 bank/custody/on-chain records, partial refunds, timing differences, duplicates,
 record matching rules, and adjustment journals. This is reconciliation matching,
 not order-book matching. Its core logic is intentionally left as an exercise.
+
+## Status And Run
+
+Status: runnable Go chapter. The reconciliation lab is an opt-in TODO exercise
+behind a build tag.
 
 Run:
 
@@ -49,6 +58,10 @@ They are expected to fail at TODO boundaries until you implement the lab.
 定义和可选测试，用来覆盖 provider callback、settlement report、
 bank/custody/on-chain record、部分退款、时间差、重复事件和人工 adjustment
 journal，以及记录匹配规则。这里说的是对账匹配，不是 order book 撮合。核心逻辑刻意留作练习。
+
+## 状态与运行
+
+状态：可运行 Go 章节。对账实验是 build tag 后的可选 TODO 练习。
 
 运行：
 

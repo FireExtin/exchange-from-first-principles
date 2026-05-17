@@ -1,6 +1,14 @@
 # 15 Rust Hot Path
 
+[English](#english) · [中文](#中文)
+
+## English
+
 This chapter is a runnable experiment, not the active implementation track.
+
+## Status And Run
+
+Status: runnable Rust experiment.
 
 The goal is to isolate what Rust might contribute to an exchange hot path:
 
@@ -49,6 +57,10 @@ make test-rust
 ## 中文
 
 本章是一个可运行实验，不是当前主实现路线。
+
+## 状态与运行
+
+状态：可运行 Rust 实验。
 
 目标是隔离 Rust 可能给交易热路径带来的价值：
 

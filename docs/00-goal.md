@@ -1,5 +1,9 @@
 # Goal
 
+[English](#english) · [中文](#中文)
+
+## English
+
 Build the smallest exchange core that is still honest about trading-system
 failure modes.
 
@@ -17,7 +21,8 @@ The project docs are organized around four layers:
 
 - `README.md` explains the project quickly.
 - `docs/README.md` is the canonical documentation map.
-- `docs/10-design-paper.md` is the full design narrative.
+- `docs/01-core-principles.md` owns stable engineering principles.
+- `docs/02-design-paper.md` is the full design narrative.
 - chapter READMEs explain local pressure, local guarantees, and how to run the
   local exercises.
 
@@ -52,7 +57,8 @@ chapter behavior, `docs/07-chapter-roadmap.md` for chapter status, and
 
 - `README.md` 快速解释项目；
 - `docs/README.md` 是规范文档地图；
-- `docs/10-design-paper.md` 是完整设计叙事；
+- `docs/01-core-principles.md` 负责稳定工程原则；
+- `docs/02-design-paper.md` 是完整设计叙事；
 - 各章节 README 解释本章的局部压力、局部保证和运行方式。
 
 如果这些文件出现不一致，优先相信更具体的来源：章节行为看章节 README，

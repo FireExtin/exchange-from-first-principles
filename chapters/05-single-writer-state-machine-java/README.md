@@ -1,5 +1,9 @@
 # 05 Single-Writer State Machine Java
 
+[English](#english) · [中文](#中文)
+
+## English
+
 This directory is the target home for the first Java trading-core chapter.
 
 Do not build a broad exchange here. Build the smallest Java surface that proves:
@@ -11,6 +15,11 @@ Do not build a broad exchange here. Build the smallest Java surface that proves:
 - low-allocation hot-path choices;
 - profiling with JFR and async-profiler;
 - clean adapter boundary to Aeron.
+
+## Status
+
+Status: design scaffold. No runnable Java module lives here yet; chapter 11
+contains the current runnable Java/Aeron boundary skeleton.
 
 ## Proposed Modules
 
@@ -73,6 +82,11 @@ owned state + ordered command -> owned state' + events
 - 低分配热路径选择；
 - 用 JFR 和 async-profiler 分析；
 - 到 Aeron 的清晰适配器边界。
+
+## 状态
+
+状态：设计脚手架。本目录尚无可运行 Java 模块；第 11 章包含当前可运行的
+Java/Aeron 边界骨架。
 
 ## 提议的模块
 

@@ -1,6 +1,14 @@
 # 07 Position Manager
 
+[English](#english) · [中文](#中文)
+
+## English
+
 Purpose: derive account and instrument exposure from execution events.
+
+## Status
+
+Status: design scaffold. No runnable implementation exists here yet.
 
 First implementation should cover:
 
@@ -17,6 +25,10 @@ Do not implement pricing, liquidation, or cross-margin here yet.
 ## 中文
 
 目的：从成交事件推导账户和合约敞口。
+
+## 状态
+
+状态：设计脚手架。本目录尚无可运行实现。
 
 第一个实现应覆盖：
 

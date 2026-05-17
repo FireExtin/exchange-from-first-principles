@@ -1,5 +1,7 @@
 # Minimal Exchange Design Paper
 
+[English](#english) · [中文](#中文)
+
 ## English
 
 ### 1. Thesis
@@ -25,8 +27,10 @@ The central thesis is:
 
 ```text
 Modern exchange architecture is not a pile of components.
-It is a sequence of migrations in truth source, ordering model,
-recovery model, and ownership boundaries.
+Architecture changes are not goals by themselves.
+They are trade-offs among Correctness, Performance, and Reliability.
+Each stage chooses where to pay for ordering, durability, recovery,
+latency, and operational complexity.
 ```
 
 The core transition can be written as:
@@ -43,16 +47,17 @@ operational complexity.
 This paper is the project-level design map. Individual chapters should stay
 smaller: one pressure, one mechanism, one runnable experiment or test.
 
-### 2. The Four Explicit Things
+### 2. Architecture Lenses For Trade-Offs
 
-The project is organized around making four hidden things visible.
+Correctness, performance, and reliability are the objective frame. The project
+uses four architecture lenses to make the trade-offs concrete.
 
 | Dimension | Early Form | Later Form | Why It Changes |
 | --- | --- | --- | --- |
-| Truth source | Database rows | Ordered commands, events, snapshots, projections | Recovery and audit need facts, not only current rows |
-| Ordering model | SQL locks, MVCC, commit order | Sequencer, single writer, replicated log | Trading correctness depends on explainable order |
-| Recovery model | Restore DB backup and inspect rows | Snapshot plus replay from a known position | The system must rebuild exact state after failure |
-| Ownership boundary | Shared store queried by many services | Named state owner publishes facts | Hot state should not be pulled and reinterpreted everywhere |
+| Truth source | Database rows | Ordered commands, events, snapshots, projections | Correctness and audit need explainable facts, not only current rows |
+| Ordering model | SQL locks, MVCC, commit order | Sequencer, single writer, replicated log | Performance and fairness depend on where contention is paid |
+| Recovery model | Restore DB backup and inspect rows | Snapshot plus replay from a known position | Reliability depends on rebuilding exact state after failure |
+| Ownership boundary | Shared store queried by many services | Named state owner publishes facts | Performance and reliability improve when state ownership is explicit |
 
 The migration is not a rejection of databases. Databases remain excellent for
 ledgers, reports, settlement state, reconciliation, compliance archives, and
@@ -495,11 +500,11 @@ one pressure -> one mechanism -> one explicit semantic comparison
 
 Each chapter should answer:
 
-1. What is the current truth source?
-2. What ordering model is being used?
-3. What failure does this model now make visible?
-4. What new operational cost did the next model introduce?
-5. Which business semantics stayed the same?
+1. What correctness property must stay stable?
+2. What performance pressure is being introduced?
+3. What reliability or recovery failure does this model expose?
+4. Which architecture lens changed: truth, order, recovery, or ownership?
+5. What new operational cost did the next model introduce?
 
 ### 9. Non-Goals
 
@@ -565,7 +570,8 @@ That is the heart of the project.
 
 ```text
 现代交易所架构不是一堆组件的堆叠，
-而是真相源、排序模型、恢复模型和归属边界逐步显式化的过程。
+架构变化是在正确性、性能和可靠性之间做取舍。
+每个阶段都在选择：排序、持久化、恢复、延迟和运营复杂度分别在哪里付费。
 ```
 
 最核心的业务转移可以写成：
@@ -577,14 +583,16 @@ old_state + command -> new_state + events
 数据库事务、内存状态机、复制状态机都可以把成功的业务变更呈现为一条可解释
 的串行历史。它们的区别在于：排序、持久化、恢复和运维复杂度分别由谁承担。
 
-### 2. 四件需要显式化的事
+### 2. 用于取舍分析的架构视角
+
+正确性、性能和可靠性是目标框架。项目使用四个架构分析视角把取舍具体化。
 
 | 维度 | 早期形态 | 后期形态 | 为什么会变化 |
 | --- | --- | --- | --- |
-| 真相源 | 数据库行 | 有序命令、事件、快照、投影 | 恢复和审计需要事实，而不只是当前行 |
-| 排序模型 | SQL 锁、MVCC、提交顺序 | sequencer、单写者、复制日志 | 交易正确性依赖可解释顺序 |
-| 恢复模型 | 恢复数据库后查当前行 | 从已知位置快照加重放 | 故障后要重建确定状态 |
-| 归属边界 | 多个服务查询共享存储 | 明确的状态 owner 发布事实 | 热状态不能被到处拉取和重复解释 |
+| 真相源 | 数据库行 | 有序命令、事件、快照、投影 | 正确性和审计需要可解释事实，而不只是当前行 |
+| 排序模型 | SQL 锁、MVCC、提交顺序 | sequencer、单写者、复制日志 | 性能和公平性取决于竞争在哪里付费 |
+| 恢复模型 | 恢复数据库后查当前行 | 从已知位置快照加重放 | 可靠性依赖故障后能重建精确状态 |
+| 归属边界 | 多个服务查询共享存储 | 明确的状态 owner 发布事实 | 状态归属显式后，性能和可靠性更可控 |
 
 这不是说数据库不好。数据库仍然很适合账本、报表、结算状态、对账、合规归档
 和很多支付工作流。迁移发生在热路径需要更清晰的顺序和更稳定的延迟时。
@@ -848,11 +856,11 @@ matching
 
 每章都应该回答：
 
-1. 当前真相源是什么？
-2. 当前排序模型是什么？
-3. 这个模型暴露了什么新故障？
-4. 下一个模型引入了什么运维成本？
-5. 哪些业务语义保持不变？
+1. 哪个正确性属性必须保持稳定？
+2. 引入了什么性能压力？
+3. 这个模型暴露了什么可靠性或恢复故障？
+4. 哪个架构视角发生变化：真相、排序、恢复或归属？
+5. 下一个模型引入了什么运维成本？
 
 ### 9. 非目标
 

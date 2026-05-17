@@ -1,7 +1,15 @@
 # 13 Cache Coherence And Market State
 
+[English](#english) · [中文](#中文)
+
+## English
+
 Purpose: model the caches that make exchange systems fast while preserving
 clear failure semantics.
+
+## Status
+
+Status: design scaffold. No runnable implementation exists here yet.
 
 This chapter is not about adding Redis everywhere. It is about deciding which
 state may be cached, how stale it may be, and what the system does when the
@@ -62,6 +70,10 @@ test scenarios for stale, missing, and conflicting cache values:
 ## 中文
 
 目的：建模使交易所系统快速但保持清晰失败语义的缓存。
+
+## 状态
+
+状态：设计脚手架。本目录尚无可运行实现。
 
 本章不是到处加 Redis。它是决定哪些状态可以缓存、可以有多旧，以及当
 缓存缺失、过旧或矛盾时系统做什么。

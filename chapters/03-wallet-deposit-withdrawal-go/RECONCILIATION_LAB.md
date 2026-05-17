@@ -1,11 +1,21 @@
 # Reconciliation Lab
 
+[English](#english) · [中文](#中文)
+
+## English
+
 This lab is intentionally unfinished.
 
 The goal is to practice the shape of a real funds reconciliation service
 without building a full payment company. The package defines the contract,
 mocks, and opt-in tests. The matching, normalization, and adjustment logic are
 left as implementation exercises.
+
+## Status
+
+This is an exercise contract. Agents may refine interfaces, fixtures, and tests,
+but the core reconciliation implementation should remain TODO unless the user
+explicitly asks for the solution.
 
 ## Core Idea
 
@@ -151,6 +161,11 @@ These tests are expected to fail until the lab is implemented.
 - bank/custody/on-chain record：更接近最终资金事实，但通常延迟。
 
 输出应该是报告，而不是自动修改 ledger 或 wallet balance。
+
+## 状态
+
+这是一个练习契约。Agent 可以完善接口、fixture 和测试，但核心对账实现应保持
+TODO，除非用户明确要求写出答案。
 
 ## 对账匹配不是交易撮合
 
