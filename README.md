@@ -75,6 +75,11 @@ machines, and replicated execution.
 | 14 | Market-data and execution push | Design scaffold |
 | 15 | Rust hot-path experiment | Experimental |
 | 16 | Low-latency runtime and networking | Design scaffold |
+| 17 | External market-data ingestion | Future design note |
+| 18 | Pricing and signal engine | Future design note |
+| 19 | Order router and execution reports | Future design note |
+| 20 | Hedger and best execution | Future design note |
+| 21 | Arbitrage strategy demo | Future design note |
 
 Each chapter answers four questions:
 
@@ -109,6 +114,8 @@ ops/                  runbooks and deployment notes
   `docs/08-truth-source-migration.md`.
 - Read the trading domain boundary:
   `docs/09-position-matching-risk-margin.md`.
+- Read the trading-desk extension:
+  `docs/13-trading-desk-extension.md`.
 - Run each chapter independently when its model becomes clear.
 
 ### First Commands
@@ -220,6 +227,11 @@ old_state + command -> new_state + events
 | 14 | 行情推送与成交推送 | 设计脚手架 |
 | 15 | Rust 热路径实验 | 实验中 |
 | 16 | 低延迟运行时与网络 | 设计脚手架 |
+| 17 | 外部行情摄入 | 远期设计笔记 |
+| 18 | 定价与信号引擎 | 远期设计笔记 |
+| 19 | 订单路由与成交回报 | 远期设计笔记 |
+| 20 | 对冲器与最优执行 | 远期设计笔记 |
+| 21 | 套利策略演示 | 远期设计笔记 |
 
 每个章节固定回答四个问题：
 
@@ -253,6 +265,8 @@ ops/                  runbook 和部署说明
   `docs/11-ordering-and-serial-semantics.md`。
 - 再读交易域边界：
   `docs/09-position-matching-risk-margin.md`。
+- 再读交易台扩展：
+  `docs/13-trading-desk-extension.md`。
 - 最后读完整设计叙事：
   `docs/10-design-paper.md`。
 - 每个模型想清楚以后，再进入对应章节跑代码。

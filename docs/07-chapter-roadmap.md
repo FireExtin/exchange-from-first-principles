@@ -103,6 +103,59 @@ funds semantics.
       are stable.
     - Question: what should be optimized only after correctness is nailed down?
 
+## Lab Contract: Ownership, Publication, And Recovery
+
+The in-memory and low-latency principles should enter through existing chapters,
+not as a detached theory chapter.
+
+- Chapter 05 should name the private state owned by the single writer and show
+  why hot mutation avoids shared storage reads.
+- Chapter 11 should separate fast distribution from reliable recovery: committed
+  order, snapshot, replay, and failover are the contract.
+- Chapter 13 should model owner-published reference and market state:
+  snapshot plus versioned deltas, gap detection, rebuild, and fail policy.
+- Chapter 14 should show public and private push streams as recoverable
+  publications, not best-effort notifications.
+- Chapter 16 should measure warmup, allocation, pooling, off-heap/buffer paths,
+  and variance before claiming an optimization.
+
+New chapters are useful only when a pressure cannot be expressed inside these
+existing boundaries.
+
+## Phase 5: Trading Desk Extension
+
+Phase 5 is not part of the exchange core. It models a trading desk, market
+maker, or proprietary trading system built on top of the earlier primitives.
+It appears only after the project has reliable market-data streams, execution
+reports, positions, risk views, and reconciliation boundaries.
+
+17. `17-external-market-data-ingestion`
+    - Primitive: consume external venue books, trades, tickers, and reference
+      data.
+    - Question: how do stale data, sequence gaps, and snapshots affect
+      pricing and risk?
+
+18. `18-pricing-and-signal-engine`
+    - Primitive: convert market state into fair values, marks, and simple
+      signals.
+    - Question: why is pricing separate from matching, routing, and risk?
+
+19. `19-order-router-and-execution-reports`
+    - Primitive: send child orders to external venue mocks and consume
+      execution reports.
+    - Question: what changes when execution happens outside the local book?
+
+20. `20-hedger-and-best-execution`
+    - Primitive: reduce exposure and choose venues under cost, latency, and
+      liquidity constraints.
+    - Question: how do positions become execution decisions?
+
+21. `21-arbitrage-strategy-demo`
+    - Primitive: use multiple venue feeds and router mocks to show a simple
+      arbitrage loop.
+    - Question: what does a strategy need from market data, pricing, risk,
+      routing, and reconciliation?
+
 ## Rule
 
 Each chapter should include:
@@ -124,7 +177,8 @@ Each chapter should include:
   execution styles can preserve the same external business semantics.
 - `docs/10-design-paper.md` is the full design-paper version of the project:
   DB truth source, command log, deterministic state machine, replicated log,
-  matching, position, risk, margin, caches, push, and implementation chapters.
+  matching, position, risk, margin, caches, push, implementation chapters,
+  state ownership, publication, data gravity, and recovery semantics.
 - `docs/11-ordering-and-serial-semantics.md` explains why locks, MVCC/CAS, and
   Raft/Paxos are all ways to choose a successful serial history.
 - `docs/12-version-contract-and-testing.md` defines the cross-version contract:
@@ -135,6 +189,9 @@ Each chapter should include:
 - `docs/09-position-matching-risk-margin.md` defines the trading-domain
   surface: matching, position management, margin, pre-trade risk, continuous
   risk, and hot/warm/cold paths.
+- `docs/13-trading-desk-extension.md` defines the later desk layer: external
+  market data, pricing, algos, order routing, hedging, best execution, and
+  arbitrage as consumers of exchange-core facts.
 
 ---
 
@@ -224,6 +281,45 @@ Each chapter should include:
     - 原语：在语义稳定后测量和调优运行时和网络路径。
     - 问题：什么应该只在正确性确定后才优化？
 
+## Lab 契约：归属、发布与恢复
+
+内存化和低延迟原则应进入已有章节，而不是单独变成一章抽象理论。
+
+- 第 05 章应命名单写者拥有的私有状态，并展示热变更为什么避免共享存储读取。
+- 第 11 章应区分快速分发和可靠恢复：提交顺序、快照、重放和故障转移才是契约。
+- 第 13 章应建模 owner 发布的参考数据和市场状态：快照加版本化增量、缺口检测、
+  重建和失败策略。
+- 第 14 章应把公共行情和私有成交推送建模为可恢复发布，而不是 best-effort 通知。
+- 第 16 章应在声称优化前测量 warmup、分配、对象池、堆外或 buffer 路径以及方差。
+
+只有当某个压力无法被这些已有边界表达时，才新增章节。
+
+## 阶段五：交易台扩展
+
+阶段五不是交易所核心。它建模建立在前面原语之上的交易台、做市或自营交易
+系统。只有当项目已经拥有可靠的行情流、成交回报、仓位、风险视图和对账边界
+之后，这一层才自然出现。
+
+17. `17-external-market-data-ingestion`
+    - 原语：消费外部场所订单簿、成交、ticker 和参考数据。
+    - 问题：陈旧数据、序列缺口和快照如何影响定价与风控？
+
+18. `18-pricing-and-signal-engine`
+    - 原语：把市场状态转换成公允价、标记价格和简单信号。
+    - 问题：为什么定价应与撮合、路由和风控分离？
+
+19. `19-order-router-and-execution-reports`
+    - 原语：向外部场所 mock 发送子订单并消费成交回报。
+    - 问题：当执行发生在本地订单簿之外时，系统发生了什么变化？
+
+20. `20-hedger-and-best-execution`
+    - 原语：在成本、延迟和流动性约束下减少敞口并选择场所。
+    - 问题：仓位如何变成执行决策？
+
+21. `21-arbitrage-strategy-demo`
+    - 原语：用多个场所行情和路由 mock 展示一个简单套利闭环。
+    - 问题：策略需要从行情、定价、风控、路由和对账获得什么？
+
 ## 规则
 
 每个章节应包含：
@@ -240,7 +336,8 @@ Each chapter should include:
 - `shared/go` 是第一份具体语义契约：类型化资金命令、事件、拒绝原因和最小引擎接口。
 - `integration-tests` 包含第一组跨章节证明：不同执行方式可以保持相同的外部业务语义。
 - `docs/10-design-paper.md` 是项目的完整设计论文版本：DB 真相源、命令日志、
-  确定性状态机、复制日志、撮合、仓位、风控、保证金、缓存、推送和实现章节。
+  确定性状态机、复制日志、撮合、仓位、风控、保证金、缓存、推送、实现章节、
+  状态归属、发布、data gravity 和恢复语义。
 - `docs/11-ordering-and-serial-semantics.md` 解释为什么锁、MVCC/CAS 和 Raft/Paxos
   都是选择成功串行历史的不同方式。
 - `docs/12-version-contract-and-testing.md` 定义跨版本契约：业务语义应能在
@@ -249,3 +346,5 @@ Each chapter should include:
   有序事实和复制状态机。
 - `docs/09-position-matching-risk-margin.md` 定义交易域表面：撮合、仓位管理、
   保证金、下单前风控、持续风控和冷热路径。
+- `docs/13-trading-desk-extension.md` 定义后期交易台层：外部行情、定价、
+  策略、订单路由、对冲、最优执行和套利，作为交易所核心事实的消费者。

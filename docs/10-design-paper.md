@@ -1,102 +1,323 @@
 # Minimal Exchange Design Paper
 
-## Abstract
+## English
 
-This project is a long-running exercise in deriving an exchange system from
-small primitives. It starts with the most understandable money primitive:
-database ACID transactions over ledger rows. It then moves, step by step, toward
-explicit command logs, deterministic state machines, projections, and
-replicated execution.
+### 1. Thesis
 
-The migration is not about replacing databases because databases are bad. It is
-about making the system's truth source, concurrency model, recovery model, and
-service boundaries increasingly explicit.
-
-The central thesis:
+This project derives an exchange-like system from small, inspectable
+primitives. It does not start with Aeron, Raft, DPDK, Rust, or a complete
+matching engine. It starts with the smallest financial question:
 
 ```text
-Modern exchange architecture is not a bag of components.
-It is a sequence of semantic migrations.
+can two accounts exchange value without creating or losing money?
 ```
 
-A database-first design starts with storage transactions as truth. Later designs
-make ordered commands, events, snapshots, and projections explicit. The precise
-technical hinge is that database transactions, in-memory state machines, and
-replicated state machines can all present successful business mutations as an
-explainable serial history. The database hides that history behind transactions,
-locks, indexes, MVCC, and WAL. The state-machine model exposes it directly:
-every command receives a sequence number, every state transition has one cause,
-and every recovery path is snapshot plus replay.
+From there, each stage introduces one new pressure:
 
-This paper defines the model, boundaries, invariants, and implementation
-chapters. It is intentionally not a complete implementation. The code should be
-written chapter by chapter as practice.
+- more explicit money facts;
+- more explicit ordering;
+- more explicit recovery;
+- clearer system boundaries;
+- lower variance on the hot path;
+- better auditability on the cold path.
 
-## 1. Problem Statement
-
-An exchange-like system has to answer several classes of questions at the same
-time:
-
-1. Money correctness:
-   - Was value created accidentally?
-   - Did a debit happen without a corresponding credit?
-   - Are deposits, withdrawals, fees, and settlements explainable?
-
-2. Trading correctness:
-   - Why was an order accepted or rejected?
-   - Which orders matched, in which order, and at what price?
-   - Can the order book be rebuilt from facts?
-
-3. Position and risk correctness:
-   - What position does an account have now?
-   - What exposure exists under current market prices?
-   - Was an order allowed before admission?
-   - Did risk keep watching after execution?
-
-4. Recovery correctness:
-   - Can we rebuild state after a crash?
-   - Can another node apply the same facts and reach the same state?
-   - Can incident review stop at a sequence number and inspect the system?
-
-5. Latency correctness:
-   - Can the hot path avoid general-purpose storage cost?
-   - Can p99/p999 latency be explained instead of guessed?
-   - Can backpressure be explicit rather than accidental?
-
-The project should let these questions emerge naturally. Each chapter introduces
-one new pressure and one new mechanism.
-
-## 2. Design Principles
-
-### 2.1 Truth Should Have A Shape
-
-The first version treats database rows as truth:
+The central thesis is:
 
 ```text
-balances, ledger_entries, orders, trades, withdrawals, deposits
+Modern exchange architecture is not a pile of components.
+It is a sequence of migrations in truth source, ordering model,
+recovery model, and ownership boundaries.
 ```
 
-Later versions treat ordered facts as truth:
+The core transition can be written as:
 
 ```text
-command_log, event_log, snapshots
+old_state + command -> new_state + events
 ```
 
-The final hot-path model treats the replicated ordered command log as truth:
+A database transaction, an in-memory state machine, and a replicated state
+machine can all present successful business changes as an explainable serial
+history. They differ in where they pay for ordering, durability, recovery, and
+operational complexity.
+
+This paper is the project-level design map. Individual chapters should stay
+smaller: one pressure, one mechanism, one runnable experiment or test.
+
+### 2. The Four Explicit Things
+
+The project is organized around making four hidden things visible.
+
+| Dimension | Early Form | Later Form | Why It Changes |
+| --- | --- | --- | --- |
+| Truth source | Database rows | Ordered commands, events, snapshots, projections | Recovery and audit need facts, not only current rows |
+| Ordering model | SQL locks, MVCC, commit order | Sequencer, single writer, replicated log | Trading correctness depends on explainable order |
+| Recovery model | Restore DB backup and inspect rows | Snapshot plus replay from a known position | The system must rebuild exact state after failure |
+| Ownership boundary | Shared store queried by many services | Named state owner publishes facts | Hot state should not be pulled and reinterpreted everywhere |
+
+The migration is not a rejection of databases. Databases remain excellent for
+ledgers, reports, settlement state, reconciliation, compliance archives, and
+many payment workflows. The migration happens when the hot path needs clearer
+ordering and more predictable latency than general-purpose storage can provide.
+
+### 3. System Evolution
+
+#### 3.1 Stage One: Database ACID As Source Of Truth
+
+The first correct system can be built with SQL transactions:
 
 ```text
-sequence -> command -> deterministic state transition -> event
+request
+  -> begin transaction
+  -> validate current rows
+  -> write ledger/order/wallet rows
+  -> commit
 ```
 
-The database remains important, but its role changes. It becomes a projection,
-reporting store, reconciliation target, and compliance archive.
+This is the right starting point for:
 
-### 2.2 Separate Hot, Warm, And Cold Paths
+- double-entry ledger;
+- basic spot settlement;
+- deposit callbacks;
+- withdrawal state transitions;
+- provider records;
+- reconciliation reports;
+- admin adjustments.
+
+The main invariant is conservation of value:
+
+```text
+sum(debits) == sum(credits)
+```
+
+The database gives atomicity, durability, and inspectability. It is the most
+understandable first truth source.
+
+Its limits appear when the system needs to answer questions like:
+
+- which command produced this exact state?
+- what was the system state after sequence `N`?
+- why did this order win the race?
+- can another process replay the same facts and rebuild the same view?
+- can the hot path avoid storage locks and storage I/O?
+
+Those are not database defects. They are signals that the architecture is ready
+to make ordering and facts explicit.
+
+#### 3.2 Stage Two: Command Log And Outbox Inside The Database
+
+The bridge stage keeps SQL but records facts:
+
+```text
+request
+  -> begin transaction
+  -> insert command_log
+  -> update authoritative rows
+  -> insert event_log / outbox
+  -> commit
+```
+
+Now the source of explanation begins to shift:
+
+```text
+facts = command_log + event_log
+views = balances + orders + positions + reports
+```
+
+The outbox pattern teaches several core lessons:
+
+- state change and publication must be tied together;
+- duplicate messages are normal;
+- consumers must be idempotent;
+- projections can lag behind facts;
+- reconciliation is a system boundary, not a cleanup script.
+
+This is still not the final hot path. It is the bridge from row-centered
+thinking to fact-centered thinking.
+
+#### 3.3 Stage Three: Deterministic In-Memory State Machine
+
+The trading hot path eventually wants a stricter mutation boundary:
+
+```text
+command
+  -> sequence number
+  -> deterministic apply()
+  -> events
+  -> snapshot / replay boundary
+```
+
+Inside this boundary, one ordered command mutates core state at a time. This
+does not mean the whole system is single-threaded. It means the most sensitive
+business mutation has a named ordering point.
+
+The state machine owns private hot state:
+
+- order book;
+- order status;
+- reservations;
+- execution facts;
+- minimal position hooks;
+- risk-admission inputs that must be synchronous.
+
+It should not call databases, remote services, clocks, random generators, or
+slow dependencies from the mutation function. Inputs such as timestamps, ids,
+marks, and configuration versions must be part of the command stream or a
+versioned snapshot.
+
+The business equivalence with a serializable database can be expressed as:
+
+```text
+DB:             State_0 --tx_1-->  State_1 --tx_2-->  State_2
+State machine:  State_0 --cmd_1--> State_1 --cmd_2--> State_2
+```
+
+If the same operations are applied in the same order by a deterministic
+transition function, they produce the same externally observable business
+history. The difference is where ordering is enforced:
+
+- the database hides ordering inside locks, MVCC, indexes, WAL, and commit
+  rules;
+- the state machine exposes ordering before business mutation.
+
+This is why the same scenario tests should run against multiple
+implementations. The substrate may change, but the contract should not.
+
+#### 3.4 Stage Four: Replicated State Machine
+
+Once one state machine is understandable, replication becomes the next pressure:
+
+```text
+client command
+  -> replicated log / Aeron Cluster / Raft-style ordering
+  -> node A apply(command)
+  -> node B apply(command)
+  -> node C apply(command)
+  -> same state if same snapshot and same log
+```
+
+The project should not implement consensus from scratch. It should define what
+the exchange core asks from the replicated log:
+
+- command encoding;
+- session identity;
+- accepted log position;
+- snapshot format;
+- replay start point;
+- backpressure semantics;
+- failover behavior;
+- event emission boundary.
+
+The learning goal is not to become a consensus implementer. The learning goal
+is to understand why a trading core asks for total order, replay, and failover
+at this boundary.
+
+#### 3.5 Stage Five: Projections, Caches, Push, And Runtime
+
+After facts are ordered and recoverable, the system has to serve many readers:
+
+- OMS;
+- ledger projection;
+- reconciliation;
+- compliance;
+- public market data;
+- private execution reports;
+- user/account permission caches;
+- mark-price and risk projections;
+- dashboards and reports.
+
+These components should not pull hot state directly from the core. They should
+consume versioned publications:
+
+```text
+snapshot(version=N) + deltas(version>N) -> local projection
+```
+
+Later runtime work should optimize only after the semantics are stable. Warmup,
+allocation control, pooling, off-heap/buffer usage, CPU isolation, and
+networking experiments belong here, not at the beginning.
+
+### 4. Design Principles
+
+#### 4.1 Truth Should Have A Shape
+
+Every stage must say what the current truth source is.
+
+Early truth:
+
+```text
+balances, ledger_entries, orders, trades, deposits, withdrawals
+```
+
+Later truth:
+
+```text
+command_log, event_log, snapshots, replicated log position
+```
+
+Views such as `available_balance`, `position_qty`, `top_of_book`, and
+`risk_exposure` are useful, but they should be explainable from facts.
+
+#### 4.2 Facts Before Views
+
+The system should prefer immutable facts before mutable summaries:
+
+```text
+deposit accepted
+withdrawal requested
+cash reserved
+order accepted
+trade executed
+position updated
+margin checked
+provider record ingested
+bank record matched
+```
+
+When facts and views disagree, reconciliation needs a path back to the raw
+facts and the rule version that interpreted them.
+
+#### 4.3 Prefer Explicit Order Over Hidden Contention
+
+Locks are acceptable in many payment and ledger workflows. They become harder
+to explain in the trading hot path when tail latency, retries, and fairness are
+part of the business contract.
+
+The state-machine model pays more infrastructure cost up front:
+
+- sequencing;
+- logs;
+- snapshots;
+- replay;
+- backpressure;
+- failover;
+- operational tooling.
+
+In return, the business question becomes simpler:
+
+```text
+if command A ran before command B, what should happen?
+```
+
+#### 4.4 Ordering Mechanisms Are Different Places To Pay
+
+| Mechanism | Where Ordering Is Paid | Strength | Cost |
+| --- | --- | --- | --- |
+| Pessimistic locking / 2PL | Before or during execution | Simple correctness for shared rows | Contention and deadlocks |
+| MVCC / CAS / optimistic validation | At commit time | High read concurrency | Retries and conflict handling |
+| Single writer / sequencer | Before mutation | Simple deterministic core | Partitioning and recovery design |
+| Raft / Paxos / replicated log | Before replicated execution | Failover and consistency | Operational and latency cost |
+
+Serializable isolation gives equivalence to some serial history.
+Linearizability adds real-time constraints. Strict serializability combines
+both effects. The project uses these ideas as comparison language, not as
+academic decoration.
+
+#### 4.5 Separate Hot, Warm, And Cold Paths
 
 Hot path:
 
 ```text
-admitted command -> sequencer -> deterministic state machine -> emitted facts
+admitted command -> ordered mutation -> emitted facts
 ```
 
 Warm path:
@@ -112,675 +333,551 @@ facts -> reports -> reconciliation -> audit -> compliance export
 ```
 
 Cold path work is not less important. It is simply not allowed to block the hot
-path. The system should be explainable without making every explanation
+path. The design should be explainable without making every explanation
 synchronous.
 
-### 2.3 Prefer Explicit Order Over Hidden Contention
+#### 4.6 State Ownership And Data Gravity
 
-For a simple payment workflow, row locks are fine. For a trading hot path,
-hidden lock contention and retry behavior can make behavior difficult to
-explain.
-
-The state-machine design pays a high infrastructure cost: sequencing, logs,
-snapshots, backpressure, failover, and replay. In return, it gets a simple
-semantic model:
+Hot state becomes expensive when many components repeatedly fetch, join, and
+reinterpret it. The design should ask:
 
 ```text
-only one command mutates the core state at a time
+should the function move to the state instead of moving the state to every function?
 ```
 
-This is not a claim that every subsystem should be single-threaded. It is a
-claim that core business mutation should have a clear ordering boundary.
+Every hot state should have an owner:
 
-### 2.4 Ordering Mechanisms Are Different Places To Pay
+- who may mutate it;
+- how updates are published;
+- how consumers detect gaps;
+- how consumers rebuild after restart;
+- what stale behavior is allowed.
 
-Pessimistic concurrency control, optimistic concurrency control, and consensus
-all answer the same business question: which successful command becomes true
-first?
+This applies to order books, positions, account status, risk limits,
+instrument rules, and mark-price inputs.
 
-- Pessimistic locks and 2PL order conflicting work before or during execution:
-  whoever gets the lock first runs first.
-- MVCC, CAS, and optimistic validation order successful work at commit time:
-  conflicting speculative work retries or rolls back.
-- Raft and Paxos order work through replication: a command can be applied only
-  after it occupies an accepted log position.
+#### 4.7 Publication Before Pull
 
-For an external observer, the successful financial commands should still be
-explainable as a serial history. Serializable database isolation gives
-equivalence to some serial history. Linearizability adds real-time ordering
-constraints. Strict serializability combines both effects.
+Reference data, account permissions, risk configuration, execution facts, and
+market state should not be repeatedly pulled on the hot path.
 
-The project uses this as its core comparison language:
+The owner should publish versioned changes. Consumers should maintain local
+projections and know their failure policy:
 
-```text
-different ordering substrate, same externally explainable business history
-```
+- fail closed;
+- continue for a bounded stale window;
+- rebuild from snapshot plus deltas;
+- reject until a missing gap is replayed.
 
-This is why full ordering can be worth its cost. Once the mutation boundary is
-ordered, the upper layer does not reason about scheduling, interleavings, dirty
-reads, non-repeatable reads, or phantom writes. It only asks:
+This makes responsibility visible: the owner publishes, the consumer detects
+staleness and rebuilds.
 
-```text
-if command A runs before command B, what should happen?
-```
+#### 4.8 Distribution Is Not Durability
 
-### 2.5 Facts Before Views
+Fast distribution is not the same as reliable truth.
 
-Rows such as `available_balance`, `position_qty`, and `top_of_book` are views.
-They are useful and often necessary, but they should be explainable from facts:
+UDP multicast, for example, lets a sender transmit once to a multicast group
+that many receivers subscribe to. It is efficient for fan-out, but the
+transport does not remember late joiners, lost packets, slow consumers, or
+restart recovery.
 
-```text
-deposit accepted
-withdrawal requested
-order accepted
-cash reserved
-trade executed
-position updated
-margin checked
-```
+A reliable stream needs more than fast delivery:
 
-When facts and views disagree, the system needs a reconciliation story. That is
-why every chapter should prefer append-only facts first, then materialized
-views.
-
-## 3. Stage One: Database ACID As Source Of Truth
-
-The earliest system can be built with SQL transactions:
-
-```text
-request
-  -> begin transaction
-  -> read rows
-  -> validate
-  -> write rows
-  -> commit
-```
-
-This is the right starting point for:
-
-- double-entry ledger;
-- basic spot settlement;
-- deposit callbacks;
-- withdrawal state transitions;
-- admin corrections;
-- reconciliation reports.
-
-The main invariant is conservation of value:
-
-```text
-sum(debits) == sum(credits)
-```
-
-External money movement is modeled explicitly:
-
-```text
-deposit: external source -> user account
-withdrawal: user account -> external sink
-fee: user account -> fee account
-```
-
-The database gives atomicity and durability. It is also easy to inspect. This is
-why the project begins here.
-
-### 3.1 Limits Of The DB-First Model
-
-The DB-first model becomes harder when the hot path needs deterministic order
-and low variance.
-
-The database can tell us the committed result. It does not always give a clean
-business story:
-
-- Which command caused this final balance?
-- Why did this request win the race?
-- What exact state existed after operation `N`?
-- Can another process replay history without trusting current rows?
-- Can the matching engine avoid storage work during order admission?
-
-These are not database defects. They are signals that the project has reached
-the next stage.
-
-## 4. Stage Two: Command Log Inside The Database
-
-The bridge stage keeps SQL but introduces facts:
-
-```text
-request
-  -> begin transaction
-  -> insert command_log
-  -> insert event_log
-  -> update view rows
-  -> commit
-```
-
-The source of explanation begins to move:
-
-```text
-truth candidate = command_log + event_log
-view = balances/orders/positions/reports
-```
-
-This stage is important because it gives product engineers and trading engineers
-a common language. A payment engineer can still rely on SQL. A trading engineer
-can start thinking in replayable facts.
-
-### 4.1 Outbox And Projection
-
-A database-backed outbox can publish facts to downstream consumers:
-
-```text
-transaction commits rows and outbox event
-background publisher reads unsent events
-publisher sends to message bus
-publisher marks event as sent
-```
-
-This is not the final hot-path architecture, but it teaches the right lessons:
-
-- message publication must be tied to state change;
-- duplicate messages are normal;
-- consumers must be idempotent;
-- projections may lag behind facts;
-- reconciliation is part of the design, not an afterthought.
-
-## 5. Stage Three: Deterministic State Machine
-
-The trading hot path moves into a state machine:
-
-```text
-command
-  -> sequence number
-  -> deterministic apply()
-  -> event
-  -> snapshot/replay boundary
-```
-
-The state machine owns core mutable state:
-
-- order book;
-- account reservation state;
-- accepted/rejected order state;
-- execution events;
-- minimal position hooks.
-
-It should not call databases, remote services, or slow dependencies inside the
-state transition.
-
-### 5.1 Why This Can Be Equivalent To DB ACID
-
-A serializable database history can be represented as:
-
-```text
-State_0 --tx_1--> State_1 --tx_2--> State_2 --tx_3--> State_3
-```
-
-A state-machine history can be represented as:
-
-```text
-State_0 --cmd_1--> State_1 --cmd_2--> State_2 --cmd_3--> State_3
-```
-
-If the same operations run in the same order and the transition function is
-deterministic, both models produce the same final state.
-
-The engineering difference is where the ordering is enforced:
-
-- DB model: ordering is hidden inside storage concurrency control.
-- State-machine model: ordering is explicit before business mutation.
-
-The state-machine model looks more expensive because it requires sequencing,
-logs, snapshots, and replica management. But its business semantics are simpler:
-there is no race inside the core mutation boundary.
-
-The strongest proof is to keep the transition contract stable across versions.
-The surrounding substrate may move from SQL transactions to an in-memory writer
-to a replicated log, but the business transition should still look like:
-
-```text
-ordered input + deterministic apply -> new state + emitted facts
-```
-
-If the same scenario suite passes against each version, the architecture has
-changed while the external semantics have not.
-
-### 5.2 Determinism Requirements
-
-The state machine must avoid nondeterminism:
-
-- no wall-clock reads inside mutation logic;
-- no random number generation inside mutation logic;
-- no remote calls inside mutation logic;
-- no unordered map iteration that affects emitted facts;
-- no floating-point money math;
-- no dependency on local thread scheduling.
-
-Inputs such as timestamps, ids, marks, and risk parameters must be part of the
-command stream or configuration snapshot.
-
-## 6. Stage Four: Replicated State Machine
-
-Once one state machine is understandable, replication becomes the next pressure.
-
-Target shape:
-
-```text
-client command
-  -> replicated log / Aeron Cluster / Raft-like ordering
-  -> node A apply(command)
-  -> node B apply(command)
-  -> node C apply(command)
-  -> same state if same snapshot and same log
-```
-
-This stage is where Aeron Cluster or a Raft-like layer becomes relevant. The
-project should not implement consensus from scratch. It should instead define
-clear contracts at the boundary:
-
-- command encoding;
-- session identity;
-- sequence position;
-- snapshot format;
-- event emission;
-- backpressure handling;
-- replay start point.
-
-The learning goal is not to become a consensus implementer. The learning goal is
-to understand what consistency service the trading system is asking from the
-replicated log.
-
-## 7. Domain Model
-
-### 7.1 Accounts And Ledger
-
-The ledger tracks value movement. It should support:
-
-- account id;
-- currency/asset;
-- debit account;
-- credit account;
-- amount;
-- reason;
-- external reference;
-- idempotency key;
-- event sequence.
-
-Important invariant:
-
-```text
-every internal movement has equal debit and credit
-```
-
-Deposits and withdrawals cross the system boundary, so their external references
-must be explicit.
-
-### 7.2 Orders And Executions
-
-Orders are intents. Executions are facts.
-
-An accepted order means:
-
-```text
-the system accepted an intent under known constraints
-```
-
-An execution means:
-
-```text
-the system created a trade fact
-```
-
-The system should not confuse the two. Positions are derived from executions,
-not from open orders.
-
-### 7.3 Position
-
-Position state is the account's exposure by instrument:
-
-- net quantity;
-- average entry price;
-- realized PnL;
-- unrealized PnL;
-- open notional;
-- mark-price dependency;
-- margin dependency.
-
-Position management should be replayable from execution reports. If the trading
-desk routes to external exchanges, position management may be more important
-than local matching.
-
-### 7.4 Desk Pre-Trade Risk
-
-Pre-trade risk decides whether a command is allowed to enter the sequenced core.
-
-Examples:
-
-- account enabled;
-- instrument enabled;
-- notional below limit;
-- price within band;
-- order size below limit;
-- enough available balance;
-- enough margin;
-- account or strategy not killed.
-
-This component is close to order entry. It must be fast and deterministic.
-
-### 7.5 Risk Cluster
-
-The risk cluster watches continuous exposure after facts are emitted.
-
-Inputs:
-
-- executions;
-- positions;
-- mark prices;
-- deposits;
-- withdrawals;
-- funding;
-- manual adjustments;
-- account configuration.
-
-Outputs:
-
-- alerts;
-- kill-switch recommendations;
-- margin pressure;
-- exposure reports;
-- reconciliation signals.
-
-This is not the same as desk pre-trade risk. Pre-trade risk blocks bad commands.
-The risk cluster detects changing exposure over time.
-
-### 7.6 Margin
-
-The first margin model should be deliberately small.
-
-Spot:
-
-```text
-available_quote = quote_balance - frozen_quote
-available_base = base_balance - frozen_base
-
-buy_required_quote = price * quantity + fee_buffer
-sell_required_base = quantity
-```
-
-Linear contract placeholder:
-
-```text
-notional = abs(position_qty) * mark_price
-
-if position_qty > 0:
-  unrealized_pnl = position_qty * (mark_price - entry_price)
-else:
-  unrealized_pnl = abs(position_qty) * (entry_price - mark_price)
-
-initial_margin = notional * initial_margin_rate
-maintenance_margin = notional * maintenance_margin_rate
-equity = wallet_balance + unrealized_pnl
-available = equity - initial_margin - frozen_margin - fee_buffer
-```
-
-Liquidation placeholder:
-
-```text
-equity <= maintenance_margin + liquidation_fee_buffer
-```
-
-The goal is not to model every exchange rule. The goal is to make the dependency
-chain explicit:
-
-```text
-fills -> position -> mark dependent PnL -> equity -> margin -> risk action
-```
-
-## 8. Failure Model
-
-### 8.1 DB Stage Failures
-
-Expected failures:
-
-- duplicate callback;
-- transaction rollback;
-- deadlock retry;
-- idempotency conflict;
-- partial external payment state;
-- reconciliation mismatch.
-
-The design response:
-
-- idempotency keys;
-- unique constraints;
-- explicit status transitions;
-- append-only ledger entries;
-- reconciliation jobs.
-
-### 8.2 Command-Log Stage Failures
-
-Expected failures:
-
-- command appended but projection lagged;
-- event sent twice;
-- consumer processed twice;
-- snapshot too old;
-- replay position unknown.
-
-The design response:
-
-- event ids;
 - sequence numbers;
-- idempotent consumers;
-- replay checkpoints;
-- snapshot metadata.
-
-### 8.3 State-Machine Stage Failures
-
-Expected failures:
-
-- process crash;
-- leader failover;
+- gap detection;
+- snapshots;
+- replay;
 - backpressure;
-- slow projection;
-- divergent state due to nondeterminism;
-- snapshot/replay bug.
+- a durable or replicated source of facts;
+- explicit recovery ownership.
 
-The design response:
+Public market data can sometimes tolerate bounded loss if clients can resync.
+Private execution reports, ledger facts, and risk decisions cannot be treated
+as best-effort notifications.
 
-- deterministic transition tests;
-- snapshot plus replay;
-- no external calls in mutation;
-- explicit backpressure;
-- reproducible input streams;
-- sequence-based incident review.
+#### 4.9 Performance Is A Consequence Of Shape
 
-## 9. Implementation Chapters
+Low latency should not be a bag of tricks. It should follow from the system
+shape:
 
-The project should be implemented in small chapters.
+- hot mutable state has an owner;
+- commands are ordered before mutation;
+- consumers use local projections;
+- durable facts are written at clear boundaries;
+- replay and snapshot semantics are explicit;
+- allocation and warmup behavior are measured.
 
-1. Double-entry ledger in Go
-   - prove conservation of value;
-   - model external deposit/withdrawal boundaries.
+Only after this shape exists does it make sense to study pooling, off-heap
+buffers, zero-allocation paths, CPU pinning, NUMA locality, kernel bypass, or
+runtime-specific tuning.
 
-2. Spot trade with DB-shaped transaction in Go
-   - buyer/seller settlement;
-   - rollback and insufficient funds;
-   - simple rows as truth.
+### 5. Domain Boundaries
 
-3. Wallet deposit/withdrawal in Go
-   - idempotency;
-   - duplicate callback;
-   - status transition.
+| Boundary | Owns | Emits | Must Not Do |
+| --- | --- | --- | --- |
+| Ledger | Value movement and double-entry facts | Journal entries, balance facts | Hide unmatched external money |
+| Wallet | Deposit/withdrawal lifecycle | Provider callbacks, withdrawal state, raw records | Apply duplicate external events twice |
+| Reconciliation | Raw external records and matching reports | Exceptions, match results, adjustment proposals | Silently mutate ledger |
+| Matching | Price-time ordering and executions | Trades, fills, order status | Depend on remote calls during mutation |
+| Position | Exposure by account/instrument | Position updates, realized/unrealized PnL inputs | Treat open orders as executions |
+| Margin | Equity and requirement calculation | Margin snapshots, admissibility inputs | Hide formulas inside handlers |
+| Pre-trade risk | Admission decision | Accept/reject facts | Become a strategy engine |
+| Risk cluster | Continuous exposure projection | Alerts, risk actions, projection state | Pretend eventual projections are synchronous truth |
+| OMS / compliance | Workflow, reporting, audit | Reports, case state, regulatory exports | Block core mutation |
+| Cache / market state | Local projections of owned facts | Snapshot/delta versions, gap status | Serve unbounded stale data silently |
+| Push gateway | Public/private stream delivery | Sequenced snapshots and deltas | Claim best-effort delivery is truth |
 
-4. Command log and replay in Go
-   - ordered commands;
-   - replay;
-   - snapshot;
-   - equivalence with serial DB history.
+### 6. Trading Desk Extension
 
-5. In-memory single-writer in Java
-   - remove DB lock from hot path;
-   - introduce fixed event contracts;
-   - observe allocation behavior.
+The exchange core decides what is true inside the venue. A trading desk decides
+what to do given market state, inventory, risk, and external venues.
 
-6. Matching engine
-   - price-time priority;
-   - top-of-book;
-   - execution facts.
+Desk components should appear later, after the core can emit reliable market
+data, execution reports, positions, risk views, and reconciliation facts.
 
-7. Position manager
-   - execution reports to position state;
-   - account and instrument exposure.
+Natural emergence:
 
-8. Margin model
-   - spot available balance;
-   - linear contract placeholder;
-   - mark-driven equity.
+```text
+matching
+  -> executions
+  -> positions
+  -> exposure
+  -> pre-trade and continuous risk
+  -> market data and mark inputs
+  -> external venue routing
+  -> hedging / best execution / strategy
+```
 
-9. Desk pre-trade risk
-   - synchronous admission checks.
+Possible later desk layer:
 
-10. Risk cluster projection
-   - event and mark-price driven exposure.
+```text
+external market data
+  -> pricing / signals
+  -> algo decision
+  -> pre-trade risk
+  -> order router
+  -> external execution reports
+  -> positions / hedger / reconciliation
+```
 
-11. Aeron/Raft replicated state-machine boundary in Java
-   - transport and ordering;
-   - backpressure;
-   - replay and failover boundary.
+Boundary rule: do not let desk concerns pollute the exchange core. The
+matching engine should not know about arbitrage. The ledger should not know
+about best execution. Pre-trade risk should not become a strategy engine.
 
-12. OMS, ledger, compliance, and path split in Java/Go
-   - local order state;
-   - service edge APIs;
-   - reporting, reconciliation, and compliance projections.
+### 7. Failure And Recovery Model
 
-13. Cache coherence and market state
-   - user/account/permission caches;
-   - instrument and mark-price caches;
-   - external exchange state caches.
+| Stage | Typical Failure | Required Recovery Story |
+| --- | --- | --- |
+| DB truth source | Transaction abort, duplicate callback, partial workflow | Atomic rollback, idempotency keys, raw external records |
+| Outbox / command log | Published state and message diverge | Transactional outbox, idempotent consumers, resend |
+| In-memory state machine | Process crash after sequence `N` | Snapshot plus replay from durable command/event log |
+| Replicated state machine | Leader crash, follower lag, client retry | Log position, session identity, replay, failover |
+| Cache / projection | Gap, stale snapshot, consumer restart | Versioned snapshot, delta replay, fail-open/closed policy |
+| Push stream | Packet loss, late joiner, slow client | Sequence numbers, snapshots, replay, backpressure |
+| Reconciliation | Provider, bank, custody, and internal records disagree | Immutable raw records, normalized records, match reports, manual adjustment journal |
+| Runtime | Warmup variance, GC/allocation spikes, noisy network path | Benchmarks, profiles, warmup discipline, allocation control, runbooks |
 
-14. Market-data and execution push
-   - public snapshots and deltas;
-   - private execution reports;
-   - gap detection and recovery.
+### 8. Chapter Map
 
-15. Rust hot path experiment
-   - optional, later;
-   - only after Java/Go chapters are useful.
+| Phase | Chapters | Purpose |
+| --- | --- | --- |
+| Funds correctness | 01-04 | Ledger, spot settlement, wallet idempotency, command log replay |
+| Trading hot path | 05-10 | Single writer, matching, position, margin, pre-trade risk, risk projection |
+| Replication and boundaries | 11-14 | Replicated log, OMS/ledger/compliance, cache coherence, market/execution push |
+| Runtime experiments | 15-16 | Rust hot path experiments and low-latency runtime/networking measurement |
+| Trading desk extension | 17-21 | External market data, pricing, routing, hedging, best execution, simple strategy |
 
-16. Low-latency runtime and networking
-   - zero-allocation work;
-   - profiling;
-   - OS and network tuning.
+The chapter rule is:
 
-Each chapter should have one runnable demo or test, but the demo should be
-small enough to rewrite from memory.
+```text
+one pressure -> one mechanism -> one explicit semantic comparison
+```
 
-## Project Narrative
+Each chapter should answer:
 
-## 11. Non-Goals
+1. What is the current truth source?
+2. What ordering model is being used?
+3. What failure does this model now make visible?
+4. What new operational cost did the next model introduce?
+5. Which business semantics stayed the same?
 
-This project should not start by implementing:
+### 9. Non-Goals
 
-- full exchange liquidation rules;
-- portfolio margin;
-- production wallet custody;
-- KYC/AML workflows;
-- consensus from scratch;
-- DPDK/XDP production networking;
-- a full matching venue with all order types;
-- a complete product backend.
+This project is not trying to be:
 
-Those can be researched later. The first goal is a clean chain of reasoning and
-small executable demonstrations.
+- a production exchange;
+- a complete matching engine library;
+- a consensus implementation;
+- a full wallet or custody system;
+- a real trading strategy;
+- a benchmark contest;
+- a pile of impressive infrastructure without a semantic reason.
 
-## 12. Success Criteria
+The goal is to build just enough code and tests to make each architectural
+pressure visible.
 
-The project succeeds if it can answer these questions with code and notes:
+### 10. Success Criteria
 
-- Why does a ledger need double-entry?
-- Why does settlement need an atomic boundary?
-- Why do callbacks need idempotency?
-- Why do facts become more important than current rows?
-- Why can DB serial history and state-machine command history be equivalent?
-- Why does total order simplify business semantics despite engineering cost?
-- Why are matching, position, pre-trade risk, and risk cluster separate?
-- Why does margin depend on mark prices and positions rather than just orders?
-- Why should hot, warm, and cold paths have different responsibilities?
-- Why does replay make incident review clearer?
+The project succeeds if a reader can explain:
 
-If these questions can be answered, the repo becomes useful both as engineering
-practice and as a working demonstration.
+- why DB ACID is the right first model;
+- why ordered facts become more useful than current rows;
+- why the hot path eventually wants a deterministic mutation boundary;
+- why replication needs a log, snapshots, replay, and backpressure;
+- why reconciliation is record matching and evidence, not just arithmetic;
+- why caches need owners, versions, and rebuild policies;
+- why private execution reports cannot be best-effort notifications;
+- why low latency work should start from ownership and measurement, not tricks.
+
+The strongest proof is cross-version testing:
+
+```text
+same business scenario
+same observable semantics
+different execution substrate
+```
+
+That is the heart of the project.
 
 ---
 
 ## 中文
 
-### 摘要
+### 1. 核心论点
 
-本项目是一个长期的练习：从小型原语推导交易所系统。它从最易理解的钱
-原语开始：账本行上的数据库 ACID 事务。然后逐步走向有序命令日志和确定性
-复制状态机。
-
-迁移不是关于因为数据库不好就替换数据库。它是将热路径真相源从隐式
-存储层排序移动到显式业务排序。
-
-核心论点：
+这个项目不是从 Aeron、Raft、DPDK、Rust 或完整撮合引擎开始，而是从最小的
+金融问题开始：
 
 ```text
-DB ACID 通过隔离并发存储效果给出正确性。
-有序状态机通过从热路径移除并发业务效果给出正确性。
+两个账户交换价值，系统能不能证明没有凭空造钱，也没有丢钱？
 ```
 
-两者都可以产生串行历史。数据库将串行历史隐藏在事务、锁、索引、MVCC
-和 WAL 之后。状态机模型直接暴露串行历史：每条命令收到一个序列号，
-每个状态转换有一个原因，每个恢复路径是快照加重放。
+然后每一章只引入一个新的压力：
 
-本文定义了模型、边界、不变量和实现章节。它故意不是一个完整实现。
-代码应该逐章作为练习来写。
+- 钱的事实要更清楚；
+- 并发顺序要更清楚；
+- 故障恢复要更清楚；
+- 系统边界要更清楚；
+- 热路径延迟要更可解释；
+- 冷路径审计要更可靠。
 
-### 1. 问题陈述
+核心论点是：
 
-一个类交易所系统必须同时回答几类问题：
+```text
+现代交易所架构不是一堆组件的堆叠，
+而是真相源、排序模型、恢复模型和归属边界逐步显式化的过程。
+```
 
-1. 资金正确性：
-   - 价值是否被意外创造？
-   - 借方是否有对应的贷方？
-   - 入金、出金、费用和结算可解释吗？
+最核心的业务转移可以写成：
 
-2. 交易正确性：
-   - 订单为什么被接受或拒绝？
-   - 哪些订单成交，按什么顺序，以什么价格？
-   - 订单簿可以从事实重建吗？
+```text
+old_state + command -> new_state + events
+```
 
-3. 仓位和风险正确性：
-   - 账户现在有什么仓位？
-   - 在当前市场价格下存在什么敞口？
-   - 订单准入前被允许了吗？
-   - 执行后风控持续监视了吗？
+数据库事务、内存状态机、复制状态机都可以把成功的业务变更呈现为一条可解释
+的串行历史。它们的区别在于：排序、持久化、恢复和运维复杂度分别由谁承担。
 
-4. 恢复正确性：
-   - 崩溃后能重建状态吗？
-   - 另一个节点能应用相同事实达到相同状态吗？
-   - 事件审查能在某个序列号停下检查系统吗？
+### 2. 四件需要显式化的事
 
-5. 延迟正确性：
-   - 热路径能避免通用存储成本吗？
-   - p99/p999 延迟能解释而不是猜测吗？
-   - 背压能是显式的而不是偶然的吗？
+| 维度 | 早期形态 | 后期形态 | 为什么会变化 |
+| --- | --- | --- | --- |
+| 真相源 | 数据库行 | 有序命令、事件、快照、投影 | 恢复和审计需要事实，而不只是当前行 |
+| 排序模型 | SQL 锁、MVCC、提交顺序 | sequencer、单写者、复制日志 | 交易正确性依赖可解释顺序 |
+| 恢复模型 | 恢复数据库后查当前行 | 从已知位置快照加重放 | 故障后要重建确定状态 |
+| 归属边界 | 多个服务查询共享存储 | 明确的状态 owner 发布事实 | 热状态不能被到处拉取和重复解释 |
 
-项目应该让这些问题自然浮现。每章引入一个新的压力和一个新的机制。
+这不是说数据库不好。数据库仍然很适合账本、报表、结算状态、对账、合规归档
+和很多支付工作流。迁移发生在热路径需要更清晰的顺序和更稳定的延迟时。
 
-### 12. 成功标准
+### 3. 演进路径
 
-如果项目能用代码和笔记回答这些问题，它就成功了：
+#### 3.1 数据库 ACID 作为真相源
 
-- 为什么账本需要双分录？
-- 为什么结算需要原子边界？
-- 为什么回调需要幂等性？
-- 为什么事实变得比当前行更重要？
-- 为什么 DB 串行历史和状态机命令历史可以等价？
-- 为什么全排序能简化业务语义尽管有工程成本？
-- 为什么撮合、仓位、下单前风控和风控集群是分开的？
-- 为什么保证金依赖标记价格和仓位而不仅仅是订单？
-- 为什么热、温、冷路径应该有不同职责？
-- 为什么重放使事件审查更清晰？
+第一版正确系统可以用 SQL 事务完成：
 
-如果这些问题能回答，仓库就既有工程练习也有工作演示的价值。
+```text
+request
+  -> begin transaction
+  -> validate current rows
+  -> write ledger/order/wallet rows
+  -> commit
+```
+
+它适合双分录账本、现货结算、充值回调、提现状态流转、provider records、对
+账报表和人工调整。
+
+核心不变量是：
+
+```text
+sum(debits) == sum(credits)
+```
+
+数据库给了原子性、持久性和可检查性，所以它是最容易理解的第一个真相源。
+
+#### 3.2 数据库里的命令日志和 outbox
+
+桥接阶段仍然使用 SQL，但开始记录事实：
+
+```text
+request
+  -> begin transaction
+  -> insert command_log
+  -> update authoritative rows
+  -> insert event_log / outbox
+  -> commit
+```
+
+系统解释开始从当前行转向事实：
+
+```text
+facts = command_log + event_log
+views = balances + orders + positions + reports
+```
+
+这个阶段教会几个重要原则：状态变更和消息发布要绑定；重复消息是常态；消费
+者必须幂等；投影可以落后于事实；对账是系统边界，不是事后脚本。
+
+#### 3.3 确定性内存状态机
+
+交易热路径最终会需要更严格的变更边界：
+
+```text
+command
+  -> sequence number
+  -> deterministic apply()
+  -> events
+  -> snapshot / replay boundary
+```
+
+这个边界里，一次只有一个有序命令修改核心状态。这不是说整个系统都单线程，
+而是最敏感的业务变更必须有明确排序点。
+
+状态机拥有私有热状态：订单簿、订单状态、资金冻结、成交事实、最小仓位钩子
+和同步风控输入。它不应该在状态转移中调用数据库、远程服务、时钟、随机数或
+慢依赖。
+
+数据库和状态机的等价关系可以这样看：
+
+```text
+DB:             State_0 --tx_1-->  State_1 --tx_2-->  State_2
+State machine:  State_0 --cmd_1--> State_1 --cmd_2--> State_2
+```
+
+如果同样的操作按同样的顺序执行，并且转移函数是确定性的，对外可观察的业务
+历史就应该一致。区别只在于：数据库把顺序藏在锁、MVCC、索引、WAL 和提交
+规则里；状态机把顺序放在业务变更之前。
+
+#### 3.4 复制状态机
+
+当单个状态机可理解后，下一个压力就是复制：
+
+```text
+client command
+  -> replicated log / Aeron Cluster / Raft-style ordering
+  -> node A apply(command)
+  -> node B apply(command)
+  -> node C apply(command)
+```
+
+项目不应该自己从零实现共识，而是定义交易核心向复制日志要求什么能力：命令
+编码、session identity、日志位置、快照格式、重放起点、背压语义、故障切换
+和事件发出边界。
+
+#### 3.5 投影、缓存、推送和运行时
+
+当事实已经有序且可恢复，系统还要服务大量读者：OMS、账本投影、对账、合规、
+公共行情、私有成交回报、权限缓存、mark-price 输入、风险投影和报表。
+
+这些组件不应该直接拉取核心热状态，而应该消费有版本的发布：
+
+```text
+snapshot(version=N) + deltas(version>N) -> local projection
+```
+
+运行时优化应该在语义稳定之后才进入。warmup、allocation、pooling、off-heap
+buffer、CPU isolation、网络路径和 kernel bypass 都属于后期实验，不是第一
+步。
+
+### 4. 设计原则
+
+#### 4.1 真相必须有形状
+
+每个阶段都要说清楚当前真相源是什么。早期是数据库行，后期是命令日志、事件
+日志、快照和复制日志位置。余额、仓位、top-of-book、风险敞口都是视图，必须
+能从事实解释回来。
+
+#### 4.2 事实先于视图
+
+系统应优先保存不可变事实，再生成可变汇总。充值 accepted、提现 requested、
+订单 accepted、成交 executed、仓位 updated、保证金 checked、provider record
+ingested、bank record matched，这些事实比当前余额更适合审计和恢复。
+
+#### 4.3 显式顺序优先于隐式竞争
+
+锁在支付和账本工作流里完全合理。但在交易热路径里，锁竞争、重试和尾延迟会
+让公平性和可解释性变差。
+
+状态机需要更高基础设施成本：sequencing、log、snapshot、replay、backpressure
+和 failover。换来的好处是业务问题变简单：
+
+```text
+如果 A 先于 B 执行，应该发生什么？
+```
+
+#### 4.4 不同排序机制是在不同地方付费
+
+| 机制 | 在哪里为排序付费 | 优势 | 代价 |
+| --- | --- | --- | --- |
+| 悲观锁 / 2PL | 执行前或执行中 | 共享行正确性简单 | 锁竞争、死锁 |
+| MVCC / CAS | 提交时 | 读并发好 | 冲突重试 |
+| 单写者 / sequencer | 业务变更前 | 核心语义简单确定 | 分片和恢复设计 |
+| Raft / Paxos / 复制日志 | 复制执行前 | 故障切换和一致性 | 运维和延迟成本 |
+
+Serializable 给出等价于某条串行历史的效果；linearizability 加上真实时间约束；
+strict serializability 同时包含两者。项目使用这些概念来比较工程模型，而不是
+为了堆术语。
+
+#### 4.5 冷热路径分离
+
+热路径是命令准入、有序变更和事实发出。温路径是事实加市场数据生成仓位、敞
+口和风险动作。冷路径是报表、对账、审计和合规导出。
+
+冷路径不是不重要，只是不能阻塞热路径。
+
+#### 4.6 状态归属与数据重力
+
+热状态被很多组件反复拉取、join、解释时会变贵。设计应该问：
+
+```text
+是不是应该让函数靠近状态，而不是让状态到处移动？
+```
+
+每个热状态都要有 owner：谁能修改它，如何发布更新，消费者如何发现 gap，重
+启后如何 rebuild，允许多旧的数据。
+
+#### 4.7 发布优先于拉取
+
+参考数据、账户权限、风险配置、成交事实和市场状态不应该在热路径里反复 pull。
+owner 应该发布带版本的 snapshot 和 delta。消费者维护本地投影，并明确知道：
+fail closed、允许有限 stale、从快照加 delta 重建，还是在 gap 回放前拒绝服务。
+
+#### 4.8 分发不等于持久可靠
+
+快速分发不等于可靠真相。
+
+比如 UDP multicast 是发送者向一个组播地址发一次，多个订阅者接收。它很适合
+低延迟 fan-out，但传输层不会替你记住晚加入者、丢包、慢消费者和重启恢复。
+
+可靠流还需要 sequence number、gap detection、snapshot、replay、backpressure、
+以及一个 durable 或 replicated 的事实源。
+
+公共行情有时可以容忍有限丢失，因为客户端能 resync。私有成交回报、账本事实
+和风控决策不能当成 best-effort notification。
+
+#### 4.9 性能是系统形状的结果
+
+低延迟不应该是一堆技巧，而应该来自系统形状：热状态有 owner；命令先排序再
+变更；消费者维护本地投影；持久事实写在明确边界；恢复语义清楚；allocation
+和 warmup 都有测量。
+
+只有这些成立后，pooling、off-heap buffer、zero allocation、CPU pinning、
+NUMA、kernel bypass 和 runtime tuning 才有意义。
+
+### 5. 领域边界
+
+| 边界 | 拥有什么 | 发出什么 | 不应该做什么 |
+| --- | --- | --- | --- |
+| Ledger | 价值移动和双分录事实 | journal entries、balance facts | 隐藏未匹配外部资金 |
+| Wallet | 充值提现生命周期 | provider callbacks、withdrawal state、raw records | 重复 apply 外部事件 |
+| Reconciliation | 外部原始记录和匹配报告 | exceptions、match results、adjustment proposals | 静默修改 ledger |
+| Matching | 价格时间优先和成交 | trades、fills、order status | 状态转移中依赖远程调用 |
+| Position | 账户和品种敞口 | position updates、PnL 输入 | 把 open order 当 execution |
+| Margin | 权益和保证金需求 | margin snapshots、准入输入 | 把公式藏在 handler 里 |
+| Pre-trade risk | 下单准入 | accept/reject facts | 变成策略引擎 |
+| Risk cluster | 持续风险投影 | alerts、risk actions、projection state | 把 eventual projection 当同步真相 |
+| OMS / compliance | 工作流、报告、审计 | reports、case state、监管导出 | 阻塞核心变更 |
+| Cache / market state | owned facts 的本地投影 | snapshot/delta versions、gap status | 静默提供无限 stale 数据 |
+| Push gateway | 公共和私有流发布 | sequenced snapshots and deltas | 把 best-effort 分发说成真相 |
+
+### 6. 交易台扩展
+
+交易所核心决定场内什么是真的；交易台根据市场状态、库存、风险和外部场所决
+定要做什么。
+
+交易台应该在核心已经能产生可靠行情、成交回报、仓位、风险视图和对账事实之
+后再出现。
+
+自然演进是：
+
+```text
+matching
+  -> executions
+  -> positions
+  -> exposure
+  -> pre-trade and continuous risk
+  -> market data and mark inputs
+  -> external venue routing
+  -> hedging / best execution / strategy
+```
+
+边界规则：不要让交易台污染交易所核心。撮合引擎不应该知道套利；账本不应该
+知道 best execution；pre-trade risk 不应该变成策略引擎。
+
+### 7. 故障与恢复模型
+
+| 阶段 | 典型故障 | 需要的恢复叙事 |
+| --- | --- | --- |
+| DB 真相源 | 事务 abort、重复 callback、流程半失败 | 原子回滚、幂等 key、外部原始记录 |
+| Outbox / command log | 状态提交和消息发布不一致 | transactional outbox、幂等消费者、重发 |
+| 内存状态机 | sequence N 后进程崩溃 | snapshot + durable log replay |
+| 复制状态机 | leader 崩溃、follower 落后、client 重试 | log position、session identity、replay、failover |
+| Cache / projection | gap、stale snapshot、consumer 重启 | versioned snapshot、delta replay、fail-open/closed policy |
+| Push stream | 丢包、晚加入、慢 client | sequence、snapshot、replay、backpressure |
+| Reconciliation | provider、bank、custody、internal records 不一致 | immutable raw records、normalized records、match reports、manual adjustment journal |
+| Runtime | warmup 抖动、GC/allocation spike、网络噪声 | benchmark、profile、warmup discipline、allocation control、runbook |
+
+### 8. 章节地图
+
+| 阶段 | 章节 | 目的 |
+| --- | --- | --- |
+| 资金正确性 | 01-04 | 账本、现货结算、钱包幂等、命令日志重放 |
+| 交易热路径 | 05-10 | 单写者、撮合、仓位、保证金、下单前风控、风险投影 |
+| 复制和边界 | 11-14 | 复制日志、OMS/账本/合规、缓存一致性、行情和成交推送 |
+| 运行时实验 | 15-16 | Rust 热路径实验和低延迟运行时/网络测量 |
+| 交易台扩展 | 17-21 | 外部行情、定价、路由、对冲、最优执行、简单策略 |
+
+每章都应该回答：
+
+1. 当前真相源是什么？
+2. 当前排序模型是什么？
+3. 这个模型暴露了什么新故障？
+4. 下一个模型引入了什么运维成本？
+5. 哪些业务语义保持不变？
+
+### 9. 非目标
+
+这个项目不是生产交易所、完整撮合库、共识实现、真实钱包、真实策略或 benchmark
+比赛。它的目标是用刚好足够的代码和测试，让每个架构压力都变得可见。
+
+### 10. 成功标准
+
+如果读者能讲清楚下面这些事，这个项目就成功了：
+
+- 为什么 DB ACID 是合理起点；
+- 为什么有序事实比当前行更适合解释和恢复；
+- 为什么热路径最终需要确定性变更边界；
+- 为什么复制需要 log、snapshot、replay 和 backpressure；
+- 为什么对账是记录匹配和证据链，不只是算术；
+- 为什么缓存需要 owner、version 和 rebuild policy；
+- 为什么私有成交回报不能是 best-effort notification；
+- 为什么低延迟工作应该从 ownership 和 measurement 开始，而不是从技巧开始。
+
+最强证明是跨版本测试：
+
+```text
+same business scenario
+same observable semantics
+different execution substrate
+```
+
+这就是整个项目的核心。
