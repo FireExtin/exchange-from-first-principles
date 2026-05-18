@@ -1,41 +1,46 @@
-# 09 Desk Pre-Trade Risk
+# 09 Margin And Pre-Trade Risk
 
 [English](#english) · [中文](#中文)
 
 ## English
 
-Purpose: block bad orders before they enter the sequenced trading core.
+Purpose: combine margin checks and synchronous pre-trade risk admission.
+
+This chapter explains how dangerous orders are rejected before they enter the
+sequenced core, and how reservation/margin semantics stay consistent across the
+version line.
 
 ## Status
 
-Status: design scaffold. No runnable implementation exists here yet.
+Status: README only. No runnable implementation exists here yet.
 
-First implementation should cover:
+## First Scope
 
 - account enabled/disabled;
+- kill switch;
+- available and locked balances;
+- initial and maintenance margin placeholders;
 - max order notional;
-- available balance;
 - price band;
-- kill switch.
-
-This is synchronous risk, not the continuous risk cluster.
-
----
+- margin accepted/rejected events.
 
 ## 中文
 
-目的：在坏订单进入排序交易核心之前阻止它们。
+目的：合并保证金检查和同步下单前风控准入。
+
+本章解释危险订单如何在进入排序核心前被拒绝，以及 reservation/margin 语义如何
+在版本线中保持一致。
 
 ## 状态
 
-状态：设计脚手架。本目录尚无可运行实现。
+状态：仅 README。本章尚无可运行实现。
 
-第一个实现应覆盖：
+## 第一范围
 
 - 账户启用/禁用；
+- kill switch；
+- 可用和冻结余额；
+- 初始保证金和维持保证金占位；
 - 最大订单名义值；
-- 可用余额；
 - 价格区间；
-- kill 开关。
-
-这是同步风控，不是持续风控集群。
+- margin accepted/rejected events。

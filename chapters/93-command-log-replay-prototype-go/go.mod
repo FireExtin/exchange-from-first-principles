@@ -1,4 +1,4 @@
-module github.com/FireExtin/exchange-from-first-principles/chapters/04-command-log-replay-go
+module github.com/FireExtin/exchange-from-first-principles/chapters/93-command-log-replay-prototype-go
 
 go 1.22
 

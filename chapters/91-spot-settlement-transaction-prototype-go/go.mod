@@ -1,4 +1,4 @@
-module github.com/FireExtin/exchange-from-first-principles/chapters/02-spot-trade-db-go
+module github.com/FireExtin/exchange-from-first-principles/chapters/91-spot-settlement-transaction-prototype-go
 
 go 1.22
 

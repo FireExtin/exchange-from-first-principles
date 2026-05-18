@@ -61,24 +61,24 @@ external market data
 
 ## Future Chapters
 
-17. `17-external-market-data-ingestion`
+15. `15-external-market-data-ingestion`
     - Consume venue books, trades, tickers, and reference data.
     - Explain sequence gaps, snapshots, stale data, and mark inputs.
 
-18. `18-pricing-and-signal-engine`
+16. `16-pricing-and-signal-engine`
     - Compute theoretical price, fair value, mark price, and simple signals.
     - Explain why pricing is separate from matching and routing.
 
-19. `19-order-router-and-execution-reports`
+17. `17-order-router-and-execution-reports`
     - Route child orders to an external venue mock.
     - Consume execution reports and update order state.
 
-20. `20-hedger-and-best-execution`
+18. `18-hedger-and-best-execution`
     - Use positions, risk limits, venue state, and costs to choose a hedge or
       execution venue.
     - Explain the tradeoff between immediacy, fees, liquidity, and risk.
 
-21. `21-arbitrage-strategy-demo`
+19. `19-arbitrage-strategy-demo`
     - Use multiple venue feeds and router mocks to demonstrate cross-venue
       arbitrage.
     - Keep it educational, not a production trading strategy.
@@ -148,23 +148,23 @@ rejects, orders, executes, and emits facts.
 
 ## 远期章节
 
-17. `17-external-market-data-ingestion`
+15. `15-external-market-data-ingestion`
     - 消费外部场所订单簿、成交、ticker 和参考数据。
     - 解释序列缺口、快照、陈旧数据和标记价格输入。
 
-18. `18-pricing-and-signal-engine`
+16. `16-pricing-and-signal-engine`
     - 计算理论价、公允价、标记价格和简单信号。
     - 解释为什么定价应与撮合、路由分离。
 
-19. `19-order-router-and-execution-reports`
+17. `17-order-router-and-execution-reports`
     - 将子订单路由到外部场所 mock。
     - 消费成交回报并更新订单状态。
 
-20. `20-hedger-and-best-execution`
+18. `18-hedger-and-best-execution`
     - 用仓位、风险限制、场所状态和成本选择对冲或执行场所。
     - 解释即时性、费用、流动性和风险之间的权衡。
 
-21. `21-arbitrage-strategy-demo`
+19. `19-arbitrage-strategy-demo`
     - 使用多个场所行情和路由 mock 演示跨场所套利。
     - 保持教育用途，不把它写成生产交易策略。
 

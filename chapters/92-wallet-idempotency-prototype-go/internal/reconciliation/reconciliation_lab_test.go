@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/FireExtin/exchange-from-first-principles/chapters/03-wallet-deposit-withdrawal-go/internal/wallet"
+	"github.com/FireExtin/exchange-from-first-principles/chapters/92-wallet-idempotency-prototype-go/internal/wallet"
 )
 
 func TestProviderCallbackSimulatorProducesDuplicateOutOfOrderAndPartialRefund(t *testing.T) {

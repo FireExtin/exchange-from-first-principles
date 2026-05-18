@@ -4,58 +4,46 @@
 
 ## English
 
-This directory contains examples and schemas shared across chapters.
+This directory contains semantic contracts shared across chapters.
 
-The files here are not a framework. They are a small contract layer so each
-chapter can talk about the same facts:
+The contracts are not a framework. They are a language for proving that the same
+exchange behavior survives architecture changes.
 
-- command identity;
-- event sequence;
-- account and asset identity;
-- amount movement;
-- replay and reconciliation inputs.
+## Current Contract Layers
 
-The first concrete Go contract lives in `shared/go`. It defines a minimal funds
-language used by chapters 03 and 04:
+- `shared/go/types`: common identifiers and scaled amounts.
+- `shared/go/funds`: the earlier runnable funds contract used by appendix
+  prototypes 92 and 93.
+- `shared/go/exchange`: the new exchange-level semantic contract covering
+  accounting, orders, executions, positions, risk, and projection cursors.
 
-- deposit;
-- withdrawal request and confirmation;
-- transfer;
-- externally visible success and rejection events.
-
-Rules:
+## Rules
 
 - Shared contracts may be consumed by any chapter.
 - Shared contracts must not import code from a chapter.
-- Chapter implementations may diverge internally as long as their public events
-  can be explained through these contracts.
+- Chapter implementations may diverge internally as long as public facts can be
+  explained through these contracts.
+- Incomplete exchange behavior belongs behind explicit TODO tests or build
+  tags, not in silent partial implementations.
 
 ---
 
 ## 中文
 
-### 共享契约
+本目录包含章节间共享的语义契约。
 
-本目录包含章节间共享的示例和 schema。
+这些契约不是框架，而是一套语言，用来证明同一交易所行为可以在架构变化中存活。
 
-这里的文件不是框架。它们是一个小的契约层，以便每个章节谈论相同的事实：
+## 当前契约层
 
-- 命令标识；
-- 事件序列；
-- 账户和资产标识；
-- 金额移动；
-- 重放和对账输入。
+- `shared/go/types`：通用标识符和缩放金额。
+- `shared/go/funds`：早期可运行资金契约，供附录原型 92 和 93 使用。
+- `shared/go/exchange`：新的交易所级语义契约，覆盖 accounting、orders、
+  executions、positions、risk 和 projection cursors。
 
-第一份可运行 Go 契约位于 `shared/go`。它定义了一个最小资金语义语言，
-供第 03 和第 04 章共用：
-
-- 入金；
-- 出金请求与确认；
-- 转账；
-- 外部可见的成功和拒绝事件。
-
-规则：
+## 规则
 
 - 共享契约可被任何章节消费。
 - 共享契约不得从章节导入代码。
-- 章节实现可以内部发散，只要其公开事件可以通过这些契约解释。
+- 章节实现可以内部发散，只要公开事实可以通过这些契约解释。
+- 未完成的 exchange 行为应放在显式 TODO 测试或 build tag 后，而不是沉默的半成品实现。

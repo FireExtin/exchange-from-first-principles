@@ -21,9 +21,9 @@ The tool should produce a table like:
 
 | Version | Problem solved | Architecture change | Semantic change | Cost |
 | --- | --- | --- | --- | --- |
-| DB | atomic settlement | storage-level ordering | baseline | lock contention |
-| Single writer | hot-path determinism | explicit command order | none | in-memory recovery |
-| Replicated state machine | failover | replicated total order | none | quorum and ops cost |
+| ACID SQL | full exchange semantics in one transaction boundary | storage-level ordering | baseline | lock contention |
+| Memory core | hot-path determinism | explicit command order | none | snapshot/replay design |
+| Replicated log | failover | replicated total order | none | quorum and ops cost |
 
 This is intentionally not implemented yet. The first step is to keep README
 section names stable enough that a script can extract them later.
@@ -50,8 +50,8 @@ section names stable enough that a script can extract them later.
 
 | Version | Problem solved | Architecture change | Semantic change | Cost |
 | --- | --- | --- | --- | --- |
-| DB | atomic settlement | storage-level ordering | baseline | lock contention |
-| Single writer | hot-path determinism | explicit command order | none | in-memory recovery |
-| Replicated state machine | failover | replicated total order | none | quorum and ops cost |
+| ACID SQL | full exchange semantics in one transaction boundary | storage-level ordering | baseline | lock contention |
+| Memory core | hot-path determinism | explicit command order | none | snapshot/replay design |
+| Replicated log | failover | replicated total order | none | quorum and ops cost |
 
 这故意尚未实现。第一步是保持 README 章节名称足够稳定，以便脚本稍后提取。

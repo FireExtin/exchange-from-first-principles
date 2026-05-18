@@ -3,7 +3,7 @@ package adapter
 import (
 	"fmt"
 
-	"github.com/FireExtin/exchange-from-first-principles/chapters/03-wallet-deposit-withdrawal-go/internal/wallet"
+	"github.com/FireExtin/exchange-from-first-principles/chapters/92-wallet-idempotency-prototype-go/internal/wallet"
 	"github.com/FireExtin/exchange-from-first-principles/shared/go/funds"
 	"github.com/FireExtin/exchange-from-first-principles/shared/go/types"
 )

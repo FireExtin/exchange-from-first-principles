@@ -1,25 +1,18 @@
-# 02 Spot Trade DB Transaction
+# 91 Spot Settlement Transaction Prototype
 
 [English](#english) · [中文](#中文)
 
 ## English
 
-Primitive: one buyer and one seller settle a spot trade.
+Purpose: preserve the original runnable spot-settlement transaction prototype.
 
-Question: why does a trade need an atomic boundary?
-
-This chapter uses an in-memory transaction boundary that snapshots state before
-settlement and commits only when all account checks pass. It is intentionally
-small; a future iteration can replace the in-memory store with SQL and the same
-test cases should still describe the behavior.
-
-`Settle` keeps the chapter's original API. `SettleEvents` exposes the same
-settlement as shared funds transfer events, so later chapters can compare
-transactional settlement with replayed facts.
+This appendix prototype uses an in-memory transaction boundary to show why spot
+settlement needs atomicity. It is DB-shaped, but it is not the new ACID SQL
+exchange chapter.
 
 ## Status And Run
 
-Status: runnable Go chapter.
+Status: runnable Go prototype.
 
 Run:
 
@@ -27,24 +20,16 @@ Run:
 go test ./...
 ```
 
----
-
 ## 中文
 
-原语：买方和卖方结算一笔现货交易。
+目的：保留原来的可运行现货结算事务原型。
 
-问题：为什么交易需要一个原子边界？
-
-本章使用内存事务边界，在结算前快照状态，只在所有账户检查通过后才提交。
-它故意做得很小；未来的迭代可以用 SQL 替换内存存储，相同的测试用例
-仍应描述行为。
-
-`Settle` 保留本章原有 API。`SettleEvents` 将同一笔结算暴露为共享资金
-转账事件，方便后续章节对比事务结算和事实重放。
+这个 appendix prototype 使用内存事务边界展示为什么现货结算需要原子性。它具有
+DB-shaped 结构，但不是新的 ACID SQL exchange 章节。
 
 ## 状态与运行
 
-状态：可运行 Go 章节。
+状态：可运行 Go 原型。
 
 运行：
 

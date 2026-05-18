@@ -16,8 +16,8 @@ next architecture step becomes necessary.
 - `docs/07-chapter-roadmap.md` owns chapter order and chapter status.
 - `docs/02-design-paper.md` is the full design narrative.
 - Chapter READMEs own chapter-local behavior, pressure, and run commands.
-- `shared/README.md` and `integration-tests/README.md` own cross-chapter
-  semantic contracts.
+- `shared/README.md`, `shared/go/exchange`, and
+  `integration-tests/README.md` own cross-version semantic contracts.
 - `docs/history/change_brief_*.md` files are append-only historical records.
   Add a new brief for a meaningful documentation or architecture
   reorganization; do not rewrite old briefs to describe the latest state.
@@ -42,7 +42,7 @@ Runnable parts currently expect:
 - Go 1.22 or newer;
 - Java 21, tested with Azul Zulu 21;
 - Gradle for the Java/Aeron chapter;
-- Rust stable for chapter 15.
+- Rust stable for chapter 13.
 
 ## Test Commands
 
@@ -60,11 +60,12 @@ make test-java
 Useful focused commands:
 
 ```bash
-cd chapters/01-double-entry-ledger-go && go run ./cmd/demo
-cd chapters/03-wallet-deposit-withdrawal-go && go test ./...
-cd chapters/03-wallet-deposit-withdrawal-go && go test -tags reconciliation_lab_todo ./internal/reconciliation
-cd chapters/11-replicated-state-machine-aeron-java && gradle --no-daemon clean test
-cd chapters/15-rust-hot-path && cargo test
+cd chapters/90-funds-double-entry-prototype-go && go run ./cmd/demo
+cd chapters/92-wallet-idempotency-prototype-go && go test ./...
+cd chapters/92-wallet-idempotency-prototype-go && go test -tags reconciliation_lab_todo ./internal/reconciliation
+cd shared/go && go test -tags exchange_contract_todo ./exchange
+cd chapters/05-replicated-log-core-aeron-java && gradle --no-daemon clean test
+cd chapters/13-rust-hot-path && cargo test
 go test ./integration-tests/...
 ```
 
@@ -72,18 +73,25 @@ The reconciliation lab tests are intentionally behind the
 `reconciliation_lab_todo` build tag and are expected to fail until the lab is
 implemented.
 
-For exercise and lab chapters, agents may add or refine interfaces, contracts,
-fixtures, and tests, but should leave the core exercise implementation for the
-project owner to write. Keep TODO boundaries explicit and avoid filling in the
-solution unless the user specifically asks for it.
+The exchange contract tests are intentionally behind the
+`exchange_contract_todo` build tag and are expected to fail until adapters and
+implementations are written by the project owner.
+
+For exercise, lab, and contract chapters, agents may add or refine interfaces,
+contracts, fixtures, and tests, but should leave the core exercise
+implementation for the project owner to write. Keep TODO boundaries explicit
+and avoid filling in the solution unless the user specifically asks for it.
 
 ## Architecture Boundaries
 
-- Go owns service edges: funds workflows, idempotency, callbacks,
-  reconciliation, adapters, tools, and integration tests.
+- Go/SQL owns service edges and warm/cold views: ACID SQL scaffolds, ledgers,
+  idempotency, callbacks, reconciliation, outbox consumers, projections, tools,
+  and integration tests.
 - Java owns the primary trading hot path: deterministic state application,
-  matching, sequencing boundaries, snapshots, and replay rules.
-- Aeron owns replicated-log integration concerns, not business rules.
+  reservations, matching, positions, risk admission, sequencing boundaries,
+  snapshots, and replay rules.
+- Aeron/Raft owns replicated-log ordering and recovery concerns, not business
+  rules.
 - Rust is exploratory: useful for measuring a clean hot-path contract and FFI
   boundary, but not the active main implementation track.
 

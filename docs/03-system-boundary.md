@@ -4,114 +4,127 @@
 
 ## English
 
-This document owns language and system-boundary rules. For the migration from
-database truth to ordered facts, see
-[Truth Source Migration](./04-truth-source-migration.md).
+This document owns language and system-boundary rules. For the version-line
+truth migration, see [Truth Source Migration](./04-truth-source-migration.md).
 
-The long-term hot-path source of truth starts at command sequencing:
+The exchange semantic contract is shared. Ownership changes by version:
 
 ```text
-ingress
-  -> assign seq
-  -> append command log
-  -> apply deterministic state machine
-  -> emit events
+Go / SQL edges
+  -> Java hot core
+  -> Aeron/Raft ordering and replication
+  -> SQL warm/cold projections
 ```
 
-Anything before sequencing is an adapter. Anything after event emission is a
-projection.
+## Go And SQL Own Service Edges
 
-## Java Owns First
+Go and SQL are the natural surfaces for service edges, durable ledgers, and
+consumer views:
 
-Java is the primary implementation surface for the trading hot path:
+- ACID SQL truth-source scaffolds;
+- double-entry ledger and account models;
+- deposits, withdrawals, callbacks, idempotency;
+- reconciliation and adjustment workflows;
+- outbox producers and consumers;
+- SQL projections for OMS, reports, compliance, cache rebuild, and push
+  recovery.
 
-- command sequence;
-- append-only command log;
-- order book;
-- account reservation;
-- matching;
-- event generation;
-- snapshot and replay rules.
+Go/SQL code should not pretend to be the low-latency trading core once the
+project reaches the memory or replicated-log versions.
 
-## Go Owns Service Edges
+## Java Owns Hot-Path State
 
-Go handles service design around assets, ledger, idempotency, reconciliation,
-callbacks, and operational glue:
+Java is the primary surface for the deterministic trading core:
 
-- load generation;
-- gateway and admin APIs;
-- ledger and account-service simulation;
-- materialized view readers;
-- reconciliation reports;
-- idempotency and callback handling.
+- command sequencing;
+- private in-memory state;
+- reservation state;
+- order books;
+- matching and execution facts;
+- position and risk-admission state;
+- snapshots and replay rules.
 
-## Aeron Owns Integration Ordering
+Java hot-path code should emit facts that Go/SQL consumers can project and
+reconcile.
 
-Aeron owns replicated-log integration concerns, not business rules:
+## Aeron/Raft Own Ordering And Replication
+
+Aeron/Raft-style infrastructure owns the replicated-log boundary, not business
+rules:
 
 - cluster ingress ordering;
-- replicated log;
-- leader election;
-- cluster snapshots;
+- replicated command log;
+- log position;
+- snapshot and replay boundary;
+- failover;
 - flow control and backpressure.
+
+The same exchange command should mean the same thing before and after
+replication is introduced.
 
 ## Rust Is Exploratory
 
-The Rust workspace is a runnable experiment for long-term exploration of a
-clean hot-path contract and FFI boundary. It is not the active main
-implementation track.
+Rust remains a runtime/hot-path experiment. It can explore replay, parsing,
+buffers, FFI, and latency-sensitive components, but it is not the canonical
+exchange implementation track in this repository.
+
+---
 
 ## 中文
 
-本文档负责语言和系统边界规则。关于真相源如何从数据库迁移到有序事实，见
+本文档负责语言和系统边界规则。关于版本线中的真相迁移，见
 [Truth Source Migration](./04-truth-source-migration.md)。
 
-长期热路径的真相源从命令排序开始：
+交易所语义契约是共享的。不同版本的归属不同：
 
 ```text
-ingress
-  -> assign seq
-  -> append command log
-  -> apply deterministic state machine
-  -> emit events
+Go / SQL edges
+  -> Java hot core
+  -> Aeron/Raft ordering and replication
+  -> SQL warm/cold projections
 ```
 
-排序之前的任何东西都是适配器。事件发出之后的任何东西都是投影。
+## Go 和 SQL 负责服务边界
 
-## Java 优先
+Go 和 SQL 自然适合服务边界、持久账本和 consumer views：
 
-Java 是交易热路径的主要实现层面：
+- ACID SQL truth-source 脚手架；
+- double-entry ledger 和 account models；
+- 入金、出金、callback、幂等；
+- 对账和 adjustment workflows；
+- outbox producers 和 consumers；
+- OMS、报表、合规、cache rebuild 和 push recovery 的 SQL projections。
+
+项目进入内存或复制日志版本后，Go/SQL 代码不应伪装成低延迟交易核心。
+
+## Java 负责热路径状态
+
+Java 是确定性交易核心的主要实现表面：
 
 - 命令排序；
-- 追加写命令日志；
-- 订单簿；
-- 账户预留；
-- 撮合；
-- 事件生成；
-- 快照和重放规则。
+- 私有内存状态；
+- reservation state；
+- order books；
+- matching 和 execution facts；
+- position 和 risk-admission state；
+- snapshots 和 replay rules。
 
-## Go 负责服务边界
+Java 热路径代码应该发出事实，供 Go/SQL consumer 投影和对账。
 
-Go 处理资产、账本、幂等、对账、回调和运营胶水代码相关的服务设计：
+## Aeron/Raft 负责排序和复制
 
-- 压测生成；
-- 网关和管理 API；
-- 账本和账户服务模拟；
-- 物化视图读取器；
-- 对账报告；
-- 幂等和回调处理。
+Aeron/Raft-style 基础设施负责复制日志边界，而不是业务规则：
 
-## Aeron 负责集成排序
+- cluster ingress ordering；
+- replicated command log；
+- log position；
+- snapshot 和 replay boundary；
+- failover；
+- flow control 和 backpressure。
 
-Aeron 负责复制日志集成问题，而不是业务规则：
-
-- 集群入口排序；
-- 复制日志；
-- leader 选举；
-- 集群快照；
-- 流量控制和背压。
+同一条 exchange command 在引入复制前后应该具有相同业务含义。
 
 ## Rust 作为探索实验
 
-Rust workspace 是一个可运行实验，用于长期探索干净的热路径契约和 FFI 边界。它
-不是当前主实现路线。
+Rust 保持 runtime/hot-path experiment 定位。它可以探索 replay、parsing、buffer、
+FFI 和 latency-sensitive components，但不是本仓库的规范交易所实现路线。

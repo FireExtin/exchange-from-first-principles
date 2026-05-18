@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/FireExtin/exchange-from-first-principles/chapters/01-double-entry-ledger-go/internal/ledger"
+	"github.com/FireExtin/exchange-from-first-principles/chapters/90-funds-double-entry-prototype-go/internal/ledger"
 )
 
 func main() {

@@ -486,11 +486,11 @@ about best execution. Pre-trade risk should not become a strategy engine.
 
 | Phase | Chapters | Purpose |
 | --- | --- | --- |
-| Funds correctness | 01-04 | Ledger, spot settlement, wallet idempotency, command log replay |
-| Trading hot path | 05-10 | Single writer, matching, position, margin, pre-trade risk, risk projection |
-| Replication and boundaries | 11-14 | Replicated log, OMS/ledger/compliance, cache coherence, market/execution push |
-| Runtime experiments | 15-16 | Rust hot path experiments and low-latency runtime/networking measurement |
-| Trading desk extension | 17-21 | External market data, pricing, routing, hedging, best execution, simple strategy |
+| Version line | 01-06 | Exchange contract, ACID SQL, SQL facts/outbox, memory core, replicated log, SQL projections |
+| Domain deep dives | 07-12 | Order book mechanics, position/PnL, margin/risk, risk projection, cache coherence, push |
+| Runtime experiments | 13-14 | Rust hot path experiments and low-latency runtime/networking measurement |
+| Desk extension | 15-19 | External market data, pricing, routing, hedging, best execution, simple strategy |
+| Appendix prototypes | 90-93 | Earlier runnable Go funds prototypes |
 
 The chapter rule is:
 
@@ -848,11 +848,11 @@ matching
 
 | 阶段 | 章节 | 目的 |
 | --- | --- | --- |
-| 资金正确性 | 01-04 | 账本、现货结算、钱包幂等、命令日志重放 |
-| 交易热路径 | 05-10 | 单写者、撮合、仓位、保证金、下单前风控、风险投影 |
-| 复制和边界 | 11-14 | 复制日志、OMS/账本/合规、缓存一致性、行情和成交推送 |
-| 运行时实验 | 15-16 | Rust 热路径实验和低延迟运行时/网络测量 |
-| 交易台扩展 | 17-21 | 外部行情、定价、路由、对冲、最优执行、简单策略 |
+| 版本线 | 01-06 | 交易所契约、ACID SQL、SQL facts/outbox、内存核心、复制日志、SQL projections |
+| 领域深挖 | 07-12 | 订单簿机制、仓位/PnL、保证金/风控、风险投影、缓存一致性、推送 |
+| 运行时实验 | 13-14 | Rust 热路径实验和低延迟运行时/网络测量 |
+| 交易台扩展 | 15-19 | 外部行情、定价、路由、对冲、最优执行、简单策略 |
+| 附录原型 | 90-93 | 早期可运行 Go 资金原型 |
 
 每章都应该回答：
 

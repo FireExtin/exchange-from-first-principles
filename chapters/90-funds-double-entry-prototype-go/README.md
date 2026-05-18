@@ -1,20 +1,18 @@
-# 01 Double-Entry Ledger
+# 90 Funds Double-Entry Prototype
 
 [English](#english) · [中文](#中文)
 
 ## English
 
-Primitive: two accounts exchange value.
+Purpose: preserve the original runnable double-entry teaching prototype.
 
-Question: how do we prove money was not created or destroyed?
-
-This chapter keeps only the smallest useful invariant: every transaction must
-balance to zero per asset. It is deliberately in-memory so the accounting rule
-is visible before storage, API, wallet, and trading concerns enter the system.
+This appendix prototype predates the full exchange semantic contract. It is
+still useful for the smallest invariant: every transaction balances to zero per
+asset. It is not the canonical v0 SQL exchange implementation.
 
 ## Status And Run
 
-Status: runnable Go chapter.
+Status: runnable Go prototype.
 
 Run:
 
@@ -23,20 +21,16 @@ go test ./...
 go run ./cmd/demo
 ```
 
----
-
 ## 中文
 
-原语：两个账户交换价值。
+目的：保留原来的可运行 double-entry 教学原型。
 
-问题：如何证明资金没有被创造或销毁？
-
-本章只保留最小有用的不变量：每笔交易必须按资产平衡为零。它故意放在内存中，
-以便在存储、API、钱包和交易问题进入系统之前，账务规则是可见的。
+这个 appendix prototype 早于完整 exchange semantic contract。它仍然适合展示最小
+不变量：每笔交易在每种资产内平衡为零。它不是规范 v0 SQL exchange 实现。
 
 ## 状态与运行
 
-状态：可运行 Go 章节。
+状态：可运行 Go 原型。
 
 运行：
 

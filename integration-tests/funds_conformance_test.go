@@ -4,8 +4,8 @@ import (
 	"reflect"
 	"testing"
 
-	walletadapter "github.com/FireExtin/exchange-from-first-principles/chapters/03-wallet-deposit-withdrawal-go/adapter"
-	replayadapter "github.com/FireExtin/exchange-from-first-principles/chapters/04-command-log-replay-go/adapter"
+	walletadapter "github.com/FireExtin/exchange-from-first-principles/chapters/92-wallet-idempotency-prototype-go/adapter"
+	replayadapter "github.com/FireExtin/exchange-from-first-principles/chapters/93-command-log-replay-prototype-go/adapter"
 	"github.com/FireExtin/exchange-from-first-principles/shared/go/funds"
 	"github.com/FireExtin/exchange-from-first-principles/shared/go/types"
 )

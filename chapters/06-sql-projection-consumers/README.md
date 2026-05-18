@@ -1,45 +1,43 @@
-# 12 OMS, Ledger, Compliance, And Paths
+# 06 SQL Projection Consumers
 
 [English](#english) · [中文](#中文)
 
 ## English
 
-Primitive: the trading engine cannot also be every product view.
+Purpose: specify v4, where SQL returns as the warm/cold-path projection and
+consumer store.
 
-Question: why separate OMS, risk, ledger, and user-facing state?
-
-This chapter is intentionally empty for now. It will connect the earlier Go
-asset/account chapters with the Java trading-system chapters after the command
-and event contracts stabilize.
+The hot path emits facts. SQL consumers rebuild OMS views, ledger reports,
+reconciliation inputs, compliance exports, risk views, cache rebuild state, and
+push recovery checkpoints.
 
 ## Status
 
-Status: design scaffold. No runnable implementation exists here yet.
+Status: README scaffold. No runnable implementation exists here yet.
 
-Planned split:
+## Boundary
 
-- Java owns deterministic trading-state application.
-- Go owns service workflows, reconciliation, and product-facing APIs.
-- Shared events describe the handoff between hot-path facts and warm/cold-path
-  views.
-
----
+- input: event stream plus snapshots;
+- output: query tables, reports, reconciliation records, compliance exports,
+  recovery cursors;
+- required behavior: idempotent consumption, gap detection, rebuild from a known
+  cursor;
+- not owned here: hot-path command admission or matching.
 
 ## 中文
 
-原语：交易引擎不能同时也是每个产品视图。
+目的：定义 v4，也就是 SQL 回到 warm/cold path，作为 projection 和 consumer store。
 
-问题：为什么要分离 OMS、风控、账本和面向用户的状态？
-
-本章目前故意留空。它将在命令和事件契约稳定后，连接早期的 Go 资产/账户
-章节和 Java 交易系统章节。
+热路径发出事实。SQL consumer 重建 OMS view、ledger report、对账输入、合规导出、
+risk view、cache rebuild state 和 push recovery checkpoint。
 
 ## 状态
 
-状态：设计脚手架。本目录尚无可运行实现。
+状态：README 脚手架。本章尚无可运行实现。
 
-计划分离：
+## 边界
 
-- Java 拥有确定性交易状态应用。
-- Go 拥有服务工作流、对账和面向产品的 API。
-- 共享事件描述热路径事实与温/冷路径视图之间的交接。
+- 输入：事件流加快照；
+- 输出：查询表、报表、对账记录、合规导出、恢复 cursor；
+- 必须行为：幂等消费、gap detection、从已知 cursor 重建；
+- 不负责：热路径命令准入或撮合。

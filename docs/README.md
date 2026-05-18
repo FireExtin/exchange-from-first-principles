@@ -4,250 +4,205 @@
 
 ## English
 
-This directory is the project knowledge base. The root `README.md` is the
-front door; this file is the map for everything deeper.
-
-Documentation roles are intentionally narrow:
-
-- project docs explain why the system evolves;
-- chapter docs explain one local pressure and one local model;
-- shared, integration, tool, and ops docs explain supporting contracts;
-- history docs record old changes and are not the current source of truth.
+This page is the canonical map for active documentation. Historical records
+live in [history/](./history/) and are not rewritten when the current thesis
+changes.
 
 ## Recommended Reading Paths
 
-For a first pass:
-
-1. [Goal](./00-goal.md)
-2. [Core Principles](./01-core-principles.md)
-3. [Minimal Exchange Design Paper](./02-design-paper.md)
-4. [Chapter Roadmap](./07-chapter-roadmap.md)
-5. Start running chapters from `chapters/01-double-entry-ledger-go`.
-
-For the architecture thread:
-
-1. [System Boundary](./03-system-boundary.md)
-2. [Truth Source Migration](./04-truth-source-migration.md)
-3. [Ordering And Serial Semantics](./05-ordering-and-serial-semantics.md)
-4. [Version Contract And Testing](./06-version-contract-and-testing.md)
-
-For the trading-domain thread:
-
-1. [Position, Matching, Risk, And Margin](./08-position-matching-risk-margin.md)
-2. [Trading Desk Extension](./09-trading-desk-extension.md)
-3. Chapter READMEs from `chapters/05-*` through `chapters/16-*`.
-
-For implementation work:
-
-1. [Shared Contracts](../shared/README.md)
-2. [Integration Test Contract](../integration-tests/README.md)
-3. [Chapter Roadmap](./07-chapter-roadmap.md)
-4. The README inside the chapter you are changing.
+| Goal | Read |
+| --- | --- |
+| Understand the project | [Goal](./00-goal.md), [Core Principles](./01-core-principles.md), [Design Paper](./02-design-paper.md) |
+| Follow the version line | [Chapter Roadmap](./07-chapter-roadmap.md), then chapters 01-06 |
+| Understand truth migration | [Truth Source Migration](./04-truth-source-migration.md), [Version Contract And Testing](./06-version-contract-and-testing.md) |
+| Understand hot-path semantics | [Position, Matching, Risk, And Margin](./08-position-matching-risk-margin.md), then chapters 07-12 |
+| Run current code | appendix prototypes 90-93, chapter 05, chapter 13 |
 
 ## Current Source Of Truth
 
-| Area | Current source |
+| Subject | Owner |
 | --- | --- |
-| Project goal | [00-goal.md](./00-goal.md) |
-| Core engineering principles | [01-core-principles.md](./01-core-principles.md) |
+| Project goal and hierarchy | [00-goal.md](./00-goal.md) |
+| Stable engineering principles | [01-core-principles.md](./01-core-principles.md) |
 | Full design narrative | [02-design-paper.md](./02-design-paper.md) |
 | Language and ownership boundaries | [03-system-boundary.md](./03-system-boundary.md) |
-| Chapter sequence and status | [07-chapter-roadmap.md](./07-chapter-roadmap.md) |
-| Runtime/toolchain entrypoint | [../README.md](../README.md) |
-| Cross-chapter semantic contract | [../shared/README.md](../shared/README.md), [../integration-tests/README.md](../integration-tests/README.md) |
-| Historical change notes | [history/change_brief_00.md](./history/change_brief_00.md), [history/change_brief_01.md](./history/change_brief_01.md), [history/change_brief_02.md](./history/change_brief_02.md) |
+| Truth-source migration | [04-truth-source-migration.md](./04-truth-source-migration.md) |
+| Ordering and serial semantics | [05-ordering-and-serial-semantics.md](./05-ordering-and-serial-semantics.md) |
+| Cross-version testing | [06-version-contract-and-testing.md](./06-version-contract-and-testing.md) |
+| Chapter order and status | [07-chapter-roadmap.md](./07-chapter-roadmap.md) |
+| Hot-path trading semantics | [08-position-matching-risk-margin.md](./08-position-matching-risk-margin.md) |
+| Desk extension notes | [09-trading-desk-extension.md](./09-trading-desk-extension.md) |
 
 ## Main Docs
 
-| Document | Role |
+| Doc | Owns |
 | --- | --- |
-| [00-goal.md](./00-goal.md) | Smallest statement of what the project is trying to prove. |
-| [01-core-principles.md](./01-core-principles.md) | Semantic contract, command/event rules, replay, recovery, and testing principles. |
-| [02-design-paper.md](./02-design-paper.md) | Full bilingual design paper. |
-| [03-system-boundary.md](./03-system-boundary.md) | Ownership boundaries: Java, Go, Aeron, Rust. |
-| [04-truth-source-migration.md](./04-truth-source-migration.md) | How truth moves from DB rows to ordered facts. |
-| [05-ordering-and-serial-semantics.md](./05-ordering-and-serial-semantics.md) | Serial history, locks, optimistic control, and consensus. |
-| [06-version-contract-and-testing.md](./06-version-contract-and-testing.md) | How tests preserve business semantics across architecture changes. |
-| [07-chapter-roadmap.md](./07-chapter-roadmap.md) | Canonical chapter order and status. |
-| [08-position-matching-risk-margin.md](./08-position-matching-risk-margin.md) | Trading-domain boundary across matching, positions, risk, and margin. |
-| [09-trading-desk-extension.md](./09-trading-desk-extension.md) | Future desk layer: market data, pricing, routing, hedging, arbitrage. |
-| [90-learning-plan.md](./90-learning-plan.md) | Supporting Java/Go learning guidance, not an architecture source of truth. |
+| [00-goal.md](./00-goal.md) | What the project is trying to prove. |
+| [01-core-principles.md](./01-core-principles.md) | Semantic contract first, command/event rules, replay, recovery, and tests. |
+| [02-design-paper.md](./02-design-paper.md) | The full design-paper narrative. |
+| [03-system-boundary.md](./03-system-boundary.md) | Java hot core, Go/SQL service edges and projections, Aeron/Raft ordering. |
+| [04-truth-source-migration.md](./04-truth-source-migration.md) | Migration from ACID SQL to facts, memory core, replicated log, and projections. |
+| [05-ordering-and-serial-semantics.md](./05-ordering-and-serial-semantics.md) | Locks, MVCC/CAS, serial history, and consensus. |
+| [06-version-contract-and-testing.md](./06-version-contract-and-testing.md) | How shared scenarios prove semantics survived architecture changes. |
+| [07-chapter-roadmap.md](./07-chapter-roadmap.md) | Canonical version-line chapter order. |
+| [08-position-matching-risk-margin.md](./08-position-matching-risk-margin.md) | Matching, positions, margin, risk, and projection semantics. |
+| [09-trading-desk-extension.md](./09-trading-desk-extension.md) | Later desk layer: market data, pricing, routing, hedging, strategies. |
+| [90-learning-plan.md](./90-learning-plan.md) | Supporting Java/Go learning guidance, not architecture truth. |
 
 ## Chapter Docs
 
 | Chapter | README | Status |
 | --- | --- | --- |
-| 01 | [Double-Entry Ledger](../chapters/01-double-entry-ledger-go/README.md) | Runnable Go |
-| 02 | [Spot Trade DB Transaction](../chapters/02-spot-trade-db-go/README.md) | Runnable Go |
-| 03 | [Wallet Deposit Withdrawal](../chapters/03-wallet-deposit-withdrawal-go/README.md) | Runnable Go plus reconciliation lab |
-| 03 lab | [Reconciliation Lab](../chapters/03-wallet-deposit-withdrawal-go/RECONCILIATION_LAB.md) | TODO exercise behind build tag |
-| 04 | [Command Log Replay](../chapters/04-command-log-replay-go/README.md) | Runnable Go |
-| 05 | [Single-Writer State Machine Java](../chapters/05-single-writer-state-machine-java/README.md) | Design scaffold |
-| 06 | [Simple Matching Engine Java](../chapters/06-simple-matching-engine-java/README.md) | Design scaffold |
-| 07 | [Position Manager](../chapters/07-position-manager/README.md) | Design scaffold |
-| 08 | [Margin Model](../chapters/08-margin-model/README.md) | Design scaffold |
-| 09 | [Desk Pre-Trade Risk](../chapters/09-desk-pretrade-risk/README.md) | Design scaffold |
-| 10 | [Risk Cluster Projection](../chapters/10-risk-cluster-projection/README.md) | Design scaffold |
-| 11 | [Replicated State Machine Aeron Java](../chapters/11-replicated-state-machine-aeron-java/README.md) | Runnable Java skeleton |
-| 12 | [OMS, Ledger, Compliance, And Paths](../chapters/12-oms-ledger-compliance-java-go/README.md) | Design scaffold |
-| 13 | [Cache Coherence And Market State](../chapters/13-cache-coherence-and-market-state/README.md) | Design scaffold |
-| 14 | [Market And Execution Push](../chapters/14-market-execution-push/README.md) | Design scaffold |
-| 15 | [Rust Hot Path](../chapters/15-rust-hot-path/README.md) | Runnable Rust experiment |
-| 16 | [Low-Latency Runtime And Networking](../chapters/16-low-latency-runtime-networking/README.md) | Design scaffold |
+| 01 | [Exchange Semantic Contract](../chapters/01-exchange-semantic-contract-go/README.md) | Contract scaffold |
+| 02 | [ACID SQL Exchange](../chapters/02-acid-sql-exchange-go/README.md) | Contract scaffold |
+| 03 | [SQL Facts And Outbox](../chapters/03-sql-facts-outbox-go/README.md) | Contract scaffold |
+| 04 | [Single-Node Memory Core](../chapters/04-single-node-memory-core-java/README.md) | README scaffold |
+| 05 | [Replicated Log Core](../chapters/05-replicated-log-core-aeron-java/README.md) | Runnable Java skeleton |
+| 06 | [SQL Projection Consumers](../chapters/06-sql-projection-consumers/README.md) | README scaffold |
+| 07 | [Order Book Mechanics](../chapters/07-order-book-mechanics/README.md) | README only |
+| 08 | [Position And PnL](../chapters/08-position-and-pnl/README.md) | README only |
+| 09 | [Margin And Pre-Trade Risk](../chapters/09-margin-and-pretrade-risk/README.md) | README only |
+| 10 | [Risk Cluster Projection](../chapters/10-risk-cluster-projection/README.md) | README only |
+| 11 | [Cache Coherence And Market State](../chapters/11-cache-coherence-and-market-state/README.md) | README only |
+| 12 | [Market And Execution Push](../chapters/12-market-execution-push/README.md) | README only |
+| 13 | [Rust Hot Path](../chapters/13-rust-hot-path/README.md) | Runnable Rust experiment |
+| 14 | [Low-Latency Runtime And Networking](../chapters/14-low-latency-runtime-networking/README.md) | README only |
 
-Chapters 17-21 are future desk-extension ideas described in
-[09-trading-desk-extension.md](./09-trading-desk-extension.md). They do not yet
-have chapter directories.
+## Appendix Prototypes
+
+| Chapter | README | Status |
+| --- | --- | --- |
+| 90 | [Funds Double-Entry Prototype](../chapters/90-funds-double-entry-prototype-go/README.md) | Runnable Go |
+| 91 | [Spot Settlement Transaction Prototype](../chapters/91-spot-settlement-transaction-prototype-go/README.md) | Runnable Go |
+| 92 | [Wallet Idempotency Prototype](../chapters/92-wallet-idempotency-prototype-go/README.md) | Runnable Go plus reconciliation lab |
+| 93 | [Command Log Replay Prototype](../chapters/93-command-log-replay-prototype-go/README.md) | Runnable Go |
 
 ## Supporting Docs
 
-| Document | Role |
+| Area | README |
 | --- | --- |
-| [../shared/README.md](../shared/README.md) | Shared command/event contracts. |
-| [../integration-tests/README.md](../integration-tests/README.md) | Cross-chapter semantic test contract. |
-| [../tools/go/README.md](../tools/go/README.md) | Go tooling placeholders. |
-| [../tools/readme-matrix/README.md](../tools/readme-matrix/README.md) | README comparison format helper. |
-| [../ops/runbook.md](../ops/runbook.md) | Operational runbook notes. |
-| [../ops/flamegraph-notes.md](../ops/flamegraph-notes.md) | Profiling and flamegraph notes. |
+| Shared contracts | [shared/README.md](../shared/README.md) |
+| Integration tests | [integration-tests/README.md](../integration-tests/README.md) |
+| Go tools | [tools/go/README.md](../tools/go/README.md) |
+| Runbooks | [ops/runbook.md](../ops/runbook.md) |
 
 ## Historical Records
 
-| Document | Role |
+| Record | Notes |
 | --- | --- |
-| [history/change_brief_00.md](./history/change_brief_00.md) | Shared funds contract and integration-test change record. |
-| [history/change_brief_01.md](./history/change_brief_01.md) | Reconciliation lab and design-paper change record. |
-| [history/change_brief_02.md](./history/change_brief_02.md) | Documentation organization refresh record. |
+| [history/change_brief_00.md](./history/change_brief_00.md) | Shared funds contract and prototype integration tests. |
+| [history/change_brief_01.md](./history/change_brief_01.md) | Reconciliation lab and earlier architecture-doc expansion. |
+| [history/change_brief_02.md](./history/change_brief_02.md) | Documentation consolidation and bilingual cleanup. |
+| [history/change_brief_03.md](./history/change_brief_03.md) | Exchange semantic version-line reorganization. |
 
 ## Maintenance Rules
 
-- Update the root `README.md` when setup commands, runnable status, or the
-  first reading path changes.
-- Update this file when a Markdown document is added, removed, or reclassified.
-- Update [07-chapter-roadmap.md](./07-chapter-roadmap.md) when a chapter changes
-  phase or status.
-- Keep change briefs append-only. They explain what changed at a point in time;
-  they should not be edited to describe the latest state.
+- Keep active docs bilingual and mirrored.
+- Keep `AGENTS.md` English-only.
+- Update this map and [07-chapter-roadmap.md](./07-chapter-roadmap.md) when a
+  chapter path, role, or status changes.
+- Do not rewrite [history/](./history/) to match current terminology.
+- Contract tests for unfinished exchange behavior must stay behind an explicit
+  build tag.
 
 ---
 
 ## 中文
 
-本目录是项目知识库。根目录 `README.md` 是入口；本文件是更完整的文档地图。
-
-文档职责有意保持窄边界：
-
-- 项目文档解释系统为什么演化；
-- 章节文档解释一个局部压力和一个局部模型；
-- shared、integration、tools、ops 文档解释支撑契约；
-- history 文档记录历史变更，不是当前真相源。
+本页是 active documentation 的规范地图。历史记录位于 [history/](./history/)，当前
+论点变化时不重写历史记录。
 
 ## 推荐阅读路径
 
-第一次阅读：
-
-1. [Goal](./00-goal.md)
-2. [Core Principles](./01-core-principles.md)
-3. [Minimal Exchange Design Paper](./02-design-paper.md)
-4. [Chapter Roadmap](./07-chapter-roadmap.md)
-5. 从 `chapters/01-double-entry-ledger-go` 开始运行章节代码。
-
-架构主线：
-
-1. [System Boundary](./03-system-boundary.md)
-2. [Truth Source Migration](./04-truth-source-migration.md)
-3. [Ordering And Serial Semantics](./05-ordering-and-serial-semantics.md)
-4. [Version Contract And Testing](./06-version-contract-and-testing.md)
-
-交易领域主线：
-
-1. [Position, Matching, Risk, And Margin](./08-position-matching-risk-margin.md)
-2. [Trading Desk Extension](./09-trading-desk-extension.md)
-3. `chapters/05-*` 到 `chapters/16-*` 的章节 README。
-
-实现工作：
-
-1. [Shared Contracts](../shared/README.md)
-2. [Integration Test Contract](../integration-tests/README.md)
-3. [Chapter Roadmap](./07-chapter-roadmap.md)
-4. 正在修改的章节 README。
+| 目标 | 阅读 |
+| --- | --- |
+| 理解项目 | [Goal](./00-goal.md)、[Core Principles](./01-core-principles.md)、[Design Paper](./02-design-paper.md) |
+| 跟随版本线 | [Chapter Roadmap](./07-chapter-roadmap.md)，然后读第 01-06 章 |
+| 理解真相迁移 | [Truth Source Migration](./04-truth-source-migration.md)、[Version Contract And Testing](./06-version-contract-and-testing.md) |
+| 理解热路径语义 | [Position, Matching, Risk, And Margin](./08-position-matching-risk-margin.md)，然后读第 07-12 章 |
+| 运行当前代码 | 附录原型 90-93、第 05 章、第 13 章 |
 
 ## 当前真相源
 
-| 范围 | 当前来源 |
+| 主题 | 归属 |
 | --- | --- |
-| 项目目标 | [00-goal.md](./00-goal.md) |
-| 核心工程原则 | [01-core-principles.md](./01-core-principles.md) |
+| 项目目标和层级 | [00-goal.md](./00-goal.md) |
+| 稳定工程原则 | [01-core-principles.md](./01-core-principles.md) |
 | 完整设计叙事 | [02-design-paper.md](./02-design-paper.md) |
-| 语言与归属边界 | [03-system-boundary.md](./03-system-boundary.md) |
+| 语言和归属边界 | [03-system-boundary.md](./03-system-boundary.md) |
+| 真相源迁移 | [04-truth-source-migration.md](./04-truth-source-migration.md) |
+| 排序和串行语义 | [05-ordering-and-serial-semantics.md](./05-ordering-and-serial-semantics.md) |
+| 跨版本测试 | [06-version-contract-and-testing.md](./06-version-contract-and-testing.md) |
 | 章节顺序和状态 | [07-chapter-roadmap.md](./07-chapter-roadmap.md) |
-| 运行时和工具链入口 | [../README.md](../README.md) |
-| 跨章节语义契约 | [../shared/README.md](../shared/README.md), [../integration-tests/README.md](../integration-tests/README.md) |
-| 历史变更记录 | [history/change_brief_00.md](./history/change_brief_00.md), [history/change_brief_01.md](./history/change_brief_01.md), [history/change_brief_02.md](./history/change_brief_02.md) |
+| 热路径交易语义 | [08-position-matching-risk-margin.md](./08-position-matching-risk-margin.md) |
+| 交易台扩展说明 | [09-trading-desk-extension.md](./09-trading-desk-extension.md) |
 
-## 主线文档
+## 主文档
 
-| 文档 | 职责 |
+| 文档 | 负责 |
 | --- | --- |
-| [00-goal.md](./00-goal.md) | 项目要证明什么的最小陈述。 |
-| [01-core-principles.md](./01-core-principles.md) | 语义契约、命令/事件规则、重放、恢复和测试原则。 |
-| [02-design-paper.md](./02-design-paper.md) | 完整双语设计论文。 |
-| [03-system-boundary.md](./03-system-boundary.md) | Java、Go、Aeron、Rust 的归属边界。 |
-| [04-truth-source-migration.md](./04-truth-source-migration.md) | 真相如何从 DB 行迁移到有序事实。 |
-| [05-ordering-and-serial-semantics.md](./05-ordering-and-serial-semantics.md) | 串行历史、锁、乐观控制和共识。 |
-| [06-version-contract-and-testing.md](./06-version-contract-and-testing.md) | 测试如何在架构变化中保持业务语义。 |
-| [07-chapter-roadmap.md](./07-chapter-roadmap.md) | 规范章节顺序和状态。 |
-| [08-position-matching-risk-margin.md](./08-position-matching-risk-margin.md) | 撮合、仓位、风控和保证金的交易领域边界。 |
-| [09-trading-desk-extension.md](./09-trading-desk-extension.md) | 未来交易台层：行情、定价、路由、对冲、套利。 |
-| [90-learning-plan.md](./90-learning-plan.md) | Java/Go 学习指导，不是架构真相源。 |
+| [00-goal.md](./00-goal.md) | 项目要证明什么。 |
+| [01-core-principles.md](./01-core-principles.md) | 语义契约优先、命令/事件、重放、恢复和测试。 |
+| [02-design-paper.md](./02-design-paper.md) | 完整设计论文叙事。 |
+| [03-system-boundary.md](./03-system-boundary.md) | Java 热核心、Go/SQL 服务边界和 projection、Aeron/Raft 排序。 |
+| [04-truth-source-migration.md](./04-truth-source-migration.md) | 从 ACID SQL 到 facts、内存核心、复制日志和 projection 的迁移。 |
+| [05-ordering-and-serial-semantics.md](./05-ordering-and-serial-semantics.md) | 锁、MVCC/CAS、串行历史和共识。 |
+| [06-version-contract-and-testing.md](./06-version-contract-and-testing.md) | 共享场景如何证明语义在架构变化后仍然存活。 |
+| [07-chapter-roadmap.md](./07-chapter-roadmap.md) | 规范版本线章节顺序。 |
+| [08-position-matching-risk-margin.md](./08-position-matching-risk-margin.md) | 撮合、仓位、保证金、风控和 projection 语义。 |
+| [09-trading-desk-extension.md](./09-trading-desk-extension.md) | 后续交易台层：行情、定价、路由、对冲、策略。 |
+| [90-learning-plan.md](./90-learning-plan.md) | Java/Go 学习指导，不是架构真相。 |
 
 ## 章节文档
 
 | 章节 | README | 状态 |
 | --- | --- | --- |
-| 01 | [Double-Entry Ledger](../chapters/01-double-entry-ledger-go/README.md) | 可运行 Go |
-| 02 | [Spot Trade DB Transaction](../chapters/02-spot-trade-db-go/README.md) | 可运行 Go |
-| 03 | [Wallet Deposit Withdrawal](../chapters/03-wallet-deposit-withdrawal-go/README.md) | 可运行 Go，包含对账实验 |
-| 03 lab | [Reconciliation Lab](../chapters/03-wallet-deposit-withdrawal-go/RECONCILIATION_LAB.md) | build tag 后的 TODO 练习 |
-| 04 | [Command Log Replay](../chapters/04-command-log-replay-go/README.md) | 可运行 Go |
-| 05 | [Single-Writer State Machine Java](../chapters/05-single-writer-state-machine-java/README.md) | 设计脚手架 |
-| 06 | [Simple Matching Engine Java](../chapters/06-simple-matching-engine-java/README.md) | 设计脚手架 |
-| 07 | [Position Manager](../chapters/07-position-manager/README.md) | 设计脚手架 |
-| 08 | [Margin Model](../chapters/08-margin-model/README.md) | 设计脚手架 |
-| 09 | [Desk Pre-Trade Risk](../chapters/09-desk-pretrade-risk/README.md) | 设计脚手架 |
-| 10 | [Risk Cluster Projection](../chapters/10-risk-cluster-projection/README.md) | 设计脚手架 |
-| 11 | [Replicated State Machine Aeron Java](../chapters/11-replicated-state-machine-aeron-java/README.md) | 可运行 Java 骨架 |
-| 12 | [OMS, Ledger, Compliance, And Paths](../chapters/12-oms-ledger-compliance-java-go/README.md) | 设计脚手架 |
-| 13 | [Cache Coherence And Market State](../chapters/13-cache-coherence-and-market-state/README.md) | 设计脚手架 |
-| 14 | [Market And Execution Push](../chapters/14-market-execution-push/README.md) | 设计脚手架 |
-| 15 | [Rust Hot Path](../chapters/15-rust-hot-path/README.md) | 可运行 Rust 实验 |
-| 16 | [Low-Latency Runtime And Networking](../chapters/16-low-latency-runtime-networking/README.md) | 设计脚手架 |
+| 01 | [Exchange Semantic Contract](../chapters/01-exchange-semantic-contract-go/README.md) | 契约脚手架 |
+| 02 | [ACID SQL Exchange](../chapters/02-acid-sql-exchange-go/README.md) | 契约脚手架 |
+| 03 | [SQL Facts And Outbox](../chapters/03-sql-facts-outbox-go/README.md) | 契约脚手架 |
+| 04 | [Single-Node Memory Core](../chapters/04-single-node-memory-core-java/README.md) | README 脚手架 |
+| 05 | [Replicated Log Core](../chapters/05-replicated-log-core-aeron-java/README.md) | 可运行 Java 骨架 |
+| 06 | [SQL Projection Consumers](../chapters/06-sql-projection-consumers/README.md) | README 脚手架 |
+| 07 | [Order Book Mechanics](../chapters/07-order-book-mechanics/README.md) | 仅 README |
+| 08 | [Position And PnL](../chapters/08-position-and-pnl/README.md) | 仅 README |
+| 09 | [Margin And Pre-Trade Risk](../chapters/09-margin-and-pretrade-risk/README.md) | 仅 README |
+| 10 | [Risk Cluster Projection](../chapters/10-risk-cluster-projection/README.md) | 仅 README |
+| 11 | [Cache Coherence And Market State](../chapters/11-cache-coherence-and-market-state/README.md) | 仅 README |
+| 12 | [Market And Execution Push](../chapters/12-market-execution-push/README.md) | 仅 README |
+| 13 | [Rust Hot Path](../chapters/13-rust-hot-path/README.md) | 可运行 Rust 实验 |
+| 14 | [Low-Latency Runtime And Networking](../chapters/14-low-latency-runtime-networking/README.md) | 仅 README |
 
-第 17-21 章是 [09-trading-desk-extension.md](./09-trading-desk-extension.md)
-描述的未来交易台扩展想法，目前尚无章节目录。
+## 附录原型
+
+| 章节 | README | 状态 |
+| --- | --- | --- |
+| 90 | [Funds Double-Entry Prototype](../chapters/90-funds-double-entry-prototype-go/README.md) | 可运行 Go |
+| 91 | [Spot Settlement Transaction Prototype](../chapters/91-spot-settlement-transaction-prototype-go/README.md) | 可运行 Go |
+| 92 | [Wallet Idempotency Prototype](../chapters/92-wallet-idempotency-prototype-go/README.md) | 可运行 Go，含对账实验 |
+| 93 | [Command Log Replay Prototype](../chapters/93-command-log-replay-prototype-go/README.md) | 可运行 Go |
 
 ## 支撑文档
 
-| 文档 | 职责 |
+| 区域 | README |
 | --- | --- |
-| [../shared/README.md](../shared/README.md) | 共享命令/事件契约。 |
-| [../integration-tests/README.md](../integration-tests/README.md) | 跨章节语义测试契约。 |
-| [../tools/go/README.md](../tools/go/README.md) | Go 工具占位。 |
-| [../tools/readme-matrix/README.md](../tools/readme-matrix/README.md) | README 比较格式辅助说明。 |
-| [../ops/runbook.md](../ops/runbook.md) | 运维 runbook 笔记。 |
-| [../ops/flamegraph-notes.md](../ops/flamegraph-notes.md) | profiling 和 flamegraph 笔记。 |
+| 共享契约 | [shared/README.md](../shared/README.md) |
+| 集成测试 | [integration-tests/README.md](../integration-tests/README.md) |
+| Go 工具 | [tools/go/README.md](../tools/go/README.md) |
+| Runbook | [ops/runbook.md](../ops/runbook.md) |
 
 ## 历史记录
 
-| 文档 | 职责 |
+| 记录 | 说明 |
 | --- | --- |
-| [history/change_brief_00.md](./history/change_brief_00.md) | 共享资金契约和集成测试变更记录。 |
-| [history/change_brief_01.md](./history/change_brief_01.md) | 对账实验和设计论文变更记录。 |
-| [history/change_brief_02.md](./history/change_brief_02.md) | 文档组织刷新记录。 |
+| [history/change_brief_00.md](./history/change_brief_00.md) | 共享资金契约和原型集成测试。 |
+| [history/change_brief_01.md](./history/change_brief_01.md) | 对账实验和早期架构文档扩展。 |
+| [history/change_brief_02.md](./history/change_brief_02.md) | 文档合并与中英文整理。 |
+| [history/change_brief_03.md](./history/change_brief_03.md) | 交易所语义版本线重排。 |
 
 ## 维护规则
 
-- 当 setup 命令、可运行状态或第一阅读路径变化时，更新根目录 `README.md`。
-- 新增、删除或重分类 Markdown 文档时，更新本文件。
-- 章节阶段或状态变化时，更新 [07-chapter-roadmap.md](./07-chapter-roadmap.md)。
-- change brief 保持追加式历史记录。它们解释某个时间点发生了什么，不应被改写为
-  最新状态说明。
+- active docs 保持中英文镜像。
+- `AGENTS.md` 保持 English-only。
+- 章节路径、职责或状态变化时，同时更新本地图和 [07-chapter-roadmap.md](./07-chapter-roadmap.md)。
+- 不为了适配当前术语而重写 [history/](./history/)。
+- 未完成 exchange 行为的契约测试必须放在显式 build tag 后。

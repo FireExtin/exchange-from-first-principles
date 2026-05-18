@@ -4,8 +4,8 @@
 
 ## English
 
-Build the smallest exchange core that is still honest about trading-system
-failure modes.
+Build the smallest exchange semantic contract that is still honest about
+trading-system failure modes.
 
 The target is not a full exchange. The target is a clear kernel:
 
@@ -13,7 +13,9 @@ The target is not a full exchange. The target is a clear kernel:
 - every command is durable before state is changed;
 - every state transition is deterministic;
 - every resulting event can be replayed and checked;
-- every balance movement can be reconciled.
+- every balance movement can be reconciled;
+- every order, execution, position, and risk decision can be explained by
+  emitted facts.
 
 ## Documentation Shape
 
@@ -41,7 +43,7 @@ chapter behavior, `docs/07-chapter-roadmap.md` for chapter status, and
 
 ## 中文
 
-构建一个最小化的交易所核心，它仍然诚实地面对交易系统的故障模式。
+构建一个最小化的交易所语义契约，它仍然诚实地面对交易系统的故障模式。
 
 目标不是完整的交易所，而是一个清晰的核：
 
@@ -49,7 +51,8 @@ chapter behavior, `docs/07-chapter-roadmap.md` for chapter status, and
 - 每条命令在状态变更前都是持久化的；
 - 每个状态转换都是确定性的；
 - 每个生成的事件都可以重放和检验；
-- 每笔余额变动都可以对账。
+- 每笔余额变动都可以对账；
+- 每个订单、成交、仓位和风控决策都可以由发出的事实解释。
 
 ## 文档形状
 

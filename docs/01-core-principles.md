@@ -15,11 +15,11 @@ to build a full exchange first. It uses small runnable systems to show how an
 exchange evolves:
 
 ```text
-database transaction
-  -> command log
-  -> deterministic state machine
-  -> replicated state machine
-  -> projections, reconciliation, risk, push, and runtime work
+ACID SQL exchange
+  -> SQL facts and outbox
+  -> deterministic memory core
+  -> replicated log core
+  -> SQL projections and consumer views
 ```
 
 Architecture changes are not goals by themselves. They are trade-offs among
@@ -36,8 +36,8 @@ The project uses four Architecture Lenses to make those trade-offs visible:
 ## Semantic Contract First
 
 Business semantics should stay stable while implementation substrates change.
-The first concrete contract is the Go funds contract in `shared/go`; later
-chapters should keep the same habit for trading commands and events.
+The first runnable contract was the Go funds contract in `shared/go/funds`.
+The active target contract is the exchange-level surface in `shared/go/exchange`.
 
 The core shape is:
 
@@ -45,10 +45,10 @@ The core shape is:
 old_state + command -> new_state + events
 ```
 
-An implementation may be a direct workflow, a database transaction, a replay
-engine, a single-writer state machine, or a replicated state machine. It should
-still expose explainable commands, facts, balances, positions, rejection
-reasons, and replay behavior.
+An implementation may be an ACID SQL transaction, a SQL facts/outbox bridge, a
+single-node memory core, a replicated log core, or a SQL projection consumer.
+It should still expose explainable commands, facts, balances, orders,
+positions, rejection reasons, and replay behavior.
 
 ## Commands And Events
 
@@ -62,6 +62,7 @@ Current and near-term command examples:
 - `Transfer`
 - `PlaceLimit`
 - `Cancel`
+- `ApplyExecution`
 
 Current and near-term event examples:
 
@@ -75,6 +76,8 @@ Current and near-term event examples:
 - `OrderRested`
 - `OrderCancelled`
 - `CancelRejected`
+- `PositionUpdated`
+- `MarginRejected`
 - `Rejected`
 
 Only events mutate downstream views. Commands are inputs. Events are facts.
@@ -126,9 +129,9 @@ Current command:
 go test ./integration-tests/...
 ```
 
-The current suite compares the chapter 03 wallet workflow and the chapter 04
-command-log replay engine through the same shared funds contract. Future DB,
-single-writer, and replicated-log implementations should join the same pattern.
+The current runnable suite compares appendix prototypes 92 and 93 through the
+same shared funds contract. Future SQL, memory-core, replicated-log, and
+projection implementations should join the exchange-level contract pattern.
 
 ## Documentation Rule
 
@@ -154,11 +157,11 @@ arguments. Use `docs/README.md` for document organization and
 展示交易所如何演进：
 
 ```text
-数据库事务
-  -> 命令日志
-  -> 确定性状态机
-  -> 复制状态机
-  -> 投影、对账、风控、推送和运行时工作
+ACID SQL exchange
+  -> SQL facts and outbox
+  -> deterministic memory core
+  -> replicated log core
+  -> SQL projections and consumer views
 ```
 
 架构变化本身不是目标。它是在正确性、性能和可靠性之间做取舍。每个阶段都在
@@ -173,8 +176,8 @@ arguments. Use `docs/README.md` for document organization and
 
 ## 语义契约优先
 
-业务语义应该在实现底座变化时保持稳定。第一份具体契约是 `shared/go` 中的
-Go 资金契约；后续交易命令和事件也应保持同样习惯。
+业务语义应该在实现底座变化时保持稳定。第一份可运行契约是 `shared/go/funds`
+中的 Go 资金契约；当前目标契约是 `shared/go/exchange` 中的交易所级表面。
 
 核心形状是：
 
@@ -182,8 +185,9 @@ Go 资金契约；后续交易命令和事件也应保持同样习惯。
 old_state + command -> new_state + events
 ```
 
-实现可以是直接工作流、数据库事务、重放引擎、单写者状态机或复制状态机。它仍
-应该暴露可解释的命令、事实、余额、仓位、拒绝原因和重放行为。
+实现可以是 ACID SQL 事务、SQL facts/outbox 桥接、单机内存核心、复制日志核心
+或 SQL projection consumer。它仍应该暴露可解释的命令、事实、余额、订单、仓位、
+拒绝原因和重放行为。
 
 ## 命令与事件
 
@@ -197,6 +201,7 @@ old_state + command -> new_state + events
 - `Transfer`
 - `PlaceLimit`
 - `Cancel`
+- `ApplyExecution`
 
 当前和近期事件示例：
 
@@ -210,6 +215,8 @@ old_state + command -> new_state + events
 - `OrderRested`
 - `OrderCancelled`
 - `CancelRejected`
+- `PositionUpdated`
+- `MarginRejected`
 - `Rejected`
 
 只有事件才能改变下游视图。命令是输入。事件是事实。
@@ -256,8 +263,8 @@ SQL 错误、map 查询失败、驱动错误或传输失败，在跨越稳定契
 go test ./integration-tests/...
 ```
 
-当前套件通过同一份共享资金契约，对比第 03 章的钱包工作流和第 04 章的命令日志
-重放引擎。未来 DB、单写者和复制日志实现也应接入同一模式。
+当前可运行套件通过同一份共享资金契约，对比附录原型 92 和 93。未来 SQL、
+内存核心、复制日志和 projection 实现应接入交易所级契约模式。
 
 ## 文档规则
 

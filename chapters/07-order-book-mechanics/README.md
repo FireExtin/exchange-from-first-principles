@@ -1,42 +1,42 @@
-# 06 Simple Matching Engine Java
+# 07 Order Book Mechanics
 
 [English](#english) · [中文](#中文)
 
 ## English
 
-Purpose: implement the smallest deterministic order book that can explain
-price-time priority and trade events.
+Purpose: explain order-book mechanics after the exchange semantic contract has
+already defined matching semantics.
+
+This is a domain deep dive, not the first place where matching appears.
 
 ## Status
 
-Status: design scaffold. No runnable implementation exists here yet.
+Status: README only. No runnable implementation exists here yet.
 
-First implementation should cover:
+## First Scope
 
-- limit order accept/reject;
-- bid/ask book;
+- price-time priority;
+- bid/ask book structure;
 - top-of-book;
-- simple match;
-- cancel by order id.
-
-Keep the engine single-threaded until the behavior is easy to replay.
-
----
+- partial and full fills;
+- cancel by order id;
+- deterministic execution facts.
 
 ## 中文
 
-目的：实现最小的确定性订单簿，能解释价格-时间优先级和成交事件。
+目的：在 exchange semantic contract 已经定义撮合语义之后，解释订单簿内部机制。
+
+这是领域 deep dive，不是第一次引入撮合语义的地方。
 
 ## 状态
 
-状态：设计脚手架。本目录尚无可运行实现。
+状态：仅 README。本章尚无可运行实现。
 
-第一个实现应覆盖：
+## 第一范围
 
-- 限价单接受/拒绝；
-- 买卖盘；
-- 最优买卖价；
-- 简单撮合；
-- 按订单 ID 撤销。
-
-在行为易于重放之前保持引擎单线程。
+- 价格-时间优先级；
+- bid/ask book 结构；
+- top-of-book；
+- 部分成交和完全成交；
+- 按 order id 撤单；
+- 确定性 execution facts。
