@@ -4,6 +4,8 @@
 
 ## English
 
+> Real-time prices and trade confirmations are pushed to clients. What happens when a client misses a message? What about a client that reconnects? This chapter upgrades push from best-effort delivery to a recoverable stream with sequence numbers and replay.
+
 Purpose: specify recoverable public market-data and private execution-report
 streams.
 
@@ -24,6 +26,8 @@ Status: README only. No runnable implementation exists here yet.
 - backpressure and replay boundary.
 
 ## 中文
+
+> 实时行情和成交回报推给客户端。客户端漏了一条怎么办？断线重连后怎么补？这章把推送从"尽力而为"升级成有顺序号、可重放的可靠流。
 
 目的：定义可恢复的 public market-data 和 private execution-report streams。
 

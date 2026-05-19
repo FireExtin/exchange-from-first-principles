@@ -4,6 +4,8 @@
 
 ## English
 
+> You place a buy order. Before matching, the exchange locks the corresponding funds so you can't spend them elsewhere. This chapter explains that lock: where it comes from, and where it goes when the order is cancelled.
+
 Purpose: explain order intent before matching.
 
 A placed order is not a trade yet. It is an intent that must reserve enough
@@ -33,6 +35,8 @@ implement order admission, reservation, or cancellation logic.
 - reservation facts must be replayable.
 
 ## 中文
+
+> 你下了一个买单，在撮合之前，系统把对应的资金"锁起来"，不让你再花。这章解释这把锁：从哪来，撤单后去哪。
 
 目的：在撮合之前，解释订单意图。
 

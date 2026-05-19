@@ -4,6 +4,8 @@
 
 ## English
 
+> Two orders match. Now what? Something has to actually move money and assets between accounts. This chapter translates a matched trade into double-entry postings, one set per asset.
+
 Purpose: explain the smallest trade before a full exchange architecture.
 
 Matching creates execution facts. Settlement explains those facts as
@@ -38,6 +40,8 @@ implement matching, settlement, fee posting, or release logic.
 - execution facts later update positions.
 
 ## 中文
+
+> 两个订单撮合成功了。然后呢？钱和资产需要在账户之间实际移动。这章把一笔成交翻译成账本条目，每种资产各自平衡。
 
 目的：在完整交易所架构之前，解释最小成交。
 

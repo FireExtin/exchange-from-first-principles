@@ -1,10 +1,9 @@
 package adapter
 
-import (
-	"github.com/FireExtin/exchange-from-first-principles/chapters/93-command-log-replay-prototype-go/internal/replay"
-	"github.com/FireExtin/exchange-from-first-principles/shared/go/funds"
-)
+import "github.com/FireExtin/exchange-from-first-principles/shared/go/funds"
 
+// NewEngine returns a funds.Engine backed by replay.FundsEngine.
+// Implement replay.FundsEngine (decide/apply pattern) to make this work.
 func NewEngine() funds.Engine {
-	return replay.NewFundsEngine()
+	panic("TODO: wire up replay.FundsEngine to implement funds.Engine")
 }

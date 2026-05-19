@@ -4,6 +4,8 @@
 
 ## English
 
+> You've made five BTC trades this week. What is your net position? What is your average entry price? How much have you gained or lost? This chapter turns execution facts into position numbers.
+
 Purpose: explain how execution facts become positions and PnL placeholders.
 
 Position semantics are part of the cross-version proof: SQL, memory,
@@ -24,6 +26,8 @@ Status: README only. No runnable implementation exists here yet.
 - deterministic application of execution reports.
 
 ## 中文
+
+> 你这周交易了五次 BTC。净仓位是多少？均价多少？盈亏多少？这章把成交事实转化成仓位数字。
 
 目的：解释 execution facts 如何变成仓位和 PnL 占位。
 

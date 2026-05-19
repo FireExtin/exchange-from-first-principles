@@ -4,6 +4,8 @@
 
 ## English
 
+> Latency comes from somewhere — GC pauses, lock contention, memory allocation. This chapter measures first, then optimizes. That is the only correct order for performance work.
+
 Purpose: measure runtime and networking costs after semantic correctness is
 defined.
 
@@ -23,6 +25,8 @@ Status: README only. No runnable implementation exists here yet.
 - p99/p999 variance measurements.
 
 ## 中文
+
+> 延迟从哪里来——GC 暂停、锁竞争、内存分配？这章先测量，再优化。这是所有性能工作唯一正确的顺序。
 
 目的：在语义正确性已经定义后，测量 runtime 和 networking 成本。
 

@@ -1,7 +1,9 @@
-.PHONY: test test-go test-java test-rust run-ledger tree
+.PHONY: test test-go test-java tree
 
 test: test-go test-java
 
+# Chapters 90-93 compile and are expected to panic at TODO boundaries.
+# The tests define the semantic contract; implement the functions to make them pass.
 test-go:
 	cd shared/go && go test ./...
 	cd chapters/90-funds-double-entry-prototype-go && go test ./...
@@ -17,12 +19,6 @@ test-java:
 	else \
 		echo "SKIP: gradle not found. Install Gradle locally or run this target on the remote dev box."; \
 	fi
-
-test-rust:
-	cd chapters/16-rust-hot-path && cargo test
-
-run-ledger:
-	cd chapters/90-funds-double-entry-prototype-go && go run ./cmd/demo
 
 tree:
 	find . -maxdepth 3 -type f | sort

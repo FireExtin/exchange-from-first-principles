@@ -4,6 +4,8 @@
 
 ## English
 
+> You have $1,000 on an exchange, place a $600 order, and your available balance drops to $400 — but the $600 didn't disappear. This chapter names where it went.
+
 Purpose: explain user balance states before orders and matching.
 
 An exchange does not only track one balance number. It tracks user claims by
@@ -34,6 +36,8 @@ implement balance-state transitions.
 - every state movement is explainable as entries.
 
 ## 中文
+
+> 你有 $1000 在交易所，挂了 $600 的买单，可用余额变成 $400，但那 $600 并没消失。这章给它的去处命名。
 
 目的：在订单和撮合之前，解释用户余额状态。
 

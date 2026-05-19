@@ -4,6 +4,8 @@
 
 ## English
 
+> What if the order book lived entirely in memory, with no database involved? Latency drops — but when the process crashes, how do you recover? This chapter moves matching into memory and answers that question.
+
 Purpose: move the same business semantics into a deterministic single-node
 memory core.
 
@@ -25,6 +27,8 @@ Implementation must wait until the semantic ramp and SQL contract are stable.
   push recovery.
 
 ## 中文
+
+> 如果订单簿整个放在内存里，不依赖数据库，会怎样？延迟更低——但进程崩溃后怎么恢复？这章把撮合搬到内存里，回答这个问题。
 
 目的：将同一业务语义迁入确定性的单机内存核心。
 

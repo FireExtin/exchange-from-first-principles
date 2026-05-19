@@ -4,6 +4,8 @@
 
 ## English
 
+> Take all of chapters 01–04 and put them inside a single SQL transaction. First correctness proof: if it commits atomically, the invariants hold.
+
 Purpose: combine chapters 01-04 into the first complete architecture version:
 ACID SQL as the source of truth.
 
@@ -28,6 +30,8 @@ semantics are clear: rows plus transactions.
 - later versions must preserve the same external semantics.
 
 ## 中文
+
+> 把第 01-04 章的所有业务逻辑放进一个 SQL 事务里。第一个正确性证明：一起提交，不变量就成立。
 
 目的：把第 01-04 章组合成第一个完整架构版本：ACID SQL 作为真相源。
 

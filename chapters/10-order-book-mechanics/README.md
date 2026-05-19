@@ -4,6 +4,8 @@
 
 ## English
 
+> When two orders are at the same price, which one fills first? How does an order book decide, and how fast can it do it? This chapter opens the lid on the matching engine.
+
 Purpose: explain order-book internals after the minimal order and settlement
 semantics are already introduced.
 
@@ -23,6 +25,8 @@ Status: README only. No runnable implementation exists here yet.
 - deterministic execution facts.
 
 ## 中文
+
+> 同价格的订单哪个先成交？订单簿怎么决定，速度有多快？这章打开撮合引擎的盖子。
 
 目的：在最小订单和结算语义已经引入之后，解释订单簿内部机制。
 

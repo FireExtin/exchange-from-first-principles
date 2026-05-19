@@ -1,10 +1,6 @@
 package wallet
 
-import (
-	"errors"
-	"fmt"
-)
-
+// WithdrawalStatus tracks whether a withdrawal is pending or complete.
 type WithdrawalStatus string
 
 const (
@@ -20,107 +16,42 @@ type Withdrawal struct {
 	Status    WithdrawalStatus
 }
 
-type Processor struct {
-	balances          map[string]int64
-	seenDepositIDs    map[string]struct{}
-	withdrawalByID    map[string]Withdrawal
-	seenConfirmations map[string]struct{}
-}
+// Processor is the in-memory wallet engine. It enforces idempotency on
+// deposits (via callbackID) and withdrawal confirmations (via providerEventID),
+// and enforces the two-phase withdrawal lifecycle (requested → confirmed).
+type Processor struct{}
 
 func NewProcessor() *Processor {
-	return &Processor{
-		balances:          make(map[string]int64),
-		seenDepositIDs:    make(map[string]struct{}),
-		withdrawalByID:    make(map[string]Withdrawal),
-		seenConfirmations: make(map[string]struct{}),
-	}
+	panic("TODO: implement")
 }
 
+// HandleDeposit credits the account. Returns (false, nil) if callbackID was
+// already seen (idempotent). Returns (false, err) on invalid input.
 func (p *Processor) HandleDeposit(callbackID, accountID, asset string, amount int64) (bool, error) {
-	if callbackID == "" {
-		return false, errors.New("callback_id is required")
-	}
-	if amount <= 0 {
-		return false, errors.New("amount must be positive")
-	}
-	if _, ok := p.seenDepositIDs[callbackID]; ok {
-		return false, nil
-	}
-
-	p.balances[key(accountID, asset)] += amount
-	p.seenDepositIDs[callbackID] = struct{}{}
-	return true, nil
+	panic("TODO: implement")
 }
 
+// RequestWithdrawal reserves funds and records the withdrawal as requested.
+// Returns (false, nil) if withdrawalID already exists (idempotent dedup).
 func (p *Processor) RequestWithdrawal(withdrawalID, accountID, asset string, amount int64) (bool, error) {
-	if withdrawalID == "" {
-		return false, errors.New("withdrawal_id is required")
-	}
-	if amount <= 0 {
-		return false, errors.New("amount must be positive")
-	}
-	if _, ok := p.withdrawalByID[withdrawalID]; ok {
-		return false, nil
-	}
-	k := key(accountID, asset)
-	if p.balances[k] < amount {
-		return false, fmt.Errorf("insufficient funds: account=%s asset=%s", accountID, asset)
-	}
-
-	p.balances[k] -= amount
-	p.withdrawalByID[withdrawalID] = Withdrawal{
-		ID:        withdrawalID,
-		AccountID: accountID,
-		Asset:     asset,
-		Amount:    amount,
-		Status:    WithdrawalRequested,
-	}
-	return true, nil
+	panic("TODO: implement")
 }
 
+// ConfirmWithdrawal transitions the withdrawal to confirmed.
+// Returns (false, nil) if providerEventID was already seen (idempotent).
 func (p *Processor) ConfirmWithdrawal(providerEventID, withdrawalID string) (bool, error) {
-	if providerEventID == "" {
-		return false, errors.New("provider_event_id is required")
-	}
-	if _, ok := p.seenConfirmations[providerEventID]; ok {
-		return false, nil
-	}
-	withdrawal, ok := p.withdrawalByID[withdrawalID]
-	if !ok {
-		return false, fmt.Errorf("unknown withdrawal: %s", withdrawalID)
-	}
-
-	withdrawal.Status = WithdrawalConfirmed
-	p.withdrawalByID[withdrawalID] = withdrawal
-	p.seenConfirmations[providerEventID] = struct{}{}
-	return true, nil
+	panic("TODO: implement")
 }
 
+// Transfer moves funds from one account to another atomically.
 func (p *Processor) Transfer(from, to, asset string, amount int64) error {
-	if from == "" || to == "" || asset == "" {
-		return errors.New("from, to, and asset are required")
-	}
-	if amount <= 0 {
-		return errors.New("amount must be positive")
-	}
-	fromKey := key(from, asset)
-	if p.balances[fromKey] < amount {
-		return fmt.Errorf("insufficient funds: account=%s asset=%s", from, asset)
-	}
-	p.balances[fromKey] -= amount
-	p.balances[key(to, asset)] += amount
-	return nil
+	panic("TODO: implement")
 }
 
 func (p *Processor) Balance(accountID, asset string) int64 {
-	return p.balances[key(accountID, asset)]
+	panic("TODO: implement")
 }
 
 func (p *Processor) Withdrawal(id string) (Withdrawal, bool) {
-	withdrawal, ok := p.withdrawalByID[id]
-	return withdrawal, ok
-}
-
-func key(accountID, asset string) string {
-	return accountID + ":" + asset
+	panic("TODO: implement")
 }

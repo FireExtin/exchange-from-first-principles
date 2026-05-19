@@ -4,6 +4,8 @@
 
 ## English
 
+> One machine holds all state in memory — if it crashes, the exchange stops. This chapter sends the same commands to multiple machines; each applies them independently and reaches the same state. That is replication.
+
 Purpose: move the same deterministic command stream behind a replicated log /
 Raft-style boundary.
 
@@ -28,6 +30,8 @@ gradle --no-daemon clean test
   or a full Raft implementation in this repo.
 
 ## 中文
+
+> 一台机器把所有状态放在内存里——崩了，交易所就停了。这章把同一条命令发给多台机器，每台独立执行后得到相同结果。这就是复制。
 
 目的：将同一确定性命令流放到 replicated log / Raft-style 边界之后。
 

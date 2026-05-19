@@ -4,6 +4,8 @@
 
 ## English
 
+> Which accounts are close to liquidation right now? How exposed is the platform if prices move suddenly? This chapter computes continuous risk from the event stream — asynchronously, not at the moment of order placement.
+
 Purpose: model warm-path risk projections that consume facts after hot-path
 admission.
 
@@ -24,6 +26,8 @@ Status: README only. No runnable implementation exists here yet.
 - rebuild state from event history with a cursor.
 
 ## 中文
+
+> 哪些账户正在接近爆仓？价格突然移动，平台的敞口有多大？这章从事实流持续计算风险——是异步的，不是在下单时计算。
 
 目的：建模热路径准入之后消费事实的 warm-path 风控 projection。
 

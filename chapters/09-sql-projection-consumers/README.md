@@ -4,6 +4,8 @@
 
 ## English
 
+> The memory core produces a stream of facts. Reports, reconciliation, compliance, and risk all need those facts — but they can't read from hot-path memory directly. This chapter brings SQL back, now as a consumer of the fact stream rather than the source of truth.
+
 Purpose: rebuild warm and cold views from the same emitted facts.
 
 SQL returns as the consumer store for OMS views, ledger reports,
@@ -23,6 +25,8 @@ Status: README scaffold. No runnable implementation exists here yet.
 - out of scope: hot-path command admission or matching.
 
 ## 中文
+
+> 内存核心产生事实流。报表、对账、合规、风控都需要这些事实——但不能直接读内存核心。这章让 SQL 回来，这次它是事实流的消费者，不再是真相源。
 
 目的：从同一组 emitted facts 重建温路径和冷路径视图。
 

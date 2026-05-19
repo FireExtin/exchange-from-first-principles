@@ -4,6 +4,8 @@
 
 ## English
 
+> Before an order enters the book, the system must decide: can this account afford it? Is it too risky to allow? This chapter defines the synchronous gate orders must pass before matching.
+
 Purpose: combine margin checks and synchronous pre-trade risk admission.
 
 This chapter explains how dangerous orders are rejected before they enter the
@@ -25,6 +27,8 @@ Status: README only. No runnable implementation exists here yet.
 - margin accepted/rejected events.
 
 ## 中文
+
+> 订单进入订单簿之前，系统必须判断：这个账户承受得起吗？这笔单风险太大该拒绝吗？这章定义订单在撮合前必须通过的同步检查门。
 
 目的：合并保证金检查和同步下单前风控准入。
 

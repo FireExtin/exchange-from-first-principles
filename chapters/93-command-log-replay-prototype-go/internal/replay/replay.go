@@ -1,10 +1,7 @@
 package replay
 
-import (
-	"errors"
-	"fmt"
-)
-
+// Command is a generic single-asset ledger command used in this prototype.
+// Type is "credit" or "debit". Seq must be strictly sequential starting at 1.
 type Command struct {
 	Seq       int64
 	Type      string
@@ -14,6 +11,8 @@ type Command struct {
 	Ref       string
 }
 
+// Event is the fact produced by applying a Command.
+// Type is "account_credited" or "account_debited".
 type Event struct {
 	Seq       int64
 	Type      string
@@ -23,95 +22,51 @@ type Event struct {
 	Ref       string
 }
 
-type CommandLog struct {
-	commands []Command
-}
+// CommandLog is an append-only in-memory command store.
+type CommandLog struct{}
 
 func (l *CommandLog) Append(command Command) {
-	l.commands = append(l.commands, command)
+	panic("TODO: implement")
 }
 
 func (l *CommandLog) Commands() []Command {
-	out := make([]Command, len(l.commands))
-	copy(out, l.commands)
-	return out
+	panic("TODO: implement")
 }
 
-type Engine struct {
-	lastSeq  int64
-	balances map[string]int64
-	events   []Event
-}
+// Engine applies commands one at a time and tracks resulting balances and
+// events. Apply must be called in strict sequence order (1, 2, 3...).
+type Engine struct{}
 
+// Snapshot captures the full state at a point in time, allowing replay
+// to resume from a known position rather than from command 1.
 type Snapshot struct {
 	LastSeq  int64
 	Balances map[string]int64
 }
 
 func NewEngine() *Engine {
-	return &Engine{balances: make(map[string]int64)}
+	panic("TODO: implement")
 }
 
 func (e *Engine) Apply(command Command) (Event, error) {
-	if command.Seq != e.lastSeq+1 {
-		return Event{}, fmt.Errorf("sequence gap: got=%d want=%d", command.Seq, e.lastSeq+1)
-	}
-	if command.Ref == "" || command.AccountID == "" || command.Asset == "" {
-		return Event{}, errors.New("ref, account_id, and asset are required")
-	}
-	if command.Amount <= 0 {
-		return Event{}, errors.New("amount must be positive")
-	}
-
-	var event Event
-	switch command.Type {
-	case "credit":
-		e.balances[key(command.AccountID, command.Asset)] += command.Amount
-		event = Event{Seq: command.Seq, Type: "account_credited", AccountID: command.AccountID, Asset: command.Asset, Amount: command.Amount, Ref: command.Ref}
-	case "debit":
-		k := key(command.AccountID, command.Asset)
-		if e.balances[k] < command.Amount {
-			return Event{}, fmt.Errorf("insufficient funds: account=%s asset=%s", command.AccountID, command.Asset)
-		}
-		e.balances[k] -= command.Amount
-		event = Event{Seq: command.Seq, Type: "account_debited", AccountID: command.AccountID, Asset: command.Asset, Amount: command.Amount, Ref: command.Ref}
-	default:
-		return Event{}, fmt.Errorf("unknown command type: %s", command.Type)
-	}
-
-	e.lastSeq = command.Seq
-	e.events = append(e.events, event)
-	return event, nil
+	panic("TODO: implement")
 }
 
+// Replay rebuilds an Engine by applying all commands from the log in order.
+// Demonstrates that deterministic replay reaches the same state as serial
+// execution.
 func Replay(commands []Command) (*Engine, error) {
-	engine := NewEngine()
-	for _, command := range commands {
-		if _, err := engine.Apply(command); err != nil {
-			return nil, err
-		}
-	}
-	return engine, nil
+	panic("TODO: implement")
 }
 
 func (e *Engine) Balance(accountID, asset string) int64 {
-	return e.balances[key(accountID, asset)]
+	panic("TODO: implement")
 }
 
 func (e *Engine) Events() []Event {
-	out := make([]Event, len(e.events))
-	copy(out, e.events)
-	return out
+	panic("TODO: implement")
 }
 
 func (e *Engine) Snapshot() Snapshot {
-	balances := make(map[string]int64, len(e.balances))
-	for key, value := range e.balances {
-		balances[key] = value
-	}
-	return Snapshot{LastSeq: e.lastSeq, Balances: balances}
-}
-
-func key(accountID, asset string) string {
-	return accountID + ":" + asset
+	panic("TODO: implement")
 }

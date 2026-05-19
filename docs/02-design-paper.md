@@ -4,15 +4,28 @@
 
 ## English
 
-### 1. Thesis
+### 1. The Starting Question
 
-This project derives an exchange-like system from small, inspectable
-primitives. It does not start with Aeron, Raft, DPDK, Rust, or a complete
-matching engine. It starts with the smallest financial question:
+Alice buys 1 BTC from Bob for 60,000 USDT.
 
-```text
-can two accounts exchange value without creating or losing money?
-```
+Simple enough. But trace what has to be true for that sentence to be
+meaningful:
+
+- Alice's USDT account must have at least 60,000.
+- That 60,000 must not already be committed to another order.
+- After the trade, Bob's BTC decreases by exactly 1, and Alice's increases
+  by exactly 1.
+- Alice's USDT decreases by exactly 60,000, and Bob's increases by exactly
+  60,000.
+- No money appears. No money disappears. The ledger balances.
+- If the system fails halfway through, neither leg can succeed without the other.
+
+Now add one more constraint: a thousand more trades happen every second.
+
+That single trade is the minimal question this project asks. Every
+architecture decision that follows — SQL transactions, command logs, in-memory
+state machines, replicated logs, push streams — is an answer to some pressure
+on that same requirement.
 
 From there, each stage introduces one new pressure:
 
@@ -548,14 +561,23 @@ That is the heart of the project.
 
 ## 中文
 
-### 1. 核心论点
+### 1. 最初的问题
 
-这个项目不是从 Aeron、Raft、DPDK、Rust 或完整撮合引擎开始，而是从最小的
-金融问题开始：
+Alice 以 60,000 USDT 从 Bob 那里买了 1 BTC。
 
-```text
-两个账户交换价值，系统能不能证明没有凭空造钱，也没有丢钱？
-```
+听起来很简单。但要让这句话有意义，系统必须保证什么？
+
+- Alice 的 USDT 账户里至少有 60,000。
+- 这 60,000 没有被其他订单锁定。
+- 成交后，Bob 的 BTC 账户减少 1，Alice 的增加 1。
+- Alice 的 USDT 减少 60,000，Bob 的增加 60,000。
+- 没有钱凭空出现，没有钱凭空消失。账本平衡。
+- 如果系统中途崩溃，两条腿不能各自独立成功。
+
+再加一个约束：同样的事情每秒还有一千笔在发生。
+
+这一笔成交就是这个项目想问的最小问题。之后所有架构决策——SQL 事务、命令日
+志、内存状态机、复制日志、推送流——都是对这同一个约束在某种压力下的回答。
 
 然后每一章只引入一个新的压力：
 

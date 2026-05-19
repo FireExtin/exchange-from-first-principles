@@ -4,6 +4,8 @@
 
 ## English
 
+> Permissions, mark prices, and instrument rules are cached everywhere. How stale is too stale? What happens when a cache falls behind? This chapter gives caches explicit rules: declare your freshness guarantee, and declare what to do when you can't meet it.
+
 Purpose: explain how reference data, permissions, marks, and market state are
 cached without breaking the semantic contract.
 
@@ -24,6 +26,8 @@ Status: README only. No runnable implementation exists here yet.
 - fail-open versus fail-closed policy.
 
 ## 中文
+
+> 权限、mark price、instrument 规则——到处都在缓存。缓存多旧算太旧？落后了会怎样？这章给缓存立规矩：声明你的新鲜度保证，声明达不到时怎么办。
 
 目的：解释 reference data、permission、mark 和 market state 如何缓存，同时不破坏
 语义契约。

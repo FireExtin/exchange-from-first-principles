@@ -4,6 +4,8 @@
 
 ## English
 
+> When a user deposits $100, is that the exchange's money? No — it's a debt the exchange owes them. This chapter writes that debt into a ledger.
+
 Purpose: explain the first accounting idea before any exchange architecture:
 user balances are platform liabilities.
 
@@ -30,6 +32,8 @@ implement posting logic.
 - every journal transaction balances per asset.
 
 ## 中文
+
+> 用户存了 $100 进来，这笔钱是平台的收入吗？不是——这是平台欠用户的债。这章把这个"欠"字写进账本。
 
 目的：在任何交易所架构之前，先解释第一条会计语义：用户余额是平台负债。
 

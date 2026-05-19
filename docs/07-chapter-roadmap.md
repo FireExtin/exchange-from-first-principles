@@ -113,8 +113,9 @@ For the full documentation catalog, see [Documentation Map](./README.md).
     - Status: README only.
 
 16. `16-rust-hot-path`
-    - Purpose: keep the Rust code as a runtime/hot-path experiment.
-    - Status: runnable Rust experiment.
+    - Purpose: discuss hot-path runtime options (Rust+io_uring, C+++DPDK, etc.)
+      after chapter 07-09 semantics are stable and measured.
+    - Status: README only.
 
 17. `17-low-latency-runtime-networking`
     - Purpose: measure runtime and network variance after semantics are stable.
@@ -127,16 +128,17 @@ useful exercises and current test fixtures, but they are not the canonical
 teaching sequence.
 
 90. `90-funds-double-entry-prototype-go`
-    - Status: runnable Go prototype.
+    - Status: contract scaffold.
 
 91. `91-spot-settlement-transaction-prototype-go`
-    - Status: runnable Go prototype.
+    - Status: contract scaffold.
 
 92. `92-wallet-idempotency-prototype-go`
-    - Status: runnable Go prototype with reconciliation lab.
+    - Status: contract scaffold. Reconciliation lab is an opt-in TODO exercise
+      behind the `reconciliation_lab_todo` build tag.
 
 93. `93-command-log-replay-prototype-go`
-    - Status: runnable Go prototype.
+    - Status: contract scaffold.
 
 ## Trading Desk Extension
 
@@ -278,8 +280,9 @@ exchange 出现。
     - 状态：仅 README。
 
 16. `16-rust-hot-path`
-    - 目的：保留 Rust 代码作为 runtime/hot-path experiment。
-    - 状态：可运行 Rust 实验。
+    - 目的：在第 07-09 章语义稳定和可测量之后，讨论热路径运行时选项
+      （Rust+io_uring、C+++DPDK 等）。
+    - 状态：仅 README。
 
 17. `17-low-latency-runtime-networking`
     - 目的：在语义稳定后测量 runtime 和 network variance。
@@ -291,16 +294,17 @@ exchange 出现。
 不是规范教学顺序。
 
 90. `90-funds-double-entry-prototype-go`
-    - 状态：可运行 Go 原型。
+    - 状态：契约脚手架。
 
 91. `91-spot-settlement-transaction-prototype-go`
-    - 状态：可运行 Go 原型。
+    - 状态：契约脚手架。
 
 92. `92-wallet-idempotency-prototype-go`
-    - 状态：可运行 Go 原型，含对账实验。
+    - 状态：契约脚手架。对账实验在 `reconciliation_lab_todo` build tag 后，
+      是可选 TODO 练习。
 
 93. `93-command-log-replay-prototype-go`
-    - 状态：可运行 Go 原型。
+    - 状态：契约脚手架。
 
 ## 交易台扩展
 

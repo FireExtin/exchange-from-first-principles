@@ -4,6 +4,8 @@
 
 ## English
 
+> The SQL transaction committed. How does the rest of the system find out what changed? This chapter writes fact records and an outbox into the same commit, so downstream consumers know what happened without polling.
+
 Purpose: introduce command/event/outbox without changing the business semantics
 from chapter 05.
 
@@ -23,6 +25,8 @@ consumer implementation exists here yet.
 - this chapter prepares the move from row-state truth to ordered-log truth.
 
 ## 中文
+
+> SQL 事务提交了，下游系统怎么知道发生了什么？这章把事实记录和 outbox 写进同一个提交，让下游消费者不需要轮询就能知道。
 
 目的：在不改变第 05 章业务语义的前提下，引入 command/event/outbox。
 
