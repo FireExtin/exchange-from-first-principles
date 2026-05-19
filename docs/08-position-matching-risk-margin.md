@@ -4,9 +4,10 @@
 
 ## English
 
-This document owns the hot-path trading semantics that every version-line
-chapter must preserve. These semantics are not late add-ons. They are part of
-the minimum exchange contract.
+This document owns the later hot-path trading surfaces that every architecture
+version must eventually preserve. It is not the first place where orders or
+matching are introduced; chapters 03 and 04 introduce the small business
+semantics first.
 
 ## Target Shape
 
@@ -35,8 +36,8 @@ Matching semantics include:
 - emit partial-fill and full-fill execution facts;
 - release unused locked funds when appropriate.
 
-Chapter 07 explains order-book mechanics. The matching semantics themselves are
-defined earlier by the exchange contract.
+Chapter 04 introduces minimal matching and settlement. Chapter 10 then explains
+order-book mechanics in more detail.
 
 ## Double-Entry Execution Settlement
 
@@ -127,8 +128,8 @@ entry.
 
 ## 中文
 
-本文档负责每个版本线章节都必须保持的热路径交易语义。这些语义不是后期补丁，
-而是最小交易所契约的一部分。
+本文档负责每个架构版本最终都必须保持的后续热路径交易表面。它不是第一次介绍
+订单或撮合的地方；第 03 和第 04 章会先引入小的业务语义。
 
 ## 目标形状
 
@@ -156,7 +157,7 @@ command
 - 发出部分成交和完全成交 execution facts；
 - 在适当时释放未使用的 locked funds。
 
-第 07 章解释订单簿内部机制。撮合语义本身由更早的 exchange contract 定义。
+第 04 章先介绍最小撮合和结算。第 10 章再更细地解释订单簿内部机制。
 
 ## Double-Entry 成交结算
 

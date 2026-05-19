@@ -7,7 +7,10 @@
 This directory contains semantic contracts shared across chapters.
 
 The contracts are not a framework. They are a language for proving that the same
-exchange behavior survives architecture changes.
+exchange behavior survives architecture changes. The exchange contract is
+presented progressively: accounting and funds first, then orders and
+executions, with position, risk, and projection surfaces kept visible for later
+chapters.
 
 ## Current Contract Layers
 
@@ -33,6 +36,8 @@ exchange behavior survives architecture changes.
 本目录包含章节间共享的语义契约。
 
 这些契约不是框架，而是一套语言，用来证明同一交易所行为可以在架构变化中存活。
+exchange contract 会渐进呈现：先是 accounting 和 funds，然后是 orders 和
+executions；position、risk 和 projection 表面保留给后续章节。
 
 ## 当前契约层
 

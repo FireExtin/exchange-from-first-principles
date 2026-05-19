@@ -11,11 +11,15 @@ minimal replay/recovery checks.
 ## Project Shape
 
 This repository is an education-oriented engineering project. It does not try
-to build a full exchange first. It uses small runnable systems to show how an
-exchange evolves:
+to build a full exchange first. It teaches the business semantics in small
+steps, then shows how the same semantics survive architecture changes:
 
 ```text
-ACID SQL exchange
+custody/user liability
+  -> balance states
+  -> order reservation
+  -> match and settlement
+  -> ACID SQL exchange
   -> SQL facts and outbox
   -> deterministic memory core
   -> replicated log core
@@ -37,7 +41,9 @@ The project uses four Architecture Lenses to make those trade-offs visible:
 
 Business semantics should stay stable while implementation substrates change.
 The first runnable contract was the Go funds contract in `shared/go/funds`.
-The active target contract is the exchange-level surface in `shared/go/exchange`.
+The active target contract is the exchange-level surface in `shared/go/exchange`,
+presented progressively from accounting and funds to orders, executions,
+positions, risk, and projections.
 
 The core shape is:
 
@@ -153,11 +159,15 @@ arguments. Use `docs/README.md` for document organization and
 
 ## 项目形状
 
-这个仓库是一个教育型工程项目。它不先构建完整交易所，而是用小型可运行系统
-展示交易所如何演进：
+这个仓库是一个教育型工程项目。它不先构建完整交易所，而是先用小步骤讲清业务
+语义，再展示同一语义如何在架构变化中存活：
 
 ```text
-ACID SQL exchange
+custody/user liability
+  -> balance states
+  -> order reservation
+  -> match and settlement
+  -> ACID SQL exchange
   -> SQL facts and outbox
   -> deterministic memory core
   -> replicated log core
@@ -177,7 +187,9 @@ ACID SQL exchange
 ## 语义契约优先
 
 业务语义应该在实现底座变化时保持稳定。第一份可运行契约是 `shared/go/funds`
-中的 Go 资金契约；当前目标契约是 `shared/go/exchange` 中的交易所级表面。
+中的 Go 资金契约；当前目标契约是 `shared/go/exchange` 中的交易所级表面，并且
+会从 accounting 和 funds 逐步呈现到 orders、executions、positions、risk 和
+projections。
 
 核心形状是：
 

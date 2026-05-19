@@ -6,7 +6,8 @@
 
 This project should become stronger as architecture changes. The way to prove
 that is to keep the exchange semantic contract stable and run the same scenarios
-against each version.
+against each version. The scenario suite should be learned in small pieces
+first, then composed into a full exchange run.
 
 ## Stable Exchange Contract
 
@@ -60,16 +61,21 @@ go test -tags exchange_contract_todo ./exchange
 
 Those tests are expected to fail until adapters and implementations exist.
 
-## Scenarios To Preserve
+## Scenario Composition
 
-Exchange-level scenarios:
+The full exchange scenarios are built from smaller teaching scenarios:
 
-- deposit creates custody asset and user liability;
-- order placement moves available to locked;
-- cancellation releases locked to available;
-- trade execution balances USD and BTC separately;
-- buyer fee posts to fee revenue;
-- partial fill releases unused locked funds;
+- chapter 01: deposit creates custody asset and user liability;
+- chapter 02: balance states move between available, locked, pending
+  withdrawal, with fee revenue defined as a platform account purpose;
+- chapter 03: order placement reserves funds and cancellation releases them;
+- chapter 04: execution emits facts, balances USD/BTC separately, posts fees,
+  and releases surplus.
+
+Those pieces then compose into architecture-version scenarios:
+
+- the same scenario runs against ACID SQL, outbox, memory core, replicated log,
+  and projection adapters;
 - execution facts update positions;
 - margin/risk rejects dangerous orders;
 - replay preserves balances, orders, positions, and emitted facts;
@@ -128,7 +134,8 @@ run the same deterministic transition logic.
 ## 中文
 
 本项目应该在架构变化中变得更强。证明方法是保持 exchange semantic contract 稳定，
-并让同一套场景跑过每个版本。
+并让同一套场景跑过每个版本。场景套件应先被拆成小块学习，再组合成完整交易所
+流程。
 
 ## 稳定交易所契约
 
@@ -180,16 +187,20 @@ go test -tags exchange_contract_todo ./exchange
 
 这些测试在 adapter 和实现出现前应该失败。
 
-## 需要保持的场景
+## 场景组合
 
-交易所级场景：
+完整交易所场景由更小的教学场景组成：
 
-- 入金形成 custody asset 和 user liability；
-- 下单将 available 移到 locked；
-- 撤单将 locked 释放回 available；
-- 成交分别平衡 USD 和 BTC；
-- 买方手续费进入 fee revenue；
-- 部分成交释放未使用的 locked funds；
+- 第 01 章：入金形成 custody asset 和 user liability；
+- 第 02 章：余额状态在 available、locked、pending withdrawal 之间移动，同时把
+  fee revenue 定义为平台账户用途；
+- 第 03 章：下单冻结资金，撤单释放资金；
+- 第 04 章：成交发出 facts，分别平衡 USD/BTC，记录手续费并释放差额。
+
+这些小块再组合成架构版本场景：
+
+- 同一场景运行在 ACID SQL、outbox、memory core、replicated log 和 projection
+  adapter 上；
 - execution facts 更新仓位；
 - margin/risk 拒绝危险订单；
 - replay 保持 balances、orders、positions 和 emitted facts 一致；

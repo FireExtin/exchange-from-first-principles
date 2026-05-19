@@ -13,10 +13,11 @@ changes.
 | Goal | Read |
 | --- | --- |
 | Understand the project | [Goal](./00-goal.md), [Core Principles](./01-core-principles.md), [Design Paper](./02-design-paper.md) |
-| Follow the version line | [Chapter Roadmap](./07-chapter-roadmap.md), then chapters 01-06 |
-| Understand truth migration | [Truth Source Migration](./04-truth-source-migration.md), [Version Contract And Testing](./06-version-contract-and-testing.md) |
-| Understand hot-path semantics | [Position, Matching, Risk, And Margin](./08-position-matching-risk-margin.md), then chapters 07-12 |
-| Run current code | appendix prototypes 90-93, chapter 05, chapter 13 |
+| Follow the business semantic ramp | [Chapter Roadmap](./07-chapter-roadmap.md), then chapters 01-04 |
+| Follow architecture migration | [Truth Source Migration](./04-truth-source-migration.md), then chapters 05-09 |
+| Understand cross-version proof | [Version Contract And Testing](./06-version-contract-and-testing.md), [shared contracts](../shared/README.md), [integration tests](../integration-tests/README.md) |
+| Understand hot-path deep dives | [Position, Matching, Risk, And Margin](./08-position-matching-risk-margin.md), then chapters 10-15 |
+| Run current code | appendix prototypes 90-93, chapter 08, chapter 16 |
 
 ## Current Source Of Truth
 
@@ -41,11 +42,11 @@ changes.
 | [01-core-principles.md](./01-core-principles.md) | Semantic contract first, command/event rules, replay, recovery, and tests. |
 | [02-design-paper.md](./02-design-paper.md) | The full design-paper narrative. |
 | [03-system-boundary.md](./03-system-boundary.md) | Java hot core, Go/SQL service edges and projections, Aeron/Raft ordering. |
-| [04-truth-source-migration.md](./04-truth-source-migration.md) | Migration from ACID SQL to facts, memory core, replicated log, and projections. |
+| [04-truth-source-migration.md](./04-truth-source-migration.md) | Migration after the minimal business semantics are defined. |
 | [05-ordering-and-serial-semantics.md](./05-ordering-and-serial-semantics.md) | Locks, MVCC/CAS, serial history, and consensus. |
-| [06-version-contract-and-testing.md](./06-version-contract-and-testing.md) | How shared scenarios prove semantics survived architecture changes. |
-| [07-chapter-roadmap.md](./07-chapter-roadmap.md) | Canonical version-line chapter order. |
-| [08-position-matching-risk-margin.md](./08-position-matching-risk-margin.md) | Matching, positions, margin, risk, and projection semantics. |
+| [06-version-contract-and-testing.md](./06-version-contract-and-testing.md) | How small scenarios compose into cross-version proof. |
+| [07-chapter-roadmap.md](./07-chapter-roadmap.md) | Canonical chapter order: semantic ramp, migration line, deep dives, appendix. |
+| [08-position-matching-risk-margin.md](./08-position-matching-risk-margin.md) | Later hot-path surfaces: matching internals, positions, margin, risk, projections. |
 | [09-trading-desk-extension.md](./09-trading-desk-extension.md) | Later desk layer: market data, pricing, routing, hedging, strategies. |
 | [90-learning-plan.md](./90-learning-plan.md) | Supporting Java/Go learning guidance, not architecture truth. |
 
@@ -53,20 +54,23 @@ changes.
 
 | Chapter | README | Status |
 | --- | --- | --- |
-| 01 | [Exchange Semantic Contract](../chapters/01-exchange-semantic-contract-go/README.md) | Contract scaffold |
-| 02 | [ACID SQL Exchange](../chapters/02-acid-sql-exchange-go/README.md) | Contract scaffold |
-| 03 | [SQL Facts And Outbox](../chapters/03-sql-facts-outbox-go/README.md) | Contract scaffold |
-| 04 | [Single-Node Memory Core](../chapters/04-single-node-memory-core-java/README.md) | README scaffold |
-| 05 | [Replicated Log Core](../chapters/05-replicated-log-core-aeron-java/README.md) | Runnable Java skeleton |
-| 06 | [SQL Projection Consumers](../chapters/06-sql-projection-consumers/README.md) | README scaffold |
-| 07 | [Order Book Mechanics](../chapters/07-order-book-mechanics/README.md) | README only |
-| 08 | [Position And PnL](../chapters/08-position-and-pnl/README.md) | README only |
-| 09 | [Margin And Pre-Trade Risk](../chapters/09-margin-and-pretrade-risk/README.md) | README only |
-| 10 | [Risk Cluster Projection](../chapters/10-risk-cluster-projection/README.md) | README only |
-| 11 | [Cache Coherence And Market State](../chapters/11-cache-coherence-and-market-state/README.md) | README only |
-| 12 | [Market And Execution Push](../chapters/12-market-execution-push/README.md) | README only |
-| 13 | [Rust Hot Path](../chapters/13-rust-hot-path/README.md) | Runnable Rust experiment |
-| 14 | [Low-Latency Runtime And Networking](../chapters/14-low-latency-runtime-networking/README.md) | README only |
+| 01 | [Custody And User Ledger](../chapters/01-custody-and-user-ledger-go/README.md) | Contract scaffold |
+| 02 | [Balance States](../chapters/02-balance-states-go/README.md) | Contract scaffold |
+| 03 | [Order Reservation](../chapters/03-order-reservation-go/README.md) | Contract scaffold |
+| 04 | [Match And Settlement](../chapters/04-match-and-settlement-go/README.md) | Contract scaffold |
+| 05 | [ACID SQL Exchange](../chapters/05-acid-sql-exchange-go/README.md) | Contract scaffold |
+| 06 | [SQL Facts And Outbox](../chapters/06-sql-facts-outbox-go/README.md) | Contract scaffold |
+| 07 | [Single-Node Memory Core](../chapters/07-single-node-memory-core-java/README.md) | README scaffold |
+| 08 | [Replicated Log Core](../chapters/08-replicated-log-core-aeron-java/README.md) | Runnable Java skeleton |
+| 09 | [SQL Projection Consumers](../chapters/09-sql-projection-consumers/README.md) | README scaffold |
+| 10 | [Order Book Mechanics](../chapters/10-order-book-mechanics/README.md) | README only |
+| 11 | [Position And PnL](../chapters/11-position-and-pnl/README.md) | README only |
+| 12 | [Margin And Pre-Trade Risk](../chapters/12-margin-and-pretrade-risk/README.md) | README only |
+| 13 | [Risk Cluster Projection](../chapters/13-risk-cluster-projection/README.md) | README only |
+| 14 | [Cache Coherence And Market State](../chapters/14-cache-coherence-and-market-state/README.md) | README only |
+| 15 | [Market And Execution Push](../chapters/15-market-execution-push/README.md) | README only |
+| 16 | [Rust Hot Path](../chapters/16-rust-hot-path/README.md) | Runnable Rust experiment |
+| 17 | [Low-Latency Runtime And Networking](../chapters/17-low-latency-runtime-networking/README.md) | README only |
 
 ## Appendix Prototypes
 
@@ -94,6 +98,7 @@ changes.
 | [history/change_brief_01.md](./history/change_brief_01.md) | Reconciliation lab and earlier architecture-doc expansion. |
 | [history/change_brief_02.md](./history/change_brief_02.md) | Documentation consolidation and bilingual cleanup. |
 | [history/change_brief_03.md](./history/change_brief_03.md) | Exchange semantic version-line reorganization. |
+| [history/change_brief_04.md](./history/change_brief_04.md) | Business semantic ramp before architecture migration. |
 
 ## Maintenance Rules
 
@@ -117,10 +122,11 @@ changes.
 | 目标 | 阅读 |
 | --- | --- |
 | 理解项目 | [Goal](./00-goal.md)、[Core Principles](./01-core-principles.md)、[Design Paper](./02-design-paper.md) |
-| 跟随版本线 | [Chapter Roadmap](./07-chapter-roadmap.md)，然后读第 01-06 章 |
-| 理解真相迁移 | [Truth Source Migration](./04-truth-source-migration.md)、[Version Contract And Testing](./06-version-contract-and-testing.md) |
-| 理解热路径语义 | [Position, Matching, Risk, And Margin](./08-position-matching-risk-margin.md)，然后读第 07-12 章 |
-| 运行当前代码 | 附录原型 90-93、第 05 章、第 13 章 |
+| 跟随业务语义爬坡 | [Chapter Roadmap](./07-chapter-roadmap.md)，然后读第 01-04 章 |
+| 跟随架构迁移 | [Truth Source Migration](./04-truth-source-migration.md)，然后读第 05-09 章 |
+| 理解跨版本证明 | [Version Contract And Testing](./06-version-contract-and-testing.md)、[shared contracts](../shared/README.md)、[integration tests](../integration-tests/README.md) |
+| 理解热路径深挖 | [Position, Matching, Risk, And Margin](./08-position-matching-risk-margin.md)，然后读第 10-15 章 |
+| 运行当前代码 | 附录原型 90-93、第 08 章、第 16 章 |
 
 ## 当前真相源
 
@@ -145,11 +151,11 @@ changes.
 | [01-core-principles.md](./01-core-principles.md) | 语义契约优先、命令/事件、重放、恢复和测试。 |
 | [02-design-paper.md](./02-design-paper.md) | 完整设计论文叙事。 |
 | [03-system-boundary.md](./03-system-boundary.md) | Java 热核心、Go/SQL 服务边界和 projection、Aeron/Raft 排序。 |
-| [04-truth-source-migration.md](./04-truth-source-migration.md) | 从 ACID SQL 到 facts、内存核心、复制日志和 projection 的迁移。 |
+| [04-truth-source-migration.md](./04-truth-source-migration.md) | 最小业务语义定义完成后的真相源迁移。 |
 | [05-ordering-and-serial-semantics.md](./05-ordering-and-serial-semantics.md) | 锁、MVCC/CAS、串行历史和共识。 |
-| [06-version-contract-and-testing.md](./06-version-contract-and-testing.md) | 共享场景如何证明语义在架构变化后仍然存活。 |
-| [07-chapter-roadmap.md](./07-chapter-roadmap.md) | 规范版本线章节顺序。 |
-| [08-position-matching-risk-margin.md](./08-position-matching-risk-margin.md) | 撮合、仓位、保证金、风控和 projection 语义。 |
+| [06-version-contract-and-testing.md](./06-version-contract-and-testing.md) | 小场景如何组合成跨版本证明。 |
+| [07-chapter-roadmap.md](./07-chapter-roadmap.md) | 规范章节顺序：语义爬坡、迁移线、深挖、附录。 |
+| [08-position-matching-risk-margin.md](./08-position-matching-risk-margin.md) | 后续热路径表面：撮合内部、仓位、保证金、风控、projection。 |
 | [09-trading-desk-extension.md](./09-trading-desk-extension.md) | 后续交易台层：行情、定价、路由、对冲、策略。 |
 | [90-learning-plan.md](./90-learning-plan.md) | Java/Go 学习指导，不是架构真相。 |
 
@@ -157,20 +163,23 @@ changes.
 
 | 章节 | README | 状态 |
 | --- | --- | --- |
-| 01 | [Exchange Semantic Contract](../chapters/01-exchange-semantic-contract-go/README.md) | 契约脚手架 |
-| 02 | [ACID SQL Exchange](../chapters/02-acid-sql-exchange-go/README.md) | 契约脚手架 |
-| 03 | [SQL Facts And Outbox](../chapters/03-sql-facts-outbox-go/README.md) | 契约脚手架 |
-| 04 | [Single-Node Memory Core](../chapters/04-single-node-memory-core-java/README.md) | README 脚手架 |
-| 05 | [Replicated Log Core](../chapters/05-replicated-log-core-aeron-java/README.md) | 可运行 Java 骨架 |
-| 06 | [SQL Projection Consumers](../chapters/06-sql-projection-consumers/README.md) | README 脚手架 |
-| 07 | [Order Book Mechanics](../chapters/07-order-book-mechanics/README.md) | 仅 README |
-| 08 | [Position And PnL](../chapters/08-position-and-pnl/README.md) | 仅 README |
-| 09 | [Margin And Pre-Trade Risk](../chapters/09-margin-and-pretrade-risk/README.md) | 仅 README |
-| 10 | [Risk Cluster Projection](../chapters/10-risk-cluster-projection/README.md) | 仅 README |
-| 11 | [Cache Coherence And Market State](../chapters/11-cache-coherence-and-market-state/README.md) | 仅 README |
-| 12 | [Market And Execution Push](../chapters/12-market-execution-push/README.md) | 仅 README |
-| 13 | [Rust Hot Path](../chapters/13-rust-hot-path/README.md) | 可运行 Rust 实验 |
-| 14 | [Low-Latency Runtime And Networking](../chapters/14-low-latency-runtime-networking/README.md) | 仅 README |
+| 01 | [Custody And User Ledger](../chapters/01-custody-and-user-ledger-go/README.md) | 契约脚手架 |
+| 02 | [Balance States](../chapters/02-balance-states-go/README.md) | 契约脚手架 |
+| 03 | [Order Reservation](../chapters/03-order-reservation-go/README.md) | 契约脚手架 |
+| 04 | [Match And Settlement](../chapters/04-match-and-settlement-go/README.md) | 契约脚手架 |
+| 05 | [ACID SQL Exchange](../chapters/05-acid-sql-exchange-go/README.md) | 契约脚手架 |
+| 06 | [SQL Facts And Outbox](../chapters/06-sql-facts-outbox-go/README.md) | 契约脚手架 |
+| 07 | [Single-Node Memory Core](../chapters/07-single-node-memory-core-java/README.md) | README 脚手架 |
+| 08 | [Replicated Log Core](../chapters/08-replicated-log-core-aeron-java/README.md) | 可运行 Java 骨架 |
+| 09 | [SQL Projection Consumers](../chapters/09-sql-projection-consumers/README.md) | README 脚手架 |
+| 10 | [Order Book Mechanics](../chapters/10-order-book-mechanics/README.md) | 仅 README |
+| 11 | [Position And PnL](../chapters/11-position-and-pnl/README.md) | 仅 README |
+| 12 | [Margin And Pre-Trade Risk](../chapters/12-margin-and-pretrade-risk/README.md) | 仅 README |
+| 13 | [Risk Cluster Projection](../chapters/13-risk-cluster-projection/README.md) | 仅 README |
+| 14 | [Cache Coherence And Market State](../chapters/14-cache-coherence-and-market-state/README.md) | 仅 README |
+| 15 | [Market And Execution Push](../chapters/15-market-execution-push/README.md) | 仅 README |
+| 16 | [Rust Hot Path](../chapters/16-rust-hot-path/README.md) | 可运行 Rust 实验 |
+| 17 | [Low-Latency Runtime And Networking](../chapters/17-low-latency-runtime-networking/README.md) | 仅 README |
 
 ## 附录原型
 
@@ -198,6 +207,7 @@ changes.
 | [history/change_brief_01.md](./history/change_brief_01.md) | 对账实验和早期架构文档扩展。 |
 | [history/change_brief_02.md](./history/change_brief_02.md) | 文档合并与中英文整理。 |
 | [history/change_brief_03.md](./history/change_brief_03.md) | 交易所语义版本线重排。 |
+| [history/change_brief_04.md](./history/change_brief_04.md) | 架构迁移前增加业务语义爬坡。 |
 
 ## 维护规则
 

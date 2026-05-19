@@ -4,8 +4,8 @@
 
 ## English
 
-This document owns language and system-boundary rules. For the version-line
-truth migration, see [Truth Source Migration](./04-truth-source-migration.md).
+This document owns language and system-boundary rules. For the semantic ramp
+and later truth migration, see [Truth Source Migration](./04-truth-source-migration.md).
 
 The exchange semantic contract is shared. Ownership changes by version:
 
@@ -72,7 +72,7 @@ exchange implementation track in this repository.
 
 ## 中文
 
-本文档负责语言和系统边界规则。关于版本线中的真相迁移，见
+本文档负责语言和系统边界规则。关于语义爬坡和后续真相迁移，见
 [Truth Source Migration](./04-truth-source-migration.md)。
 
 交易所语义契约是共享的。不同版本的归属不同：

@@ -9,6 +9,9 @@ This directory is reserved for cross-version scenarios.
 The goal is to prove that architecture can change while exchange semantics stay
 stable. A scenario should be written once, then run against every runnable
 version through a small adapter.
+Future exchange scenarios should be composed from the first four teaching
+steps: custody/liability, balance states, order reservation, and
+match/settlement.
 
 ## Current Runnable Shape
 
@@ -45,6 +48,8 @@ Unimplemented exchange scenarios should remain behind the
 
 目标是证明架构可以变化，而交易所语义保持稳定。场景应写一次，然后通过薄 adapter
 针对每个可运行版本运行。
+未来 exchange 场景应由前四个教学步骤组合而来：custody/liability、余额状态、
+订单冻结、撮合/结算。
 
 ## 当前可运行形态
 

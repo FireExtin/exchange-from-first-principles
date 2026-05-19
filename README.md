@@ -1,7 +1,8 @@
 # Exchange From First Principles
 
-> Proving the same exchange semantics across ACID SQL, in-memory state
-> machines, replicated logs, and SQL projections.
+> Business semantics first, architecture migration second: prove the same
+> exchange behavior across ACID SQL, memory state machines, replicated logs,
+> and SQL projections.
 
 [English](#english) · [中文](#中文)
 
@@ -16,8 +17,9 @@ something built around command/event facts, in-memory trading cores, replicated
 logs, OMS, risk engines, hot/warm/cold paths, cache rebuilds, push streams, and
 low-latency runtime work?
 
-This project answers that question by keeping one exchange semantic contract
-stable while the architecture changes underneath it.
+This project answers that question in two steps: first make the smallest
+exchange business semantics legible, then keep those semantics stable while the
+architecture changes underneath them.
 
 It is not a production exchange. It is a systems project about correctness,
 performance, reliability, risk boundaries, and architecture evolution.
@@ -34,11 +36,13 @@ The business semantics should remain stable:
 ordered command + current state -> new state + emitted facts
 ```
 
-The first full version starts from ACID SQL because it is familiar, durable, and
-good at explaining double-entry accounting and transaction boundaries. Later
-versions move the same exchange semantics through SQL facts/outbox, a
-single-node in-memory trading core, a replicated log core, and SQL projection
-consumers.
+The first chapters climb the business semantics slowly: custody and user
+liability, balance states, order reservation, cancellation, matching,
+settlement, fees, and release. The first complete architecture version then
+uses ACID SQL because it is familiar, durable, and good at explaining
+double-entry accounting and transaction boundaries. Later versions move the
+same exchange semantics through SQL facts/outbox, a single-node in-memory
+trading core, a replicated log core, and SQL projection consumers.
 
 The contract is exchange-level, not only funds-level: accounting, reservation,
 matching, executions, positions, margin/risk admission, projections, caches,
@@ -49,30 +53,33 @@ and push recovery all have to survive the architecture migration.
 The canonical documentation index is [docs/README.md](./docs/README.md). Use
 that page for reading order, source-of-truth ownership, and chapter status.
 
-### Version Line
+### Main Chapters
 
 | Chapter | Topic | Status |
 | --- | --- | --- |
-| 01 | [Exchange semantic contract](./chapters/01-exchange-semantic-contract-go/README.md) | Contract scaffold |
-| 02 | [ACID SQL exchange](./chapters/02-acid-sql-exchange-go/README.md) | Contract scaffold |
-| 03 | [SQL facts and outbox](./chapters/03-sql-facts-outbox-go/README.md) | Contract scaffold |
-| 04 | [Single-node memory core](./chapters/04-single-node-memory-core-java/README.md) | README scaffold |
-| 05 | [Replicated log core](./chapters/05-replicated-log-core-aeron-java/README.md) | Runnable Java skeleton |
-| 06 | [SQL projection consumers](./chapters/06-sql-projection-consumers/README.md) | README scaffold |
-| 07 | [Order book mechanics](./chapters/07-order-book-mechanics/README.md) | README only |
-| 08 | [Position and PnL](./chapters/08-position-and-pnl/README.md) | README only |
-| 09 | [Margin and pre-trade risk](./chapters/09-margin-and-pretrade-risk/README.md) | README only |
-| 10 | [Risk cluster projection](./chapters/10-risk-cluster-projection/README.md) | README only |
-| 11 | [Cache coherence and market state](./chapters/11-cache-coherence-and-market-state/README.md) | README only |
-| 12 | [Market and execution push](./chapters/12-market-execution-push/README.md) | README only |
-| 13 | [Rust hot path](./chapters/13-rust-hot-path/README.md) | Runnable Rust experiment |
-| 14 | [Low-latency runtime and networking](./chapters/14-low-latency-runtime-networking/README.md) | README only |
-| 15-19 | Trading desk extension ideas | Planned notes only |
+| 01 | [Custody and user ledger](./chapters/01-custody-and-user-ledger-go/README.md) | Contract scaffold |
+| 02 | [Balance states](./chapters/02-balance-states-go/README.md) | Contract scaffold |
+| 03 | [Order reservation](./chapters/03-order-reservation-go/README.md) | Contract scaffold |
+| 04 | [Match and settlement](./chapters/04-match-and-settlement-go/README.md) | Contract scaffold |
+| 05 | [ACID SQL exchange](./chapters/05-acid-sql-exchange-go/README.md) | Contract scaffold |
+| 06 | [SQL facts and outbox](./chapters/06-sql-facts-outbox-go/README.md) | Contract scaffold |
+| 07 | [Single-node memory core](./chapters/07-single-node-memory-core-java/README.md) | README scaffold |
+| 08 | [Replicated log core](./chapters/08-replicated-log-core-aeron-java/README.md) | Runnable Java skeleton |
+| 09 | [SQL projection consumers](./chapters/09-sql-projection-consumers/README.md) | README scaffold |
+| 10 | [Order book mechanics](./chapters/10-order-book-mechanics/README.md) | README only |
+| 11 | [Position and PnL](./chapters/11-position-and-pnl/README.md) | README only |
+| 12 | [Margin and pre-trade risk](./chapters/12-margin-and-pretrade-risk/README.md) | README only |
+| 13 | [Risk cluster projection](./chapters/13-risk-cluster-projection/README.md) | README only |
+| 14 | [Cache coherence and market state](./chapters/14-cache-coherence-and-market-state/README.md) | README only |
+| 15 | [Market and execution push](./chapters/15-market-execution-push/README.md) | README only |
+| 16 | [Rust hot path](./chapters/16-rust-hot-path/README.md) | Runnable Rust experiment |
+| 17 | [Low-latency runtime and networking](./chapters/17-low-latency-runtime-networking/README.md) | README only |
+| 18-22 | Trading desk extension ideas | Planned notes only |
 
 ### Appendix Prototypes
 
 The current runnable Go funds examples are preserved as prototypes. They are
-useful exercises, but they are not the new canonical version line.
+useful exercises, but they are not the new canonical teaching sequence.
 
 | Chapter | Topic | Status |
 | --- | --- | --- |
@@ -84,7 +91,7 @@ useful exercises, but they are not the new canonical version line.
 ### Repository Layout
 
 ```text
-chapters/             version-line chapters and appendix prototypes
+chapters/             semantic ramp, architecture chapters, and appendix prototypes
 docs/                 design notes, roadmap, and project documentation
 shared/               shared semantic contracts and schemas
 integration-tests/    cross-version semantic tests
@@ -101,7 +108,7 @@ ops/                  runbooks and deployment notes
   [docs/01-core-principles.md](./docs/01-core-principles.md), and
   [docs/02-design-paper.md](./docs/02-design-paper.md).
 - Use [docs/07-chapter-roadmap.md](./docs/07-chapter-roadmap.md) for the
-  version-line order.
+  semantic ramp and architecture migration order.
 - Use the chapter README before changing code in that chapter.
 
 ### Toolchain
@@ -166,8 +173,8 @@ Apache-2.0. See `LICENSE`.
 为什么现代交易所会从简单的 ACID SQL 事务模型，逐步演进到 command/event facts、
 内存交易核心、复制日志、OMS、风控、冷热路径、缓存重建、推送流和低延迟运行时？
 
-本项目通过一件事回答这个问题：保持同一套交易所语义契约稳定，同时不断替换它
-下面的架构底座。
+本项目分两步回答这个问题：先把最小交易所业务语义讲清楚，再在底层架构不断
+变化时保持这些语义稳定。
 
 这不是生产级交易所。它是一个系统设计和工程训练项目，重点是正确性、性能、
 可靠性、风控边界和架构演化。
@@ -183,9 +190,11 @@ Apache-2.0. See `LICENSE`.
 ordered command + current state -> new state + emitted facts
 ```
 
-第一版完整语义从 ACID SQL 开始，因为它熟悉、持久，也最适合讲清 double-entry
-accounting 和事务边界。后续版本把同一套交易所语义迁移到 SQL facts/outbox、
-单机内存交易核心、复制日志核心，以及 SQL projection consumers。
+前几章先缓慢爬坡业务语义：custody 与 user liability、余额状态、订单冻结、
+撤单释放、撮合、结算、手续费和差额释放。第一版完整架构再使用 ACID SQL，
+因为它熟悉、持久，也最适合讲清 double-entry accounting 和事务边界。后续版本
+把同一套交易所语义迁移到 SQL facts/outbox、单机内存交易核心、复制日志核心，
+以及 SQL projection consumers。
 
 契约是交易所级别的，不只是资金级别：accounting、reservation、matching、
 executions、positions、margin/risk admission、projections、caches 和 push
@@ -196,29 +205,32 @@ recovery 都必须在架构迁移中保持可解释。
 规范文档索引在 [docs/README.md](./docs/README.md)。阅读顺序、真相源归属和章节
 状态都从那里开始。
 
-### 版本线
+### 主章节
 
 | 章节 | 主题 | 状态 |
 | --- | --- | --- |
-| 01 | [交易所语义契约](./chapters/01-exchange-semantic-contract-go/README.md) | 契约脚手架 |
-| 02 | [ACID SQL exchange](./chapters/02-acid-sql-exchange-go/README.md) | 契约脚手架 |
-| 03 | [SQL facts and outbox](./chapters/03-sql-facts-outbox-go/README.md) | 契约脚手架 |
-| 04 | [单机内存核心](./chapters/04-single-node-memory-core-java/README.md) | README 脚手架 |
-| 05 | [复制日志核心](./chapters/05-replicated-log-core-aeron-java/README.md) | 可运行 Java 骨架 |
-| 06 | [SQL projection consumers](./chapters/06-sql-projection-consumers/README.md) | README 脚手架 |
-| 07 | [订单簿机制](./chapters/07-order-book-mechanics/README.md) | 仅 README |
-| 08 | [仓位和 PnL](./chapters/08-position-and-pnl/README.md) | 仅 README |
-| 09 | [保证金与下单前风控](./chapters/09-margin-and-pretrade-risk/README.md) | 仅 README |
-| 10 | [风控集群 projection](./chapters/10-risk-cluster-projection/README.md) | 仅 README |
-| 11 | [缓存一致性与市场状态](./chapters/11-cache-coherence-and-market-state/README.md) | 仅 README |
-| 12 | [行情与成交推送](./chapters/12-market-execution-push/README.md) | 仅 README |
-| 13 | [Rust 热路径](./chapters/13-rust-hot-path/README.md) | 可运行 Rust 实验 |
-| 14 | [低延迟运行时与网络](./chapters/14-low-latency-runtime-networking/README.md) | 仅 README |
-| 15-19 | 交易台扩展想法 | 仅规划笔记 |
+| 01 | [托管与用户账本](./chapters/01-custody-and-user-ledger-go/README.md) | 契约脚手架 |
+| 02 | [余额状态](./chapters/02-balance-states-go/README.md) | 契约脚手架 |
+| 03 | [订单冻结](./chapters/03-order-reservation-go/README.md) | 契约脚手架 |
+| 04 | [撮合与结算](./chapters/04-match-and-settlement-go/README.md) | 契约脚手架 |
+| 05 | [ACID SQL exchange](./chapters/05-acid-sql-exchange-go/README.md) | 契约脚手架 |
+| 06 | [SQL facts and outbox](./chapters/06-sql-facts-outbox-go/README.md) | 契约脚手架 |
+| 07 | [单机内存核心](./chapters/07-single-node-memory-core-java/README.md) | README 脚手架 |
+| 08 | [复制日志核心](./chapters/08-replicated-log-core-aeron-java/README.md) | 可运行 Java 骨架 |
+| 09 | [SQL projection consumers](./chapters/09-sql-projection-consumers/README.md) | README 脚手架 |
+| 10 | [订单簿机制](./chapters/10-order-book-mechanics/README.md) | 仅 README |
+| 11 | [仓位和 PnL](./chapters/11-position-and-pnl/README.md) | 仅 README |
+| 12 | [保证金与下单前风控](./chapters/12-margin-and-pretrade-risk/README.md) | 仅 README |
+| 13 | [风控集群 projection](./chapters/13-risk-cluster-projection/README.md) | 仅 README |
+| 14 | [缓存一致性与市场状态](./chapters/14-cache-coherence-and-market-state/README.md) | 仅 README |
+| 15 | [行情与成交推送](./chapters/15-market-execution-push/README.md) | 仅 README |
+| 16 | [Rust 热路径](./chapters/16-rust-hot-path/README.md) | 可运行 Rust 实验 |
+| 17 | [低延迟运行时与网络](./chapters/17-low-latency-runtime-networking/README.md) | 仅 README |
+| 18-22 | 交易台扩展想法 | 仅规划笔记 |
 
 ### 附录原型
 
-当前可运行 Go 资金示例保留为 prototype。它们仍然适合练习，但不是新的规范版本线。
+当前可运行 Go 资金示例保留为 prototype。它们仍然适合练习，但不是新的规范教学顺序。
 
 | 章节 | 主题 | 状态 |
 | --- | --- | --- |
@@ -230,7 +242,7 @@ recovery 都必须在架构迁移中保持可解释。
 ### 仓库结构
 
 ```text
-chapters/             版本线章节和附录原型
+chapters/             语义爬坡、架构章节和附录原型
 docs/                 设计说明、路线图和项目文档
 shared/               共享语义契约和 schema
 integration-tests/    跨版本语义测试
@@ -246,7 +258,7 @@ ops/                  runbook 和部署说明
 - 再读 [docs/00-goal.md](./docs/00-goal.md)、
   [docs/01-core-principles.md](./docs/01-core-principles.md) 和
   [docs/02-design-paper.md](./docs/02-design-paper.md)。
-- 用 [docs/07-chapter-roadmap.md](./docs/07-chapter-roadmap.md) 查看版本线顺序。
+- 用 [docs/07-chapter-roadmap.md](./docs/07-chapter-roadmap.md) 查看语义爬坡和架构迁移顺序。
 - 修改某章代码前，先读该章自己的 README。
 
 ### 工具链

@@ -4,10 +4,18 @@
 
 ## English
 
-This roadmap owns chapter order and status. The main sequence now follows a
-version line: the same exchange semantics should survive as the source of truth
-moves from ACID SQL to SQL facts/outbox, a single-node memory core, a replicated
-log core, and SQL projection consumers.
+This roadmap owns chapter order and status. The main sequence now has two
+steps:
+
+```text
+business semantic ramp
+  -> architecture migration line
+  -> domain and runtime deep dives
+```
+
+The ramp exists so readers do not meet the whole exchange contract at once.
+Custody, balance states, reservation, cancellation, matching, settlement, fees,
+and release are introduced before the first complete ACID SQL exchange.
 
 For the full documentation catalog, see [Documentation Map](./README.md).
 
@@ -22,75 +30,93 @@ For the full documentation catalog, see [Documentation Map](./README.md).
 - README only: domain note or future chapter without runnable code.
 - Planned note: the idea is described in docs, but no chapter directory exists.
 
-## Main Version Line
+## Business Semantic Ramp
 
-1. `01-exchange-semantic-contract-go`
-   - Version role: shared exchange semantic contract.
-   - Covers: accounting, reservation, orders, executions, positions, risk,
-     projection cursors, adapter boundaries.
+1. `01-custody-and-user-ledger-go`
+   - Role: explain platform custody assets and user liability accounts.
+   - Covers: deposits as Debit custody / Credit user available, and why user
+     balances are not revenue.
    - Status: contract scaffold.
 
-2. `02-acid-sql-exchange-go`
+2. `02-balance-states-go`
+   - Role: split user balances into operational states.
+   - Covers: available, locked, pending withdrawal, fee revenue as a platform
+     account purpose, and state-changing journal entries.
+   - Status: contract scaffold.
+
+3. `03-order-reservation-go`
+   - Role: explain order intent before matching.
+   - Covers: order acceptance/rejection, reservation, cancellation, and release.
+   - Status: contract scaffold.
+
+4. `04-match-and-settlement-go`
+   - Role: explain the smallest match and settlement semantics.
+   - Covers: execution facts, USD/BTC separate balancing, buyer fee, partial
+     fill release, and ledger-explainable settlement.
+   - Status: contract scaffold.
+
+## Architecture Migration Line
+
+5. `05-acid-sql-exchange-go`
    - Version role: v0 ACID SQL truth source.
-   - Covers: double-entry ledger, account reservation, orders, trades,
-     positions, risk-admission state inside one transaction boundary.
+   - Covers: composing chapters 01-04 inside SQL transaction boundaries.
    - Status: contract scaffold.
 
-3. `03-sql-facts-outbox-go`
+6. `06-sql-facts-outbox-go`
    - Version role: v1 SQL facts and outbox bridge.
    - Covers: SQL mutation plus command/event/outbox records in the same commit.
    - Status: contract scaffold.
 
-4. `04-single-node-memory-core-java`
+7. `07-single-node-memory-core-java`
    - Version role: v2 deterministic single-node memory trading core.
    - Covers: sequenced commands, private hot state, facts, snapshots.
    - Status: README scaffold.
 
-5. `05-replicated-log-core-aeron-java`
+8. `08-replicated-log-core-aeron-java`
    - Version role: v3 replicated log core.
    - Covers: command order, log position, snapshot/replay, failover boundary.
    - Status: runnable Java skeleton.
 
-6. `06-sql-projection-consumers`
+9. `09-sql-projection-consumers`
    - Version role: v4 SQL projection and consumer views.
    - Covers: OMS, ledger reports, reconciliation, compliance, risk views,
      cache rebuild, push recovery.
    - Status: README scaffold.
 
-## Domain Deep Dives
+## Domain And Runtime Deep Dives
 
-7. `07-order-book-mechanics`
-   - Purpose: explain order-book internals after matching semantics are already
-     part of the shared contract.
-   - Status: README only.
+10. `10-order-book-mechanics`
+    - Purpose: explain order-book internals after basic matching semantics are
+      already introduced in chapter 04.
+    - Status: README only.
 
-8. `08-position-and-pnl`
-   - Purpose: explain how execution facts become positions and PnL placeholders.
-   - Status: README only.
+11. `11-position-and-pnl`
+    - Purpose: explain how execution facts become positions and PnL placeholders.
+    - Status: README only.
 
-9. `09-margin-and-pretrade-risk`
-   - Purpose: combine margin checks, reservation, risk admission, and kill
-     switch semantics.
-   - Status: README only.
+12. `12-margin-and-pretrade-risk`
+    - Purpose: combine margin checks, reservation, risk admission, and kill
+      switch semantics.
+    - Status: README only.
 
-10. `10-risk-cluster-projection`
+13. `13-risk-cluster-projection`
     - Purpose: model warm-path risk projections that consume facts.
     - Status: README only.
 
-11. `11-cache-coherence-and-market-state`
+14. `14-cache-coherence-and-market-state`
     - Purpose: define cache freshness, fail policy, gap detection, and rebuild.
     - Status: README only.
 
-12. `12-market-execution-push`
+15. `15-market-execution-push`
     - Purpose: define recoverable public market-data and private
       execution-report streams.
     - Status: README only.
 
-13. `13-rust-hot-path`
+16. `16-rust-hot-path`
     - Purpose: keep the Rust code as a runtime/hot-path experiment.
     - Status: runnable Rust experiment.
 
-14. `14-low-latency-runtime-networking`
+17. `17-low-latency-runtime-networking`
     - Purpose: measure runtime and network variance after semantics are stable.
     - Status: README only.
 
@@ -98,7 +124,7 @@ For the full documentation catalog, see [Documentation Map](./README.md).
 
 The current runnable Go funds chapters are preserved as prototypes. They are
 useful exercises and current test fixtures, but they are not the canonical
-version-line implementation.
+teaching sequence.
 
 90. `90-funds-double-entry-prototype-go`
     - Status: runnable Go prototype.
@@ -117,17 +143,17 @@ version-line implementation.
 Trading desk chapters are planned notes only and are not part of the exchange
 core. They remain consumers of exchange-core facts.
 
-15. `15-external-market-data-ingestion`
-16. `16-pricing-and-signal-engine`
-17. `17-order-router-and-execution-reports`
-18. `18-hedger-and-best-execution`
-19. `19-arbitrage-strategy-demo`
+18. `18-external-market-data-ingestion`
+19. `19-pricing-and-signal-engine`
+20. `20-order-router-and-execution-reports`
+21. `21-hedger-and-best-execution`
+22. `22-arbitrage-strategy-demo`
 
 ## Rule
 
 Each chapter should say:
 
-- what version-line role or domain role it owns;
+- what business semantic, architecture role, or domain role it owns;
 - what semantic contract it must preserve;
 - what implementation is intentionally absent;
 - what would count as a future runnable proof.
@@ -139,19 +165,28 @@ not in silent partial implementations.
 
 - `shared/go/exchange` is the exchange-level semantic contract.
 - `integration-tests` owns cross-version scenario tests.
-- `docs/04-truth-source-migration.md` explains how truth moves across v0-v4.
+- `docs/04-truth-source-migration.md` explains how truth moves after the
+  business semantic ramp is defined.
 - `docs/06-version-contract-and-testing.md` defines how tests prove semantic
   equivalence.
-- `docs/08-position-matching-risk-margin.md` defines the hot-path trading
-  semantics preserved by each version.
+- `docs/08-position-matching-risk-margin.md` defines later hot-path trading
+  surfaces preserved by each version.
 
 ---
 
 ## 中文
 
-本路线图负责章节顺序和状态。主线现在遵循版本线：同一套交易所语义应该在真相源
-从 ACID SQL 迁移到 SQL facts/outbox、单机内存核心、复制日志核心和 SQL projection
-consumer 时保持不变。
+本路线图负责章节顺序和状态。主线现在分成两步：
+
+```text
+业务语义爬坡
+  -> 架构迁移线
+  -> 领域与运行时深挖
+```
+
+语义爬坡的目的，是避免读者一上来就面对完整 exchange contract。custody、余额
+状态、reservation、撤单、撮合、结算、手续费和释放，会先于第一版完整 ACID SQL
+exchange 出现。
 
 完整文档目录见 [Documentation Map](./README.md)。
 
@@ -164,78 +199,96 @@ consumer 时保持不变。
 - 仅 README：领域说明或未来章节，无可运行代码。
 - 规划笔记：想法已写进文档，但尚无章节目录。
 
-## 主版本线
+## 业务语义爬坡
 
-1. `01-exchange-semantic-contract-go`
-   - 版本角色：共享交易所语义契约。
-   - 覆盖：accounting、reservation、orders、executions、positions、risk、
-     projection cursors、adapter boundaries。
+1. `01-custody-and-user-ledger-go`
+   - 角色：解释平台 custody asset 和用户 liability account。
+   - 覆盖：入金是 Debit custody / Credit user available，以及为什么用户余额
+     不是收入。
    - 状态：契约脚手架。
 
-2. `02-acid-sql-exchange-go`
+2. `02-balance-states-go`
+   - 角色：把用户余额拆成操作状态。
+   - 覆盖：available、locked、pending withdrawal、fee revenue 作为平台账户用途，
+     以及改变状态的 journal entries。
+   - 状态：契约脚手架。
+
+3. `03-order-reservation-go`
+   - 角色：在撮合前解释订单意图。
+   - 覆盖：订单接受/拒绝、冻结、撤单和释放。
+   - 状态：契约脚手架。
+
+4. `04-match-and-settlement-go`
+   - 角色：解释最小撮合和结算语义。
+   - 覆盖：execution facts、USD/BTC 分别平衡、买方手续费、部分成交释放，以及
+     可由账本解释的结算。
+   - 状态：契约脚手架。
+
+## 架构迁移线
+
+5. `05-acid-sql-exchange-go`
    - 版本角色：v0 ACID SQL 真相源。
-   - 覆盖：double-entry ledger、account reservation、orders、trades、positions、
-     risk-admission state 位于同一个事务边界内。
+   - 覆盖：把第 01-04 章组合进 SQL 事务边界。
    - 状态：契约脚手架。
 
-3. `03-sql-facts-outbox-go`
+6. `06-sql-facts-outbox-go`
    - 版本角色：v1 SQL facts 和 outbox 桥接。
    - 覆盖：SQL mutation 加 command/event/outbox records 在同一次 commit 内完成。
    - 状态：契约脚手架。
 
-4. `04-single-node-memory-core-java`
+7. `07-single-node-memory-core-java`
    - 版本角色：v2 确定性单机内存交易核心。
    - 覆盖：已排序命令、私有热状态、事实、快照。
    - 状态：README 脚手架。
 
-5. `05-replicated-log-core-aeron-java`
+8. `08-replicated-log-core-aeron-java`
    - 版本角色：v3 复制日志核心。
    - 覆盖：命令顺序、日志位置、snapshot/replay、failover 边界。
    - 状态：可运行 Java 骨架。
 
-6. `06-sql-projection-consumers`
+9. `09-sql-projection-consumers`
    - 版本角色：v4 SQL projection 和 consumer views。
    - 覆盖：OMS、ledger reports、对账、合规、risk views、cache rebuild、push recovery。
    - 状态：README 脚手架。
 
-## 领域深挖
+## 领域与运行时深挖
 
-7. `07-order-book-mechanics`
-   - 目的：在撮合语义已经属于共享契约之后，解释订单簿内部机制。
-   - 状态：仅 README。
+10. `10-order-book-mechanics`
+    - 目的：在第 04 章已经引入基础撮合语义之后，解释订单簿内部机制。
+    - 状态：仅 README。
 
-8. `08-position-and-pnl`
-   - 目的：解释 execution facts 如何变成仓位和 PnL 占位。
-   - 状态：仅 README。
+11. `11-position-and-pnl`
+    - 目的：解释 execution facts 如何变成仓位和 PnL 占位。
+    - 状态：仅 README。
 
-9. `09-margin-and-pretrade-risk`
-   - 目的：合并保证金检查、reservation、risk admission 和 kill switch 语义。
-   - 状态：仅 README。
+12. `12-margin-and-pretrade-risk`
+    - 目的：合并保证金检查、reservation、risk admission 和 kill switch 语义。
+    - 状态：仅 README。
 
-10. `10-risk-cluster-projection`
+13. `13-risk-cluster-projection`
     - 目的：建模消费事实的 warm-path risk projection。
     - 状态：仅 README。
 
-11. `11-cache-coherence-and-market-state`
+14. `14-cache-coherence-and-market-state`
     - 目的：定义缓存新鲜度、失败策略、gap detection 和 rebuild。
     - 状态：仅 README。
 
-12. `12-market-execution-push`
+15. `15-market-execution-push`
     - 目的：定义可恢复的 public market-data 和 private execution-report streams。
     - 状态：仅 README。
 
-13. `13-rust-hot-path`
+16. `16-rust-hot-path`
     - 目的：保留 Rust 代码作为 runtime/hot-path experiment。
     - 状态：可运行 Rust 实验。
 
-14. `14-low-latency-runtime-networking`
+17. `17-low-latency-runtime-networking`
     - 目的：在语义稳定后测量 runtime 和 network variance。
     - 状态：仅 README。
 
 ## 附录原型
 
 当前可运行 Go 资金章节保留为 prototype。它们是有用练习和当前测试 fixture，但
-不是规范版本线实现。
+不是规范教学顺序。
 
 90. `90-funds-double-entry-prototype-go`
     - 状态：可运行 Go 原型。
@@ -254,17 +307,17 @@ consumer 时保持不变。
 交易台章节目前只是规划笔记，不属于交易所核心。它们仍然是 exchange-core facts 的
 消费者。
 
-15. `15-external-market-data-ingestion`
-16. `16-pricing-and-signal-engine`
-17. `17-order-router-and-execution-reports`
-18. `18-hedger-and-best-execution`
-19. `19-arbitrage-strategy-demo`
+18. `18-external-market-data-ingestion`
+19. `19-pricing-and-signal-engine`
+20. `20-order-router-and-execution-reports`
+21. `21-hedger-and-best-execution`
+22. `22-arbitrage-strategy-demo`
 
 ## 规则
 
 每章都应该说明：
 
-- 自己拥有的 version-line role 或 domain role；
+- 自己拥有的业务语义、架构角色或领域角色；
 - 必须保持的语义契约；
 - 哪些实现刻意缺席；
 - 未来怎样才算可运行证明。
@@ -275,6 +328,6 @@ consumer 时保持不变。
 
 - `shared/go/exchange` 是交易所级语义契约。
 - `integration-tests` 负责跨版本场景测试。
-- `docs/04-truth-source-migration.md` 解释真相如何在 v0-v4 之间迁移。
+- `docs/04-truth-source-migration.md` 解释业务语义爬坡之后，真相如何迁移。
 - `docs/06-version-contract-and-testing.md` 定义测试如何证明语义等价。
-- `docs/08-position-matching-risk-margin.md` 定义每个版本必须保持的热路径交易语义。
+- `docs/08-position-matching-risk-margin.md` 定义每个版本必须保持的后续热路径交易表面。

@@ -486,10 +486,10 @@ about best execution. Pre-trade risk should not become a strategy engine.
 
 | Phase | Chapters | Purpose |
 | --- | --- | --- |
-| Version line | 01-06 | Exchange contract, ACID SQL, SQL facts/outbox, memory core, replicated log, SQL projections |
-| Domain deep dives | 07-12 | Order book mechanics, position/PnL, margin/risk, risk projection, cache coherence, push |
-| Runtime experiments | 13-14 | Rust hot path experiments and low-latency runtime/networking measurement |
-| Desk extension | 15-19 | External market data, pricing, routing, hedging, best execution, simple strategy |
+| Business semantic ramp | 01-04 | Custody/user liability, balance states, reservation/release, matching and settlement |
+| Architecture migration line | 05-09 | ACID SQL, SQL facts/outbox, memory core, replicated log, SQL projections |
+| Domain and runtime deep dives | 10-17 | Order book mechanics, position/PnL, margin/risk, risk projection, cache coherence, push, Rust, runtime/networking |
+| Desk extension | 18-22 | External market data, pricing, routing, hedging, best execution, simple strategy |
 | Appendix prototypes | 90-93 | Earlier runnable Go funds prototypes |
 
 The chapter rule is:
@@ -848,10 +848,10 @@ matching
 
 | 阶段 | 章节 | 目的 |
 | --- | --- | --- |
-| 版本线 | 01-06 | 交易所契约、ACID SQL、SQL facts/outbox、内存核心、复制日志、SQL projections |
-| 领域深挖 | 07-12 | 订单簿机制、仓位/PnL、保证金/风控、风险投影、缓存一致性、推送 |
-| 运行时实验 | 13-14 | Rust 热路径实验和低延迟运行时/网络测量 |
-| 交易台扩展 | 15-19 | 外部行情、定价、路由、对冲、最优执行、简单策略 |
+| 业务语义爬坡 | 01-04 | custody/user liability、余额状态、冻结/释放、撮合与结算 |
+| 架构迁移线 | 05-09 | ACID SQL、SQL facts/outbox、内存核心、复制日志、SQL projections |
+| 领域与运行时深挖 | 10-17 | 订单簿机制、仓位/PnL、保证金/风控、风险投影、缓存一致性、推送、Rust、运行时/网络 |
+| 交易台扩展 | 18-22 | 外部行情、定价、路由、对冲、最优执行、简单策略 |
 | 附录原型 | 90-93 | 早期可运行 Go 资金原型 |
 
 每章都应该回答：

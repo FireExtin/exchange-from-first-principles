@@ -42,7 +42,7 @@ Runnable parts currently expect:
 - Go 1.22 or newer;
 - Java 21, tested with Azul Zulu 21;
 - Gradle for the Java/Aeron chapter;
-- Rust stable for chapter 13.
+- Rust stable for chapter 16.
 
 ## Test Commands
 
@@ -64,8 +64,8 @@ cd chapters/90-funds-double-entry-prototype-go && go run ./cmd/demo
 cd chapters/92-wallet-idempotency-prototype-go && go test ./...
 cd chapters/92-wallet-idempotency-prototype-go && go test -tags reconciliation_lab_todo ./internal/reconciliation
 cd shared/go && go test -tags exchange_contract_todo ./exchange
-cd chapters/05-replicated-log-core-aeron-java && gradle --no-daemon clean test
-cd chapters/13-rust-hot-path && cargo test
+cd chapters/08-replicated-log-core-aeron-java && gradle --no-daemon clean test
+cd chapters/16-rust-hot-path && cargo test
 go test ./integration-tests/...
 ```
 

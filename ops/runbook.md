@@ -7,7 +7,7 @@
 ## Local Rust Core
 
 ```bash
-cd chapters/13-rust-hot-path
+cd chapters/16-rust-hot-path
 cargo test
 cargo run -p exchange-replay
 cargo run -p exchange-bench
@@ -27,7 +27,7 @@ snapshot semantics are stable.
 ## 本地 Rust 核心
 
 ```bash
-cd chapters/13-rust-hot-path
+cd chapters/16-rust-hot-path
 cargo test
 cargo run -p exchange-replay
 cargo run -p exchange-bench

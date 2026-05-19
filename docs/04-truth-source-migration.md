@@ -7,20 +7,27 @@
 This note owns the project spine:
 
 ```text
-ACID SQL truth
+minimal business semantics
+  -> custody/user liability
+  -> balance states
+  -> order reservation
+  -> match and settlement
+  -> ACID SQL truth
   -> SQL facts and outbox
   -> deterministic memory core
   -> replicated log core
   -> SQL projections and consumer views
 ```
 
-The migration target is not only balances. It is the full exchange semantic
-surface: ledger postings, reservations, orders, matching, executions,
+Truth-source migration starts only after the smallest business semantics are
+defined. The migration target is not only balances. It is the full exchange
+semantic surface: ledger postings, reservations, orders, matching, executions,
 positions, risk admission, projection cursors, caches, and push recovery.
 
 ## v0: ACID SQL As First Truth Source
 
-The first complete model should be boring and familiar:
+After chapters 01-04 define the component semantics, the first complete model
+should be boring and familiar:
 
 ```text
 request
@@ -134,13 +141,16 @@ auditability, reconciliation, and reporting matter most.
 ## Code Map
 
 - `shared/go/exchange` defines the exchange semantic contract.
-- `chapters/01-exchange-semantic-contract-go` explains that contract.
-- `chapters/02-acid-sql-exchange-go` is the v0 SQL contract scaffold.
-- `chapters/03-sql-facts-outbox-go` is the v1 facts/outbox scaffold.
-- `chapters/04-single-node-memory-core-java` is the v2 memory-core scaffold.
-- `chapters/05-replicated-log-core-aeron-java` is the v3 replicated-log
+- `chapters/01-custody-and-user-ledger-go` starts the business semantic ramp.
+- `chapters/02-balance-states-go` explains account state transitions.
+- `chapters/03-order-reservation-go` explains reservation and release.
+- `chapters/04-match-and-settlement-go` explains matching, fees, and settlement.
+- `chapters/05-acid-sql-exchange-go` is the v0 SQL contract scaffold.
+- `chapters/06-sql-facts-outbox-go` is the v1 facts/outbox scaffold.
+- `chapters/07-single-node-memory-core-java` is the v2 memory-core scaffold.
+- `chapters/08-replicated-log-core-aeron-java` is the v3 replicated-log
   skeleton.
-- `chapters/06-sql-projection-consumers` is the v4 projection scaffold.
+- `chapters/09-sql-projection-consumers` is the v4 projection scaffold.
 - `chapters/90-*` through `chapters/93-*` preserve earlier runnable funds
   prototypes.
 
@@ -159,20 +169,25 @@ auditability, reconciliation, and reporting matter most.
 这份笔记负责项目脊柱：
 
 ```text
-ACID SQL truth
+minimal business semantics
+  -> custody/user liability
+  -> balance states
+  -> order reservation
+  -> match and settlement
+  -> ACID SQL truth
   -> SQL facts and outbox
   -> deterministic memory core
   -> replicated log core
   -> SQL projections and consumer views
 ```
 
-迁移对象不只是余额，而是完整交易所语义表面：ledger postings、reservations、
-orders、matching、executions、positions、risk admission、projection cursors、
-caches 和 push recovery。
+真相源迁移要等最小业务语义定义清楚后再开始。迁移对象不只是余额，而是完整交易所
+语义表面：ledger postings、reservations、orders、matching、executions、positions、
+risk admission、projection cursors、caches 和 push recovery。
 
 ## v0：ACID SQL 作为第一真相源
 
-第一版完整模型应该朴素且熟悉：
+第 01-04 章定义组件语义之后，第一版完整模型应该朴素且熟悉：
 
 ```text
 request
@@ -282,12 +297,15 @@ SQL 回到 warm/cold-path store：
 ## 代码地图
 
 - `shared/go/exchange` 定义交易所语义契约。
-- `chapters/01-exchange-semantic-contract-go` 解释该契约。
-- `chapters/02-acid-sql-exchange-go` 是 v0 SQL 契约脚手架。
-- `chapters/03-sql-facts-outbox-go` 是 v1 facts/outbox 脚手架。
-- `chapters/04-single-node-memory-core-java` 是 v2 内存核心脚手架。
-- `chapters/05-replicated-log-core-aeron-java` 是 v3 复制日志骨架。
-- `chapters/06-sql-projection-consumers` 是 v4 projection 脚手架。
+- `chapters/01-custody-and-user-ledger-go` 开始业务语义爬坡。
+- `chapters/02-balance-states-go` 解释账户状态迁移。
+- `chapters/03-order-reservation-go` 解释冻结和释放。
+- `chapters/04-match-and-settlement-go` 解释撮合、手续费和结算。
+- `chapters/05-acid-sql-exchange-go` 是 v0 SQL 契约脚手架。
+- `chapters/06-sql-facts-outbox-go` 是 v1 facts/outbox 脚手架。
+- `chapters/07-single-node-memory-core-java` 是 v2 内存核心脚手架。
+- `chapters/08-replicated-log-core-aeron-java` 是 v3 复制日志骨架。
+- `chapters/09-sql-projection-consumers` 是 v4 projection 脚手架。
 - `chapters/90-*` 到 `chapters/93-*` 保留早期可运行资金原型。
 
 ## 后续工作

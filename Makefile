@@ -13,13 +13,13 @@ test-go:
 
 test-java:
 	@if command -v gradle >/dev/null 2>&1; then \
-		cd chapters/05-replicated-log-core-aeron-java && gradle --no-daemon clean test; \
+		cd chapters/08-replicated-log-core-aeron-java && gradle --no-daemon clean test; \
 	else \
 		echo "SKIP: gradle not found. Install Gradle locally or run this target on the remote dev box."; \
 	fi
 
 test-rust:
-	cd chapters/13-rust-hot-path && cargo test
+	cd chapters/16-rust-hot-path && cargo test
 
 run-ledger:
 	cd chapters/90-funds-double-entry-prototype-go && go run ./cmd/demo
