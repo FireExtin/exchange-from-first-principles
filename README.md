@@ -72,21 +72,21 @@ that page for reading order, source-of-truth ownership, and chapter status.
 | 13 | [Risk cluster projection](./chapters/13-risk-cluster-projection/README.md) | README only |
 | 14 | [Cache coherence and market state](./chapters/14-cache-coherence-and-market-state/README.md) | README only |
 | 15 | [Market and execution push](./chapters/15-market-execution-push/README.md) | README only |
-| 16 | [Rust hot path](./chapters/16-rust-hot-path/README.md) | Runnable Rust experiment |
+| 16 | [Rust hot path](./chapters/16-rust-hot-path/README.md) | README only |
 | 17 | [Low-latency runtime and networking](./chapters/17-low-latency-runtime-networking/README.md) | README only |
 | 18-22 | Trading desk extension ideas | Planned notes only |
 
 ### Appendix Prototypes
 
-The current runnable Go funds examples are preserved as prototypes. They are
+The current Go funds examples are preserved as contract scaffolds. They are
 useful exercises, but they are not the new canonical teaching sequence.
 
 | Chapter | Topic | Status |
 | --- | --- | --- |
-| 90 | [Funds double-entry prototype](./chapters/90-funds-double-entry-prototype-go/README.md) | Runnable Go |
-| 91 | [Spot settlement transaction prototype](./chapters/91-spot-settlement-transaction-prototype-go/README.md) | Runnable Go |
-| 92 | [Wallet idempotency prototype](./chapters/92-wallet-idempotency-prototype-go/README.md) | Runnable Go plus reconciliation lab |
-| 93 | [Command log replay prototype](./chapters/93-command-log-replay-prototype-go/README.md) | Runnable Go |
+| 90 | [Funds double-entry prototype](./chapters/90-funds-double-entry-prototype-go/README.md) | Contract scaffold |
+| 91 | [Spot settlement transaction prototype](./chapters/91-spot-settlement-transaction-prototype-go/README.md) | Contract scaffold |
+| 92 | [Wallet idempotency prototype](./chapters/92-wallet-idempotency-prototype-go/README.md) | Contract scaffold plus reconciliation lab |
+| 93 | [Command log replay prototype](./chapters/93-command-log-replay-prototype-go/README.md) | Contract scaffold |
 
 ### Repository Layout
 
@@ -113,11 +113,10 @@ ops/                  runbooks and deployment notes
 
 ### Toolchain
 
-The runnable parts of the repo currently expect:
+The runnable checks in the repo currently expect:
 
-- Go 1.22 or newer for Go modules and integration tests;
-- Java 21 and Gradle for the replicated-log skeleton;
-- Rust stable for the Rust experiment.
+- Go 1.22 or newer for shared contracts and tools;
+- Java 21 and Gradle for the replicated-log skeleton.
 
 ### First Commands
 
@@ -125,17 +124,17 @@ The runnable parts of the repo currently expect:
 git clone git@github.com:FireExtin/exchange-from-first-principles.git
 cd exchange-from-first-principles
 make test-go
-make test-rust
-
-cd chapters/90-funds-double-entry-prototype-go
-go run ./cmd/demo
-```
-
-Java chapters require Gradle:
-
-```bash
 make test-java
 ```
+
+Appendix contract scaffolds are intentionally incomplete:
+
+```bash
+make test-todo-go
+```
+
+That target is expected to fail at TODO boundaries until a learner implements
+the exercises.
 
 The incomplete exchange contract scenarios are intentionally behind a build
 tag:
@@ -224,20 +223,20 @@ recovery 都必须在架构迁移中保持可解释。
 | 13 | [风控集群 projection](./chapters/13-risk-cluster-projection/README.md) | 仅 README |
 | 14 | [缓存一致性与市场状态](./chapters/14-cache-coherence-and-market-state/README.md) | 仅 README |
 | 15 | [行情与成交推送](./chapters/15-market-execution-push/README.md) | 仅 README |
-| 16 | [Rust 热路径](./chapters/16-rust-hot-path/README.md) | 可运行 Rust 实验 |
+| 16 | [Rust 热路径](./chapters/16-rust-hot-path/README.md) | 仅 README |
 | 17 | [低延迟运行时与网络](./chapters/17-low-latency-runtime-networking/README.md) | 仅 README |
 | 18-22 | 交易台扩展想法 | 仅规划笔记 |
 
 ### 附录原型
 
-当前可运行 Go 资金示例保留为 prototype。它们仍然适合练习，但不是新的规范教学顺序。
+当前 Go 资金示例保留为 contract scaffold。它们仍然适合练习，但不是新的规范教学顺序。
 
 | 章节 | 主题 | 状态 |
 | --- | --- | --- |
-| 90 | [资金 double-entry 原型](./chapters/90-funds-double-entry-prototype-go/README.md) | 可运行 Go |
-| 91 | [现货结算事务原型](./chapters/91-spot-settlement-transaction-prototype-go/README.md) | 可运行 Go |
-| 92 | [钱包幂等原型](./chapters/92-wallet-idempotency-prototype-go/README.md) | 可运行 Go，含对账实验 |
-| 93 | [命令日志重放原型](./chapters/93-command-log-replay-prototype-go/README.md) | 可运行 Go |
+| 90 | [资金 double-entry 原型](./chapters/90-funds-double-entry-prototype-go/README.md) | 契约脚手架 |
+| 91 | [现货结算事务原型](./chapters/91-spot-settlement-transaction-prototype-go/README.md) | 契约脚手架 |
+| 92 | [钱包幂等原型](./chapters/92-wallet-idempotency-prototype-go/README.md) | 契约脚手架，含对账实验 |
+| 93 | [命令日志重放原型](./chapters/93-command-log-replay-prototype-go/README.md) | 契约脚手架 |
 
 ### 仓库结构
 
@@ -263,11 +262,10 @@ ops/                  runbook 和部署说明
 
 ### 工具链
 
-当前可运行部分需要：
+当前绿色检查需要：
 
-- Go 1.22 或更新版本，用于 Go modules 和集成测试；
-- Java 21 和 Gradle，用于复制日志骨架；
-- Rust stable，用于 Rust 实验。
+- Go 1.22 或更新版本，用于共享契约和工具；
+- Java 21 和 Gradle，用于复制日志骨架。
 
 ### 第一组命令
 
@@ -275,17 +273,16 @@ ops/                  runbook 和部署说明
 git clone git@github.com:FireExtin/exchange-from-first-principles.git
 cd exchange-from-first-principles
 make test-go
-make test-rust
-
-cd chapters/90-funds-double-entry-prototype-go
-go run ./cmd/demo
-```
-
-Java 章节需要 Gradle：
-
-```bash
 make test-java
 ```
+
+附录契约脚手架刻意不完整：
+
+```bash
+make test-todo-go
+```
+
+这个 target 在学习者实现练习前，预期会失败在 TODO 边界。
 
 未完成的 exchange contract 场景刻意放在 build tag 后：
 

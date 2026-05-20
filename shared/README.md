@@ -10,13 +10,14 @@ The contracts are not a framework. They are a language for proving that the same
 exchange behavior survives architecture changes. The exchange contract is
 presented progressively: accounting and funds first, then orders and
 executions, with position, risk, and projection surfaces kept visible for later
-chapters.
+chapters. The first four teaching chapters build the contract from smaller
+actions: deposit, balance-state movement, order reservation, and settlement.
 
 ## Current Contract Layers
 
 - `shared/go/types`: common identifiers and scaled amounts.
-- `shared/go/funds`: the earlier runnable funds contract used by appendix
-  prototypes 92 and 93.
+- `shared/go/funds`: the earlier funds contract used by appendix contract
+  scaffolds 92 and 93.
 - `shared/go/exchange`: the new exchange-level semantic contract covering
   accounting, orders, executions, positions, risk, and projection cursors.
 
@@ -37,12 +38,13 @@ chapters.
 
 这些契约不是框架，而是一套语言，用来证明同一交易所行为可以在架构变化中存活。
 exchange contract 会渐进呈现：先是 accounting 和 funds，然后是 orders 和
-executions；position、risk 和 projection 表面保留给后续章节。
+executions；position、risk 和 projection 表面保留给后续章节。前四个教学章节从更
+小的动作构建契约：入金、余额状态移动、订单冻结和结算。
 
 ## 当前契约层
 
 - `shared/go/types`：通用标识符和缩放金额。
-- `shared/go/funds`：早期可运行资金契约，供附录原型 92 和 93 使用。
+- `shared/go/funds`：早期资金契约，供附录契约脚手架 92 和 93 使用。
 - `shared/go/exchange`：新的交易所级语义契约，覆盖 accounting、orders、
   executions、positions、risk 和 projection cursors。
 

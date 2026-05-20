@@ -4,8 +4,8 @@
 
 ## English
 
-This roadmap owns chapter order and status. The main sequence now has two
-steps:
+This roadmap owns chapter order and status. The main sequence now has three
+parts:
 
 ```text
 business semantic ramp
@@ -16,6 +16,8 @@ business semantic ramp
 The ramp exists so readers do not meet the whole exchange contract at once.
 Custody, balance states, reservation, cancellation, matching, settlement, fees,
 and release are introduced before the first complete ACID SQL exchange.
+Early ramp chapters use the same teaching shape: user action, account map,
+journal template, contract checks, and out-of-scope boundaries.
 
 For the full documentation catalog, see [Documentation Map](./README.md).
 
@@ -113,7 +115,7 @@ For the full documentation catalog, see [Documentation Map](./README.md).
     - Status: README only.
 
 16. `16-rust-hot-path`
-    - Purpose: discuss hot-path runtime options (Rust+io_uring, C+++DPDK, etc.)
+    - Purpose: discuss hot-path runtime options (Rust+io_uring, C++/DPDK, etc.)
       after chapter 07-09 semantics are stable and measured.
     - Status: README only.
 
@@ -123,9 +125,9 @@ For the full documentation catalog, see [Documentation Map](./README.md).
 
 ## Appendix Prototypes
 
-The current runnable Go funds chapters are preserved as prototypes. They are
-useful exercises and current test fixtures, but they are not the canonical
-teaching sequence.
+The Go funds appendix chapters are preserved as contract scaffolds. They are
+useful exercises, but they are not the canonical teaching sequence and their
+tests are expected to fail at TODO boundaries until implemented.
 
 90. `90-funds-double-entry-prototype-go`
     - Status: contract scaffold.
@@ -160,6 +162,10 @@ Each chapter should say:
 - what implementation is intentionally absent;
 - what would count as a future runnable proof.
 
+Chapters 01-05 should additionally keep the teaching flow concrete: start from
+a user action, name the accounts involved, show the journal template, then name
+the TODO contract checks.
+
 Unfinished exchange behavior belongs behind explicit TODO tests or build tags,
 not in silent partial implementations.
 
@@ -178,7 +184,7 @@ not in silent partial implementations.
 
 ## 中文
 
-本路线图负责章节顺序和状态。主线现在分成两步：
+本路线图负责章节顺序和状态。主线现在分成三段：
 
 ```text
 业务语义爬坡
@@ -189,6 +195,8 @@ not in silent partial implementations.
 语义爬坡的目的，是避免读者一上来就面对完整 exchange contract。custody、余额
 状态、reservation、撤单、撮合、结算、手续费和释放，会先于第一版完整 ACID SQL
 exchange 出现。
+早期爬坡章节使用同一教学形状：用户动作、账户图谱、分录模板、契约检查和本章
+不做什么。
 
 完整文档目录见 [Documentation Map](./README.md)。
 
@@ -281,7 +289,7 @@ exchange 出现。
 
 16. `16-rust-hot-path`
     - 目的：在第 07-09 章语义稳定和可测量之后，讨论热路径运行时选项
-      （Rust+io_uring、C+++DPDK 等）。
+（Rust+io_uring、C++/DPDK 等）。
     - 状态：仅 README。
 
 17. `17-low-latency-runtime-networking`
@@ -290,8 +298,8 @@ exchange 出现。
 
 ## 附录原型
 
-当前可运行 Go 资金章节保留为 prototype。它们是有用练习和当前测试 fixture，但
-不是规范教学顺序。
+Go 资金附录章节保留为契约脚手架。它们是有用练习，但不是规范教学顺序；在实现
+之前，它们的测试预期会失败在 TODO 边界。
 
 90. `90-funds-double-entry-prototype-go`
     - 状态：契约脚手架。
@@ -325,6 +333,9 @@ exchange 出现。
 - 必须保持的语义契约；
 - 哪些实现刻意缺席；
 - 未来怎样才算可运行证明。
+
+第 01-05 章还应保持具体教学流程：先从用户动作出发，命名涉及账户，展示分录模板，
+然后说明 TODO 契约检查。
 
 未完成的 exchange 行为应放在显式 TODO 测试或 build tag 后，而不是沉默的半成品实现。
 

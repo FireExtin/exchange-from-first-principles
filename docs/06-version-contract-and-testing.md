@@ -18,7 +18,9 @@ preserve this shape:
 ordered command + deterministic transition -> new state + emitted facts
 ```
 
-The contract is not only balances. It includes:
+The contract is not only balances. Tests should inspect the journal entries
+that explain a balance and the externally visible state that users and
+downstream systems observe. It includes:
 
 - double-entry ledger postings;
 - account reservation and release;
@@ -46,29 +48,33 @@ same scenario suite
   -> same externally visible semantics
 ```
 
-The current runnable Go tests still compare appendix funds prototypes:
+The current appendix funds scenarios are contract scaffolds, not normal green
+tests:
 
 ```bash
-go test ./integration-tests/...
+make test-todo-go
 ```
 
-The future exchange contract scenarios are intentionally behind a build tag:
+That target is expected to fail at TODO boundaries until the exercises are
+implemented. The future exchange contract scenarios are intentionally behind a
+build tag:
 
 ```bash
 cd shared/go
 go test -tags exchange_contract_todo ./exchange
 ```
 
-Those tests are expected to fail until adapters and implementations exist.
+Those tests are also expected to fail until adapters and implementations exist.
 
 ## Scenario Composition
 
 The full exchange scenarios are built from smaller teaching scenarios:
 
-- chapter 01: deposit creates custody asset and user liability;
-- chapter 02: balance states move between available, locked, pending
-  withdrawal, with fee revenue defined as a platform account purpose;
-- chapter 03: order placement reserves funds and cancellation releases them;
+- chapter 01: deposit posts debit custody and credit user available;
+- chapter 02: balance states move through journal entries between available,
+  locked, pending withdrawal, custody, and fee revenue;
+- chapter 03: buy orders reserve quote asset, sell orders reserve base asset,
+  and cancellation releases remaining locked funds;
 - chapter 04: execution emits facts, balances USD/BTC separately, posts fees,
   and releases surplus.
 
@@ -145,7 +151,8 @@ run the same deterministic transition logic.
 ordered command + deterministic transition -> new state + emitted facts
 ```
 
-契约不只是余额。它包括：
+契约不只是余额。测试应该检查解释余额的 journal entries，也要检查用户和下游系统
+能观察到的外部状态。它包括：
 
 - double-entry ledger postings；
 - account reservation 和 release；
@@ -172,29 +179,30 @@ same scenario suite
   -> same externally visible semantics
 ```
 
-当前可运行 Go 测试仍然比较附录资金原型：
+当前附录资金场景是契约脚手架，不是常规绿色测试：
 
 ```bash
-go test ./integration-tests/...
+make test-todo-go
 ```
 
-未来 exchange contract 场景刻意放在 build tag 后：
+这个 target 在练习实现前，预期会失败在 TODO 边界。未来 exchange contract 场景
+刻意放在 build tag 后：
 
 ```bash
 cd shared/go
 go test -tags exchange_contract_todo ./exchange
 ```
 
-这些测试在 adapter 和实现出现前应该失败。
+这些测试在 adapter 和实现出现前也应该失败。
 
 ## 场景组合
 
 完整交易所场景由更小的教学场景组成：
 
-- 第 01 章：入金形成 custody asset 和 user liability；
-- 第 02 章：余额状态在 available、locked、pending withdrawal 之间移动，同时把
-  fee revenue 定义为平台账户用途；
-- 第 03 章：下单冻结资金，撤单释放资金；
+- 第 01 章：入金对 custody 记 debit，对 user available 记 credit；
+- 第 02 章：余额状态通过 journal entries 在 available、locked、pending withdrawal、
+  custody 和 fee revenue 之间移动；
+- 第 03 章：买单冻结 quote asset，卖单冻结 base asset，撤单释放剩余 locked funds；
 - 第 04 章：成交发出 facts，分别平衡 USD/BTC，记录手续费并释放差额。
 
 这些小块再组合成架构版本场景：

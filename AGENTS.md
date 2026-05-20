@@ -37,12 +37,11 @@ When documents disagree, prefer the more specific source:
 
 ## Toolchain
 
-Runnable parts currently expect:
+Runnable checks currently expect:
 
 - Go 1.22 or newer;
 - Java 21, tested with Azul Zulu 21;
-- Gradle for the Java/Aeron chapter;
-- Rust stable for chapter 16.
+- Gradle for the Java/Aeron chapter.
 
 ## Test Commands
 
@@ -53,21 +52,21 @@ From the repo root:
 
 ```bash
 make test-go
-make test-rust
 make test-java
 ```
 
 Useful focused commands:
 
 ```bash
-cd chapters/90-funds-double-entry-prototype-go && go run ./cmd/demo
-cd chapters/92-wallet-idempotency-prototype-go && go test ./...
+make test-todo-go
 cd chapters/92-wallet-idempotency-prototype-go && go test -tags reconciliation_lab_todo ./internal/reconciliation
 cd shared/go && go test -tags exchange_contract_todo ./exchange
 cd chapters/08-replicated-log-core-aeron-java && gradle --no-daemon clean test
-cd chapters/16-rust-hot-path && cargo test
-go test ./integration-tests/...
 ```
+
+The appendix Go contract scaffold tests behind `make test-todo-go` and the
+current integration tests are expected to fail at TODO boundaries until the
+project owner implements the exercises.
 
 The reconciliation lab tests are intentionally behind the
 `reconciliation_lab_todo` build tag and are expected to fail until the lab is

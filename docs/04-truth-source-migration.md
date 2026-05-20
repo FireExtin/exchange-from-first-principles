@@ -151,8 +151,8 @@ auditability, reconciliation, and reporting matter most.
 - `chapters/08-replicated-log-core-aeron-java` is the v3 replicated-log
   skeleton.
 - `chapters/09-sql-projection-consumers` is the v4 projection scaffold.
-- `chapters/90-*` through `chapters/93-*` preserve earlier runnable funds
-  prototypes.
+- `chapters/90-*` through `chapters/93-*` preserve earlier funds contract
+  scaffolds.
 
 ## Future Work
 
@@ -306,7 +306,7 @@ SQL 回到 warm/cold-path store：
 - `chapters/07-single-node-memory-core-java` 是 v2 内存核心脚手架。
 - `chapters/08-replicated-log-core-aeron-java` 是 v3 复制日志骨架。
 - `chapters/09-sql-projection-consumers` 是 v4 projection 脚手架。
-- `chapters/90-*` 到 `chapters/93-*` 保留早期可运行资金原型。
+- `chapters/90-*` 到 `chapters/93-*` 保留早期资金契约脚手架。
 
 ## 后续工作
 

@@ -81,7 +81,7 @@ public final class ExchangeClusteredService implements ClusteredService {
 
     @Override
     public void onTerminate(final Cluster cluster) {
-        // TODO: close Rust resources after the FFI boundary exists.
+        // TODO: close runtime resources once a hot-path boundary exists.
     }
 
     public Cluster cluster() {

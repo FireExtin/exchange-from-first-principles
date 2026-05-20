@@ -503,7 +503,7 @@ about best execution. Pre-trade risk should not become a strategy engine.
 | Architecture migration line | 05-09 | ACID SQL, SQL facts/outbox, memory core, replicated log, SQL projections |
 | Domain and runtime deep dives | 10-17 | Order book mechanics, position/PnL, margin/risk, risk projection, cache coherence, push, Rust, runtime/networking |
 | Desk extension | 18-22 | External market data, pricing, routing, hedging, best execution, simple strategy |
-| Appendix prototypes | 90-93 | Earlier runnable Go funds prototypes |
+| Appendix prototypes | 90-93 | Earlier Go funds contract scaffolds |
 
 The chapter rule is:
 
@@ -874,7 +874,7 @@ matching
 | 架构迁移线 | 05-09 | ACID SQL、SQL facts/outbox、内存核心、复制日志、SQL projections |
 | 领域与运行时深挖 | 10-17 | 订单簿机制、仓位/PnL、保证金/风控、风险投影、缓存一致性、推送、Rust、运行时/网络 |
 | 交易台扩展 | 18-22 | 外部行情、定价、路由、对冲、最优执行、简单策略 |
-| 附录原型 | 90-93 | 早期可运行 Go 资金原型 |
+| 附录原型 | 90-93 | 早期 Go 资金契约脚手架 |
 
 每章都应该回答：
 

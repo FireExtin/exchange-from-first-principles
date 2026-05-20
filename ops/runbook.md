@@ -4,14 +4,11 @@
 
 ## English
 
-## Local Rust Core
+## Hot-Path Runtime Notes
 
-```bash
-cd chapters/16-rust-hot-path
-cargo test
-cargo run -p exchange-replay
-cargo run -p exchange-bench
-```
+Chapter 16 is README-only. It discusses possible future runtime paths after
+the Java memory core, replicated log, and projection chapters become runnable
+and measurable.
 
 ## Later Aeron Cluster
 
@@ -24,14 +21,10 @@ snapshot semantics are stable.
 
 ### 运行手册
 
-## 本地 Rust 核心
+## 热路径运行时说明
 
-```bash
-cd chapters/16-rust-hot-path
-cargo test
-cargo run -p exchange-replay
-cargo run -p exchange-bench
-```
+第 16 章仅有 README。它讨论 Java 内存核心、复制日志和 projection 章节可运行并
+可测量之后，未来可能选择的运行时路径。
 
 ## 后续 Aeron 集群
 

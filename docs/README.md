@@ -13,11 +13,11 @@ changes.
 | Goal | Read |
 | --- | --- |
 | Understand the project | [Goal](./00-goal.md), [Core Principles](./01-core-principles.md), [Design Paper](./02-design-paper.md) |
-| Follow the business semantic ramp | [Chapter Roadmap](./07-chapter-roadmap.md), then chapters 01-04 |
+| Follow the business semantic ramp | [Chapter Roadmap](./07-chapter-roadmap.md), then chapters 01-04; each chapter starts from user action, account map, journal template, and contract checks |
 | Follow architecture migration | [Truth Source Migration](./04-truth-source-migration.md), then chapters 05-09 |
 | Understand cross-version proof | [Version Contract And Testing](./06-version-contract-and-testing.md), [shared contracts](../shared/README.md), [integration tests](../integration-tests/README.md) |
 | Understand hot-path deep dives | [Position, Matching, Risk, And Margin](./08-position-matching-risk-margin.md), then chapters 10-15 |
-| Run current code | appendix prototypes 90-93, chapter 08, chapter 16 |
+| Run current code | shared Go checks and chapter 08; appendix chapters 90-93 are TODO contract scaffolds |
 
 ## Current Source Of Truth
 
@@ -69,17 +69,17 @@ changes.
 | 13 | [Risk Cluster Projection](../chapters/13-risk-cluster-projection/README.md) | README only |
 | 14 | [Cache Coherence And Market State](../chapters/14-cache-coherence-and-market-state/README.md) | README only |
 | 15 | [Market And Execution Push](../chapters/15-market-execution-push/README.md) | README only |
-| 16 | [Rust Hot Path](../chapters/16-rust-hot-path/README.md) | Runnable Rust experiment |
+| 16 | [Rust Hot Path](../chapters/16-rust-hot-path/README.md) | README only |
 | 17 | [Low-Latency Runtime And Networking](../chapters/17-low-latency-runtime-networking/README.md) | README only |
 
 ## Appendix Prototypes
 
 | Chapter | README | Status |
 | --- | --- | --- |
-| 90 | [Funds Double-Entry Prototype](../chapters/90-funds-double-entry-prototype-go/README.md) | Runnable Go |
-| 91 | [Spot Settlement Transaction Prototype](../chapters/91-spot-settlement-transaction-prototype-go/README.md) | Runnable Go |
-| 92 | [Wallet Idempotency Prototype](../chapters/92-wallet-idempotency-prototype-go/README.md) | Runnable Go plus reconciliation lab |
-| 93 | [Command Log Replay Prototype](../chapters/93-command-log-replay-prototype-go/README.md) | Runnable Go |
+| 90 | [Funds Double-Entry Prototype](../chapters/90-funds-double-entry-prototype-go/README.md) | Contract scaffold |
+| 91 | [Spot Settlement Transaction Prototype](../chapters/91-spot-settlement-transaction-prototype-go/README.md) | Contract scaffold |
+| 92 | [Wallet Idempotency Prototype](../chapters/92-wallet-idempotency-prototype-go/README.md) | Contract scaffold plus reconciliation lab |
+| 93 | [Command Log Replay Prototype](../chapters/93-command-log-replay-prototype-go/README.md) | Contract scaffold |
 
 ## Supporting Docs
 
@@ -122,11 +122,11 @@ changes.
 | 目标 | 阅读 |
 | --- | --- |
 | 理解项目 | [Goal](./00-goal.md)、[Core Principles](./01-core-principles.md)、[Design Paper](./02-design-paper.md) |
-| 跟随业务语义爬坡 | [Chapter Roadmap](./07-chapter-roadmap.md)，然后读第 01-04 章 |
+| 跟随业务语义爬坡 | [Chapter Roadmap](./07-chapter-roadmap.md)，然后读第 01-04 章；每章从用户动作、账户图谱、分录模板和契约检查开始 |
 | 跟随架构迁移 | [Truth Source Migration](./04-truth-source-migration.md)，然后读第 05-09 章 |
 | 理解跨版本证明 | [Version Contract And Testing](./06-version-contract-and-testing.md)、[shared contracts](../shared/README.md)、[integration tests](../integration-tests/README.md) |
 | 理解热路径深挖 | [Position, Matching, Risk, And Margin](./08-position-matching-risk-margin.md)，然后读第 10-15 章 |
-| 运行当前代码 | 附录原型 90-93、第 08 章、第 16 章 |
+| 运行当前代码 | shared Go 检查和第 08 章；附录 90-93 是 TODO 契约脚手架 |
 
 ## 当前真相源
 
@@ -178,17 +178,17 @@ changes.
 | 13 | [Risk Cluster Projection](../chapters/13-risk-cluster-projection/README.md) | 仅 README |
 | 14 | [Cache Coherence And Market State](../chapters/14-cache-coherence-and-market-state/README.md) | 仅 README |
 | 15 | [Market And Execution Push](../chapters/15-market-execution-push/README.md) | 仅 README |
-| 16 | [Rust Hot Path](../chapters/16-rust-hot-path/README.md) | 可运行 Rust 实验 |
+| 16 | [Rust Hot Path](../chapters/16-rust-hot-path/README.md) | 仅 README |
 | 17 | [Low-Latency Runtime And Networking](../chapters/17-low-latency-runtime-networking/README.md) | 仅 README |
 
 ## 附录原型
 
 | 章节 | README | 状态 |
 | --- | --- | --- |
-| 90 | [Funds Double-Entry Prototype](../chapters/90-funds-double-entry-prototype-go/README.md) | 可运行 Go |
-| 91 | [Spot Settlement Transaction Prototype](../chapters/91-spot-settlement-transaction-prototype-go/README.md) | 可运行 Go |
-| 92 | [Wallet Idempotency Prototype](../chapters/92-wallet-idempotency-prototype-go/README.md) | 可运行 Go，含对账实验 |
-| 93 | [Command Log Replay Prototype](../chapters/93-command-log-replay-prototype-go/README.md) | 可运行 Go |
+| 90 | [Funds Double-Entry Prototype](../chapters/90-funds-double-entry-prototype-go/README.md) | 契约脚手架 |
+| 91 | [Spot Settlement Transaction Prototype](../chapters/91-spot-settlement-transaction-prototype-go/README.md) | 契约脚手架 |
+| 92 | [Wallet Idempotency Prototype](../chapters/92-wallet-idempotency-prototype-go/README.md) | 契约脚手架，含对账实验 |
+| 93 | [Command Log Replay Prototype](../chapters/93-command-log-replay-prototype-go/README.md) | 契约脚手架 |
 
 ## 支撑文档
 

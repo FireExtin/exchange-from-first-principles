@@ -11,16 +11,18 @@ stable. A scenario should be written once, then run against every runnable
 version through a small adapter.
 Future exchange scenarios should be composed from the first four teaching
 steps: custody/liability, balance states, order reservation, and
-match/settlement.
+match/settlement. Each scenario should check both the journal explanation and
+the externally visible state.
 
-## Current Runnable Shape
+## Current Scaffold Shape
 
 ```bash
-go test ./integration-tests/...
+make test-todo-go
 ```
 
-The current suite still compares appendix funds prototypes 92 and 93 through
-the earlier `shared/go/funds` contract.
+The current suite still defines how appendix contract scaffolds 92 and 93
+should compare through the earlier `shared/go/funds` contract. It is expected
+to fail at TODO boundaries until those exercises are implemented.
 
 ## Target Exchange Shape
 
@@ -47,17 +49,18 @@ Unimplemented exchange scenarios should remain behind the
 本目录保留用于跨版本场景。
 
 目标是证明架构可以变化，而交易所语义保持稳定。场景应写一次，然后通过薄 adapter
-针对每个可运行版本运行。
+针对每个已实现版本运行。
 未来 exchange 场景应由前四个教学步骤组合而来：custody/liability、余额状态、
-订单冻结、撮合/结算。
+订单冻结、撮合/结算。每个场景都应该同时检查 journal explanation 和外部可见状态。
 
-## 当前可运行形态
+## 当前脚手架形态
 
 ```bash
-go test ./integration-tests/...
+make test-todo-go
 ```
 
-当前套件仍然通过早期 `shared/go/funds` 契约，对比附录资金原型 92 和 93。
+当前套件仍然通过早期 `shared/go/funds` 契约，定义附录契约脚手架 92 和 93 应该
+如何对齐。在这些练习实现前，它预期会失败在 TODO 边界。
 
 ## 目标交易所形态
 
