@@ -142,16 +142,27 @@ tests are expected to fail at TODO boundaries until implemented.
 93. `93-command-log-replay-prototype-go`
     - Status: contract scaffold.
 
+## Credit, Margin, And Funding Extension
+
+These planned notes are optional exchange-core extensions. They borrow only the
+lending concepts needed for margin and funding semantics; they are not a
+Modern Lending product track.
+
+18. `18-credit-and-collateral-accounts`
+19. `19-funding-and-interest-accrual`
+20. `20-liquidation-and-repayment-settlement`
+
 ## Trading Desk Extension
 
 Trading desk chapters are planned notes only and are not part of the exchange
-core. They remain consumers of exchange-core facts.
+core. They remain consumers of exchange-core facts and come after the
+credit/margin/funding extension.
 
-18. `18-external-market-data-ingestion`
-19. `19-pricing-and-signal-engine`
-20. `20-order-router-and-execution-reports`
-21. `21-hedger-and-best-execution`
-22. `22-arbitrage-strategy-demo`
+21. `21-external-market-data-ingestion`
+22. `22-pricing-and-signal-engine`
+23. `23-order-router-and-execution-reports`
+24. `24-hedger-and-best-execution`
+25. `25-arbitrage-strategy-demo`
 
 ## Rule
 
@@ -179,6 +190,8 @@ not in silent partial implementations.
   equivalence.
 - `docs/08-position-matching-risk-margin.md` defines later hot-path trading
   surfaces preserved by each version.
+- `docs/09-credit-margin-funding-extension.md` defines the optional
+  credit/margin/funding extension before desk systems.
 
 ---
 
@@ -314,16 +327,25 @@ Go 资金附录章节保留为契约脚手架。它们是有用练习，但不�
 93. `93-command-log-replay-prototype-go`
     - 状态：契约脚手架。
 
+## Credit, Margin, And Funding 扩展
+
+这些规划笔记是可选 exchange-core 扩展。它们只借用解释 margin 和 funding 语义所需的
+lending 概念；不是 Modern Lending 产品线。
+
+18. `18-credit-and-collateral-accounts`
+19. `19-funding-and-interest-accrual`
+20. `20-liquidation-and-repayment-settlement`
+
 ## 交易台扩展
 
 交易台章节目前只是规划笔记，不属于交易所核心。它们仍然是 exchange-core facts 的
-消费者。
+消费者，并排在 credit/margin/funding 扩展之后。
 
-18. `18-external-market-data-ingestion`
-19. `19-pricing-and-signal-engine`
-20. `20-order-router-and-execution-reports`
-21. `21-hedger-and-best-execution`
-22. `22-arbitrage-strategy-demo`
+21. `21-external-market-data-ingestion`
+22. `22-pricing-and-signal-engine`
+23. `23-order-router-and-execution-reports`
+24. `24-hedger-and-best-execution`
+25. `25-arbitrage-strategy-demo`
 
 ## 规则
 
@@ -346,3 +368,5 @@ Go 资金附录章节保留为契约脚手架。它们是有用练习，但不�
 - `docs/04-truth-source-migration.md` 解释业务语义爬坡之后，真相如何迁移。
 - `docs/06-version-contract-and-testing.md` 定义测试如何证明语义等价。
 - `docs/08-position-matching-risk-margin.md` 定义每个版本必须保持的后续热路径交易表面。
+- `docs/09-credit-margin-funding-extension.md` 定义交易台系统之前的可选
+  credit/margin/funding 扩展。

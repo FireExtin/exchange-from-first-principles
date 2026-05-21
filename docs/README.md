@@ -103,6 +103,7 @@ changes.
 | [history/change_brief_03.md](./history/change_brief_03.md) | Exchange semantic version-line reorganization. |
 | [history/change_brief_04.md](./history/change_brief_04.md) | Business semantic ramp before architecture migration. |
 | [history/change_brief_05.md](./history/change_brief_05.md) | Posted facts versus derived/prospective state boundary. |
+| [history/change_brief_06.md](./history/change_brief_06.md) | Credit, margin, and funding extension before trading desk. |
 
 ## Maintenance Rules
 
@@ -216,6 +217,7 @@ changes.
 | [history/change_brief_03.md](./history/change_brief_03.md) | 交易所语义版本线重排。 |
 | [history/change_brief_04.md](./history/change_brief_04.md) | 架构迁移前增加业务语义爬坡。 |
 | [history/change_brief_05.md](./history/change_brief_05.md) | 已过账事实与派生/未来状态边界。 |
+| [history/change_brief_06.md](./history/change_brief_06.md) | 交易台之前增加 credit、margin 和 funding 扩展。 |
 
 ## 维护规则
 

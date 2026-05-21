@@ -8,7 +8,9 @@ This note defines a later extension of the project: a trading desk, market
 maker, or proprietary trading system built on top of the exchange primitives.
 It should not be implemented early. It becomes useful only after the exchange
 core can produce reliable facts, positions, risk views, market-data streams,
-and execution reports.
+and execution reports. It also comes after the optional credit/margin/funding
+extension, because desk systems should consume those risk and funding facts
+rather than own them.
 
 The distinction matters:
 
@@ -61,24 +63,24 @@ external market data
 
 ## Future Chapters
 
-18. `18-external-market-data-ingestion`
+21. `21-external-market-data-ingestion`
     - Consume venue books, trades, tickers, and reference data.
     - Explain sequence gaps, snapshots, stale data, and mark inputs.
 
-19. `19-pricing-and-signal-engine`
+22. `22-pricing-and-signal-engine`
     - Compute theoretical price, fair value, mark price, and simple signals.
     - Explain why pricing is separate from matching and routing.
 
-20. `20-order-router-and-execution-reports`
+23. `23-order-router-and-execution-reports`
     - Route child orders to an external venue mock.
     - Consume execution reports and update order state.
 
-21. `21-hedger-and-best-execution`
+24. `24-hedger-and-best-execution`
     - Use positions, risk limits, venue state, and costs to choose a hedge or
       execution venue.
     - Explain the tradeoff between immediacy, fees, liquidity, and risk.
 
-22. `22-arbitrage-strategy-demo`
+25. `25-arbitrage-strategy-demo`
     - Use multiple venue feeds and router mocks to demonstrate cross-venue
       arbitrage.
     - Keep it educational, not a production trading strategy.
@@ -98,7 +100,9 @@ rejects, orders, executes, and emits facts.
 
 这份笔记定义项目的远期扩展：建立在交易所原语之上的交易台、做市或自营交易
 系统。它不应该过早实现。只有当交易所核心已经能够产生可靠事实、仓位、风险
-视图、行情流和成交回报之后，这一层才自然出现。
+视图、行情流和成交回报之后，这一层才自然出现。它也排在可选
+credit/margin/funding 扩展之后，因为交易台系统应该消费这些 risk 和 funding facts，
+而不是拥有它们。
 
 这里要区分两类系统：
 
@@ -148,23 +152,23 @@ rejects, orders, executes, and emits facts.
 
 ## 远期章节
 
-18. `18-external-market-data-ingestion`
+21. `21-external-market-data-ingestion`
     - 消费外部场所订单簿、成交、ticker 和参考数据。
     - 解释序列缺口、快照、陈旧数据和标记价格输入。
 
-19. `19-pricing-and-signal-engine`
+22. `22-pricing-and-signal-engine`
     - 计算理论价、公允价、标记价格和简单信号。
     - 解释为什么定价应与撮合、路由分离。
 
-20. `20-order-router-and-execution-reports`
+23. `23-order-router-and-execution-reports`
     - 将子订单路由到外部场所 mock。
     - 消费成交回报并更新订单状态。
 
-21. `21-hedger-and-best-execution`
+24. `24-hedger-and-best-execution`
     - 用仓位、风险限制、场所状态和成本选择对冲或执行场所。
     - 解释即时性、费用、流动性和风险之间的权衡。
 
-22. `22-arbitrage-strategy-demo`
+25. `25-arbitrage-strategy-demo`
     - 使用多个场所行情和路由 mock 演示跨场所套利。
     - 保持教育用途，不把它写成生产交易策略。
 

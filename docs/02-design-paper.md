@@ -445,7 +445,26 @@ runtime-specific tuning.
 | Cache / market state | Local projections of owned facts | Snapshot/delta versions, gap status | Serve unbounded stale data silently |
 | Push gateway | Public/private stream delivery | Sequenced snapshots and deltas | Claim best-effort delivery is truth |
 
-### 6. Trading Desk Extension
+### 6. Credit, Margin, And Funding Extension
+
+Credit, margin, and funding are exchange-core extensions, not a separate
+lending product track. They should appear only after spot custody, reservation,
+matching, positions, risk views, and posted-versus-derived state are clear.
+
+The useful lending concepts are:
+
+- collateral and borrow-liability accounts;
+- funding and interest accrual boundaries;
+- repayment and collateral release;
+- liquidation settlement;
+- bad-debt and insurance-fund transfers.
+
+Boundary rule: mark changes, margin requirement recalculations, liquidation
+warnings, and unrealized PnL movements are model state. They become ledger
+truth only through explicit accrual, settlement, repayment, liquidation, or
+transfer events.
+
+### 7. Trading Desk Extension
 
 The exchange core decides what is true inside the venue. A trading desk decides
 what to do given market state, inventory, risk, and external venues.
@@ -482,7 +501,7 @@ Boundary rule: do not let desk concerns pollute the exchange core. The
 matching engine should not know about arbitrage. The ledger should not know
 about best execution. Pre-trade risk should not become a strategy engine.
 
-### 7. Failure And Recovery Model
+### 8. Failure And Recovery Model
 
 | Stage | Typical Failure | Required Recovery Story |
 | --- | --- | --- |
@@ -495,14 +514,15 @@ about best execution. Pre-trade risk should not become a strategy engine.
 | Reconciliation | Provider, bank, custody, and internal records disagree | Immutable raw records, normalized records, match reports, manual adjustment journal |
 | Runtime | Warmup variance, GC/allocation spikes, noisy network path | Benchmarks, profiles, warmup discipline, allocation control, runbooks |
 
-### 8. Chapter Map
+### 9. Chapter Map
 
 | Phase | Chapters | Purpose |
 | --- | --- | --- |
 | Business semantic ramp | 01-04 | Custody/user liability, balance states, reservation/release, matching and settlement |
 | Architecture migration line | 05-09 | ACID SQL, SQL facts/outbox, memory core, replicated log, SQL projections |
 | Domain and runtime deep dives | 10-17 | Order book mechanics, position/PnL, margin/risk, risk projection, cache coherence, push, Rust, runtime/networking |
-| Desk extension | 18-22 | External market data, pricing, routing, hedging, best execution, simple strategy |
+| Credit/margin/funding extension | 18-20 | Collateral, borrow liability, funding accrual, repayment, liquidation settlement |
+| Desk extension | 21-25 | External market data, pricing, routing, hedging, best execution, simple strategy |
 | Appendix prototypes | 90-93 | Earlier Go funds contract scaffolds |
 
 The chapter rule is:
@@ -829,7 +849,25 @@ NUMA、kernel bypass 和 runtime tuning 才有意义。
 | Cache / market state | owned facts 的本地投影 | snapshot/delta versions、gap status | 静默提供无限 stale 数据 |
 | Push gateway | 公共和私有流发布 | sequenced snapshots and deltas | 把 best-effort 分发说成真相 |
 
-### 6. 交易台扩展
+### 6. Credit, Margin, And Funding 扩展
+
+Credit、margin 和 funding 是 exchange-core 扩展，不是独立 lending 产品线。它们应在
+spot custody、reservation、matching、positions、risk views 和
+posted-versus-derived state 都清楚之后再出现。
+
+真正有用的 lending 概念是：
+
+- collateral 和 borrow-liability accounts；
+- funding 和 interest accrual 边界；
+- repayment 和 collateral release；
+- liquidation settlement；
+- bad-debt 和 insurance-fund transfers。
+
+边界规则：mark changes、margin requirement recalculations、liquidation warnings 和
+unrealized PnL movements 都是模型状态。它们只有通过显式 accrual、settlement、
+repayment、liquidation 或 transfer events，才会成为 ledger truth。
+
+### 7. 交易台扩展
 
 交易所核心决定场内什么是真的；交易台根据市场状态、库存、风险和外部场所决
 定要做什么。
@@ -853,7 +891,7 @@ matching
 边界规则：不要让交易台污染交易所核心。撮合引擎不应该知道套利；账本不应该
 知道 best execution；pre-trade risk 不应该变成策略引擎。
 
-### 7. 故障与恢复模型
+### 8. 故障与恢复模型
 
 | 阶段 | 典型故障 | 需要的恢复叙事 |
 | --- | --- | --- |
@@ -866,14 +904,15 @@ matching
 | Reconciliation | provider、bank、custody、internal records 不一致 | immutable raw records、normalized records、match reports、manual adjustment journal |
 | Runtime | warmup 抖动、GC/allocation spike、网络噪声 | benchmark、profile、warmup discipline、allocation control、runbook |
 
-### 8. 章节地图
+### 9. 章节地图
 
 | 阶段 | 章节 | 目的 |
 | --- | --- | --- |
 | 业务语义爬坡 | 01-04 | custody/user liability、余额状态、冻结/释放、撮合与结算 |
 | 架构迁移线 | 05-09 | ACID SQL、SQL facts/outbox、内存核心、复制日志、SQL projections |
 | 领域与运行时深挖 | 10-17 | 订单簿机制、仓位/PnL、保证金/风控、风险投影、缓存一致性、推送、Rust、运行时/网络 |
-| 交易台扩展 | 18-22 | 外部行情、定价、路由、对冲、最优执行、简单策略 |
+| Credit/margin/funding 扩展 | 18-20 | collateral、borrow liability、funding accrual、repayment、liquidation settlement |
+| 交易台扩展 | 21-25 | 外部行情、定价、路由、对冲、最优执行、简单策略 |
 | 附录原型 | 90-93 | 早期 Go 资金契约脚手架 |
 
 每章都应该回答：

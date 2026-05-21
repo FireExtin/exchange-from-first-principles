@@ -74,7 +74,8 @@ that page for reading order, source-of-truth ownership, and chapter status.
 | 15 | [Market and execution push](./chapters/15-market-execution-push/README.md) | README only |
 | 16 | [Rust hot path](./chapters/16-rust-hot-path/README.md) | README only |
 | 17 | [Low-latency runtime and networking](./chapters/17-low-latency-runtime-networking/README.md) | README only |
-| 18-22 | Trading desk extension ideas | Planned notes only |
+| 18-20 | Credit, margin, and funding extension ideas | Planned notes only |
+| 21-25 | Trading desk extension ideas | Planned notes only |
 
 ### Appendix Prototypes
 
@@ -225,7 +226,8 @@ recovery 都必须在架构迁移中保持可解释。
 | 15 | [行情与成交推送](./chapters/15-market-execution-push/README.md) | 仅 README |
 | 16 | [Rust 热路径](./chapters/16-rust-hot-path/README.md) | 仅 README |
 | 17 | [低延迟运行时与网络](./chapters/17-low-latency-runtime-networking/README.md) | 仅 README |
-| 18-22 | 交易台扩展想法 | 仅规划笔记 |
+| 18-20 | Credit、margin 和 funding 扩展想法 | 仅规划笔记 |
+| 21-25 | 交易台扩展想法 | 仅规划笔记 |
 
 ### 附录原型
 
