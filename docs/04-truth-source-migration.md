@@ -24,6 +24,19 @@ defined. The migration target is not only balances. It is the full exchange
 semantic surface: ledger postings, reservations, orders, matching, executions,
 positions, risk admission, projection cursors, caches, and push recovery.
 
+## Truth Layers
+
+The migration target has three layers:
+
+| Layer | Examples | Rule |
+| --- | --- | --- |
+| Posted facts | ledger entries, execution facts, settlement facts | Historical financial truth; append or reverse, do not silently rewrite. |
+| Operational state | orders, reservations, hot-path risk admission | Current state needed to accept, reject, sequence, and execute commands. |
+| Prospective or derived state | marks, margin requirements, unrealized PnL, continuous risk views, projections | Model or view state; useful for decisions, but not posted ledger truth until an explicit event posts entries. |
+
+Architecture migration may move where these layers live, but it should not blur
+their meaning.
+
 ## v0: ACID SQL As First Truth Source
 
 After chapters 01-04 define the component semantics, the first complete model
@@ -184,6 +197,18 @@ minimal business semantics
 真相源迁移要等最小业务语义定义清楚后再开始。迁移对象不只是余额，而是完整交易所
 语义表面：ledger postings、reservations、orders、matching、executions、positions、
 risk admission、projection cursors、caches 和 push recovery。
+
+## 真相层次
+
+迁移对象分成三层：
+
+| 层次 | 例子 | 规则 |
+| --- | --- | --- |
+| 已过账事实 | ledger entries、execution facts、settlement facts | 历史财务真相；只能追加或冲正，不能偷偷重写。 |
+| 运营状态 | orders、reservations、hot-path risk admission | 接受、拒绝、排序和执行命令所需的当前状态。 |
+| 未来或派生状态 | marks、margin requirements、unrealized PnL、continuous risk views、projections | 模型或视图状态；可用于决策，但只有显式事件提交 entries 后才成为 ledger truth。 |
+
+架构迁移可以改变这些层次在哪里运行，但不应该模糊它们的含义。
 
 ## v0：ACID SQL 作为第一真相源
 

@@ -12,6 +12,10 @@ from chapter 05.
 SQL still owns truth, but each accepted mutation also writes facts that can be
 consumed, audited, replayed, and projected.
 
+The outbox is the handoff from transaction handling logic to consumers. It says
+what happened and where consumers can resume. It should not let consumers infer
+ledger postings from hidden row changes.
+
 ## Status
 
 Status: contract scaffold. No command table, event table, outbox adapter, or
@@ -21,6 +25,8 @@ consumer implementation exists here yet.
 
 - SQL mutation, command row, event rows, and outbox intent commit atomically;
 - facts explain ledger, orders, executions, positions, and risk decisions;
+- facts label whether they are posted financial facts, operational facts, or
+  derived/prospective model facts;
 - consumers use cursors and idempotency;
 - this chapter prepares the move from row-state truth to ordered-log truth.
 
@@ -33,6 +39,9 @@ consumer implementation exists here yet.
 SQL 仍然拥有真相，但每次 accepted mutation 也写出可消费、可审计、可重放、可投影
 的事实。
 
+outbox 是 transaction handling logic 和消费者之间的交接点。它说明发生了什么，以及
+consumer 应该从哪里继续。它不应该让 consumer 从隐藏行变更里猜 ledger postings。
+
 ## 状态
 
 状态：契约脚手架。本章尚无 command table、event table、outbox adapter 或 consumer
@@ -42,5 +51,6 @@ SQL 仍然拥有真相，但每次 accepted mutation 也写出可消费、可审
 
 - SQL mutation、command row、event rows 和 outbox intent 原子提交；
 - facts 解释 ledger、orders、executions、positions 和 risk decisions；
+- facts 标明自己是已过账财务事实、运营事实，还是派生/未来模型事实；
 - consumers 使用 cursor 和幂等；
 - 本章为从行状态真相迁移到有序日志真相做准备。

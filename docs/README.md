@@ -17,6 +17,7 @@ changes.
 | Follow architecture migration | [Truth Source Migration](./04-truth-source-migration.md), then chapters 05-09 |
 | Understand cross-version proof | [Version Contract And Testing](./06-version-contract-and-testing.md), [shared contracts](../shared/README.md), [integration tests](../integration-tests/README.md) |
 | Understand hot-path deep dives | [Position, Matching, Risk, And Margin](./08-position-matching-risk-margin.md), then chapters 10-15 |
+| Understand credit and funding extension | [Credit, Margin, And Funding Extension](./09-credit-margin-funding-extension.md), after the hot-path risk docs |
 | Run current code | shared Go checks and chapter 08; appendix chapters 90-93 are TODO contract scaffolds |
 
 ## Current Source Of Truth
@@ -32,7 +33,8 @@ changes.
 | Cross-version testing | [06-version-contract-and-testing.md](./06-version-contract-and-testing.md) |
 | Chapter order and status | [07-chapter-roadmap.md](./07-chapter-roadmap.md) |
 | Hot-path trading semantics | [08-position-matching-risk-margin.md](./08-position-matching-risk-margin.md) |
-| Desk extension notes | [09-trading-desk-extension.md](./09-trading-desk-extension.md) |
+| Credit, margin, and funding extension | [09-credit-margin-funding-extension.md](./09-credit-margin-funding-extension.md) |
+| Desk extension notes | [10-trading-desk-extension.md](./10-trading-desk-extension.md) |
 
 ## Main Docs
 
@@ -47,7 +49,8 @@ changes.
 | [06-version-contract-and-testing.md](./06-version-contract-and-testing.md) | How small scenarios compose into cross-version proof. |
 | [07-chapter-roadmap.md](./07-chapter-roadmap.md) | Canonical chapter order: semantic ramp, migration line, deep dives, appendix. |
 | [08-position-matching-risk-margin.md](./08-position-matching-risk-margin.md) | Later hot-path surfaces: matching internals, positions, margin, risk, projections. |
-| [09-trading-desk-extension.md](./09-trading-desk-extension.md) | Later desk layer: market data, pricing, routing, hedging, strategies. |
+| [09-credit-margin-funding-extension.md](./09-credit-margin-funding-extension.md) | Optional credit, collateral, funding, accrual, and liquidation settlement extension. |
+| [10-trading-desk-extension.md](./10-trading-desk-extension.md) | Later desk layer: market data, pricing, routing, hedging, strategies. |
 | [90-learning-plan.md](./90-learning-plan.md) | Supporting Java/Go learning guidance, not architecture truth. |
 
 ## Chapter Docs
@@ -99,6 +102,7 @@ changes.
 | [history/change_brief_02.md](./history/change_brief_02.md) | Documentation consolidation and bilingual cleanup. |
 | [history/change_brief_03.md](./history/change_brief_03.md) | Exchange semantic version-line reorganization. |
 | [history/change_brief_04.md](./history/change_brief_04.md) | Business semantic ramp before architecture migration. |
+| [history/change_brief_05.md](./history/change_brief_05.md) | Posted facts versus derived/prospective state boundary. |
 
 ## Maintenance Rules
 
@@ -126,6 +130,7 @@ changes.
 | 跟随架构迁移 | [Truth Source Migration](./04-truth-source-migration.md)，然后读第 05-09 章 |
 | 理解跨版本证明 | [Version Contract And Testing](./06-version-contract-and-testing.md)、[shared contracts](../shared/README.md)、[integration tests](../integration-tests/README.md) |
 | 理解热路径深挖 | [Position, Matching, Risk, And Margin](./08-position-matching-risk-margin.md)，然后读第 10-15 章 |
+| 理解 credit 和 funding 扩展 | [Credit, Margin, And Funding Extension](./09-credit-margin-funding-extension.md)，在热路径风控文档之后阅读 |
 | 运行当前代码 | shared Go 检查和第 08 章；附录 90-93 是 TODO 契约脚手架 |
 
 ## 当前真相源
@@ -141,7 +146,8 @@ changes.
 | 跨版本测试 | [06-version-contract-and-testing.md](./06-version-contract-and-testing.md) |
 | 章节顺序和状态 | [07-chapter-roadmap.md](./07-chapter-roadmap.md) |
 | 热路径交易语义 | [08-position-matching-risk-margin.md](./08-position-matching-risk-margin.md) |
-| 交易台扩展说明 | [09-trading-desk-extension.md](./09-trading-desk-extension.md) |
+| Credit、margin 和 funding 扩展 | [09-credit-margin-funding-extension.md](./09-credit-margin-funding-extension.md) |
+| 交易台扩展说明 | [10-trading-desk-extension.md](./10-trading-desk-extension.md) |
 
 ## 主文档
 
@@ -156,7 +162,8 @@ changes.
 | [06-version-contract-and-testing.md](./06-version-contract-and-testing.md) | 小场景如何组合成跨版本证明。 |
 | [07-chapter-roadmap.md](./07-chapter-roadmap.md) | 规范章节顺序：语义爬坡、迁移线、深挖、附录。 |
 | [08-position-matching-risk-margin.md](./08-position-matching-risk-margin.md) | 后续热路径表面：撮合内部、仓位、保证金、风控、projection。 |
-| [09-trading-desk-extension.md](./09-trading-desk-extension.md) | 后续交易台层：行情、定价、路由、对冲、策略。 |
+| [09-credit-margin-funding-extension.md](./09-credit-margin-funding-extension.md) | 可选 credit、collateral、funding、accrual 和强平结算扩展。 |
+| [10-trading-desk-extension.md](./10-trading-desk-extension.md) | 后续交易台层：行情、定价、路由、对冲、策略。 |
 | [90-learning-plan.md](./90-learning-plan.md) | Java/Go 学习指导，不是架构真相。 |
 
 ## 章节文档
@@ -208,6 +215,7 @@ changes.
 | [history/change_brief_02.md](./history/change_brief_02.md) | 文档合并与中英文整理。 |
 | [history/change_brief_03.md](./history/change_brief_03.md) | 交易所语义版本线重排。 |
 | [history/change_brief_04.md](./history/change_brief_04.md) | 架构迁移前增加业务语义爬坡。 |
+| [history/change_brief_05.md](./history/change_brief_05.md) | 已过账事实与派生/未来状态边界。 |
 
 ## 维护规则
 

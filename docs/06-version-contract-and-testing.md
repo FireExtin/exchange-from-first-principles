@@ -30,6 +30,10 @@ downstream systems observe. It includes:
 - margin and pre-trade risk decisions;
 - projection cursors, gap detection, rebuild, and read models.
 
+Tests should also preserve provenance: posted financial facts, operational
+state, and derived/prospective model state are allowed to interact, but they
+should not collapse into one unnamed balance row.
+
 `shared/go/exchange` defines the current contract surface. It is intentionally
 interface-first. Business implementations belong in version chapters, and only
 after the contract tests are clear.
@@ -87,6 +91,8 @@ Those pieces then compose into architecture-version scenarios:
 - replay preserves balances, orders, positions, and emitted facts;
 - replicated nodes applying the same command stream reach the same state;
 - SQL projection rebuilds a consistent read model from snapshot plus events.
+- marks, unrealized PnL, risk projections, and cache views do not create ledger
+  entries unless an explicit settlement/accrual event posts them.
 
 Current funds-prototype scenarios:
 
@@ -162,6 +168,9 @@ ordered command + deterministic transition -> new state + emitted facts
 - margin 和 pre-trade risk decisions；
 - projection cursors、gap detection、rebuild 和 read models。
 
+测试也应该保持 provenance：已过账财务事实、运营状态和派生/未来模型状态可以交互，
+但不应塌缩成一行没有来源的 balance。
+
 `shared/go/exchange` 定义当前契约表面。它刻意 interface-first。业务实现属于版本
 章节，而且要等契约测试清楚后再写。
 
@@ -214,6 +223,8 @@ go test -tags exchange_contract_todo ./exchange
 - replay 保持 balances、orders、positions 和 emitted facts 一致；
 - 复制节点应用同一命令流后达到相同状态；
 - SQL projection 从 snapshot 加 events 重建一致 read model。
+- marks、未实现 PnL、risk projections 和 cache views 不会创建 ledger entries，
+  除非显式 settlement/accrual 事件提交它们。
 
 当前 funds prototype 场景：
 

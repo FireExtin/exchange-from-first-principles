@@ -74,6 +74,26 @@ accounting teaching shape, but this repository's source of truth remains its
 own docs and contracts:
 [Accounting For Developers, Part II](https://www.moderntreasury.com/journal/accounting-for-developers-part-ii).
 
+## Posted Facts And Derived State
+
+The ledger owns posted historical financial facts. Business models,
+projections, marks, margin requirements, unrealized PnL, and risk views may
+describe future, derived, or operational state, but they must not masquerade as
+posted ledger truth.
+
+A derived value becomes ledger truth only when an explicit business event posts
+journal entries. Until then:
+
+- marks explain valuation, not cash movement;
+- unrealized PnL explains exposure, not settled profit;
+- risk projections can reject or alert, not silently mutate balances;
+- SQL projections can combine facts and model inputs, but must preserve where
+  each value came from.
+
+Modern Treasury's lending ledger article is a useful external reference for
+this boundary between posted historical data and model/prospective data:
+[Accounting For Developers, Part III](https://www.moderntreasury.com/journal/accounting-for-developers-part-iii).
+
 ## Commands And Events
 
 Commands express intent. Events express facts produced by the system.
@@ -234,6 +254,23 @@ old_state + command -> new_state + events
 Modern Treasury 的 wallet ledger 文章是一个有用的外部会计教学参考，但本仓库的真相
 源仍然是自己的文档和契约：
 [Accounting For Developers, Part II](https://www.moderntreasury.com/journal/accounting-for-developers-part-ii)。
+
+## 已过账事实与派生状态
+
+ledger 拥有已经发生的历史财务事实。业务模型、projection、mark、保证金要求、
+未实现 PnL 和 risk views 可以描述未来、派生或运营状态，但不能伪装成已过账的
+ledger truth。
+
+派生值只有在显式业务事件提交 journal entries 时，才会变成 ledger truth。在此之前：
+
+- mark 解释估值，不代表现金移动；
+- 未实现 PnL 解释敞口，不代表已结算利润；
+- risk projection 可以拒绝或报警，不能偷偷改余额；
+- SQL projection 可以组合事实和模型输入，但必须保留每个值的来源。
+
+Modern Treasury 的 lending ledger 文章是一个有用的外部参考，用来理解已过账历史数据
+和模型/未来数据之间的边界：
+[Accounting For Developers, Part III](https://www.moderntreasury.com/journal/accounting-for-developers-part-iii)。
 
 ## 命令与事件
 

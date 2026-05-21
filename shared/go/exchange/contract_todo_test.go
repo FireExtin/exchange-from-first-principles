@@ -56,12 +56,24 @@ func TestChapter05ACIDAdapterCommitsLedgerOrderExecutionAndPositionAtomically(t 
 	t.Fatal("TODO(exchange_contract_todo): chapter 05 ACID adapter must commit ledger, order/reservation, execution, and position facts atomically")
 }
 
+func TestExecutionFactsTranslateToLedgerPostingsAtSettlementBoundary(t *testing.T) {
+	t.Fatal("TODO(exchange_contract_todo): execution facts must become ledger postings through an explicit settlement boundary")
+}
+
 func TestExecutionFactsUpdatePositions(t *testing.T) {
 	t.Fatal("TODO(exchange_contract_todo): later contract scenario requires an adapter; do not implement position logic here")
 }
 
+func TestMarksAndUnrealizedPnLDoNotCreateLedgerEntries(t *testing.T) {
+	t.Fatal("TODO(exchange_contract_todo): marks and unrealized PnL are derived views and must not create ledger entries by themselves")
+}
+
 func TestMarginAndRiskRejectDangerousOrders(t *testing.T) {
 	t.Fatal("TODO(exchange_contract_todo): later contract scenario requires an adapter; do not implement risk logic here")
+}
+
+func TestRiskProjectionDoesNotSilentlyMutatePostedBalances(t *testing.T) {
+	t.Fatal("TODO(exchange_contract_todo): risk and projection state can reject or alert but must not silently mutate posted balances")
 }
 
 func TestReplayPreservesBalancesOrdersPositionsAndFacts(t *testing.T) {
@@ -74,4 +86,8 @@ func TestReplicatedNodesReachSameStateFromSameCommandStream(t *testing.T) {
 
 func TestSQLProjectionRebuildsReadModelFromSnapshotAndEvents(t *testing.T) {
 	t.Fatal("TODO(exchange_contract_todo): chapter 09 scenario requires an adapter; do not implement projection rebuild here")
+}
+
+func TestProjectionRebuildPreservesPostedAndDerivedProvenance(t *testing.T) {
+	t.Fatal("TODO(exchange_contract_todo): projection rebuild may combine posted facts and model inputs but must preserve provenance")
 }

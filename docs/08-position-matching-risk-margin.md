@@ -25,6 +25,18 @@ Different versions may place these responsibilities in SQL transactions,
 in-memory state, a replicated log, or SQL consumers. The external meaning should
 stay stable.
 
+## Posted Versus Derived State
+
+Execution settlement can create posted ledger facts. Positions are first-class
+state derived from execution facts. Mark-based valuation, unrealized PnL,
+margin requirements, and continuous risk views are derived or prospective state
+until an explicit accrual, settlement, liquidation, or fee event posts journal
+entries.
+
+Pre-trade risk can reject a command before it reaches matching. Warm-path risk
+can alert or trigger downstream workflows. Neither boundary should silently
+post ledger truth.
+
 ## Matching
 
 Matching semantics include:
@@ -75,7 +87,9 @@ Position semantics include:
 - rebuild from execution facts.
 
 The project should treat positions as first-class state. Matching creates
-execution facts; position management interprets them.
+execution facts; position management interprets them. Realized PnL only becomes
+posted ledger truth at an explicit settlement/accrual boundary. Unrealized PnL
+is a valuation view until then.
 
 ## Margin And Pre-Trade Risk
 
@@ -146,6 +160,15 @@ command
 不同版本可以把这些职责放在 SQL 事务、内存状态、复制日志或 SQL consumer 中。
 外部含义应该保持稳定。
 
+## 已过账状态与派生状态
+
+成交结算可以产生已过账 ledger facts。仓位是从 execution facts 派生出来的一等状态。
+基于 mark 的估值、未实现 PnL、保证金要求和持续风控视图，在显式 accrual、
+settlement、liquidation 或 fee 事件提交 journal entries 之前，都属于派生或未来状态。
+
+下单前风控可以在命令进入撮合前拒绝它。温路径风控可以报警或触发下游流程。两者都
+不应该偷偷提交 ledger truth。
+
 ## 撮合
 
 撮合语义包括：
@@ -192,7 +215,9 @@ Credit  User_A_BTC_Available           1
 - 确定性应用 execution report；
 - 从 execution facts 重建。
 
-项目应将仓位视为一等状态。撮合产生成交事实，仓位管理解释它们。
+项目应将仓位视为一等状态。撮合产生成交事实，仓位管理解释它们。已实现 PnL 只有在
+显式 settlement/accrual 边界才会成为已过账 ledger truth。未实现 PnL 在此之前是
+估值视图。
 
 ## 保证金和下单前风控
 

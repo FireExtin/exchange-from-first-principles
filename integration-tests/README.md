@@ -12,7 +12,8 @@ version through a small adapter.
 Future exchange scenarios should be composed from the first four teaching
 steps: custody/liability, balance states, order reservation, and
 match/settlement. Each scenario should check both the journal explanation and
-the externally visible state.
+the externally visible state. Projection scenarios should also prove that
+derived views are rebuildable and do not mutate ledger truth directly.
 
 ## Current Scaffold Shape
 
@@ -33,6 +34,7 @@ Future adapters should expose the `shared/go/exchange` behavior surface:
 - inspect emitted facts;
 - snapshot and restore where relevant;
 - verify projection cursors and rebuild results.
+- distinguish posted financial facts from derived model/projection state.
 
 Tests should assert externally visible semantics, not internal storage shape.
 If the SQL version, memory version, replicated-log version, and projection
@@ -52,6 +54,7 @@ Unimplemented exchange scenarios should remain behind the
 针对每个已实现版本运行。
 未来 exchange 场景应由前四个教学步骤组合而来：custody/liability、余额状态、
 订单冻结、撮合/结算。每个场景都应该同时检查 journal explanation 和外部可见状态。
+projection 场景还应证明派生视图可重建，并且不会直接改写 ledger truth。
 
 ## 当前脚手架形态
 
@@ -71,6 +74,7 @@ make test-todo-go
 - 检查 emitted facts；
 - 在相关版本中 snapshot 和 restore；
 - 验证 projection cursors 和 rebuild results。
+- 区分已过账财务事实和派生模型/projection 状态。
 
 测试应断言外部可见语义，而不是内部存储形状。如果 SQL 版本、内存版本、
 复制日志版本和 projection 版本都通过同一套场景，仓库就有了语义契约在架构迁移中

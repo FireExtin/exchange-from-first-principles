@@ -11,6 +11,9 @@ Purpose: explain how execution facts become positions and PnL placeholders.
 Position semantics are part of the cross-version proof: SQL, memory,
 replicated log, and projections should interpret the same executions
 consistently.
+Positions are first-class state, but PnL has boundaries. Realized PnL becomes
+posted ledger truth only at an explicit settlement or accrual event.
+Unrealized PnL is a mark-based valuation view until then.
 
 ## Status
 
@@ -25,6 +28,12 @@ Status: README only. No runnable implementation exists here yet.
 - cash and locked-fund hooks;
 - deterministic application of execution reports.
 
+## Boundary
+
+- execution facts update position state;
+- mark prices can update unrealized PnL views;
+- neither mark changes nor unrealized PnL create ledger entries by themselves.
+
 ## 中文
 
 > 你这周交易了五次 BTC。净仓位是多少？均价多少？盈亏多少？这章把成交事实转化成仓位数字。
@@ -33,6 +42,8 @@ Status: README only. No runnable implementation exists here yet.
 
 仓位语义是跨版本证明的一部分：SQL、内存、复制日志和 projection 应该一致解释
 同一组成交。
+仓位是一等状态，但 PnL 有边界。已实现 PnL 只有在显式 settlement 或 accrual 事件中
+才会成为已过账 ledger truth。未实现 PnL 在此之前是基于 mark 的估值视图。
 
 ## 状态
 
@@ -46,3 +57,9 @@ Status: README only. No runnable implementation exists here yet.
 - 未实现 PnL 占位；
 - cash 和 locked-fund hook；
 - 确定性应用 execution report。
+
+## 边界
+
+- execution facts 更新仓位状态；
+- mark prices 可以更新未实现 PnL 视图；
+- mark 变化和未实现 PnL 本身都不会创建 ledger entries。

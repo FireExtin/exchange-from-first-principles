@@ -37,7 +37,10 @@ chapters 01-04 introduced:
 | `executions` | Trade facts emitted by matching and consumed by settlement/projections. |
 | `positions` | Position facts derived from executions. |
 
-This is a conceptual map, not a schema requirement for this scaffold.
+This is a conceptual map, not a schema requirement for this scaffold. It also
+does not mean every row is ledger truth. SQL may store posted financial facts,
+operational rows, and derived/prospective model rows; only posted journal
+entries are ledger truth.
 
 ## Journal Template
 
@@ -60,6 +63,8 @@ chapters 01-04. It only gives them an atomic durability boundary.
 - One committed transaction explains one accepted business mutation.
 - Ledger entries balance per asset inside the committed transaction.
 - Order/reservation state and ledger state cannot commit separately.
+- Derived values such as unrealized PnL or mark-based margin do not become
+  ledger postings unless an explicit business event posts them.
 - Rows are queryable projections of committed facts.
 - Later outbox, memory-core, replicated-log, and projection versions must keep
   the same external semantics.
@@ -105,7 +110,9 @@ SQL 版本未来应该持久化第 01-04 章已经引入的同一组概念表面
 | `executions` | 撮合发出的成交事实，供结算和 projection 消费。 |
 | `positions` | 从 executions 推导的仓位事实。 |
 
-这是概念图谱，不是本脚手架要求实现的 schema。
+这是概念图谱，不是本脚手架要求实现的 schema。它也不表示每一行都是 ledger truth。
+SQL 可以存储已过账财务事实、运营行和派生/未来模型行；只有已过账 journal entries
+才是 ledger truth。
 
 ## 分录模板
 
@@ -127,6 +134,8 @@ SQL 事务不改变第 01-04 章 entries 的业务含义。它只给这些事实
 - 一次 committed transaction 解释一次 accepted business mutation。
 - ledger entries 在 committed transaction 内按资产分别平衡。
 - order/reservation state 和 ledger state 不能分开提交。
+- unrealized PnL 或基于 mark 的 margin 等派生值，不会在没有显式业务事件的情况下
+  变成 ledger postings。
 - rows 是 committed facts 的可查询 projection。
 - 后续 outbox、memory-core、replicated-log 和 projection 版本必须保持同一外部语义。
 

@@ -11,6 +11,8 @@ cached without breaking the semantic contract.
 
 Caches are consumer views. They must declare freshness, fail policy, rebuild
 path, and cursor/gap behavior.
+Mark prices and market state are model inputs for valuation and risk. Cache
+updates do not post money by themselves.
 
 ## Status
 
@@ -25,6 +27,13 @@ Status: README only. No runnable implementation exists here yet.
 - gap detection and rebuild;
 - fail-open versus fail-closed policy.
 
+## Boundary
+
+- cache values can influence admission and projections;
+- stale or missing cache values must produce explicit fail-open/fail-closed
+  behavior;
+- cache refreshes do not create ledger entries.
+
 ## 中文
 
 > 权限、mark price、instrument 规则——到处都在缓存。缓存多旧算太旧？落后了会怎样？这章给缓存立规矩：声明你的新鲜度保证，声明达不到时怎么办。
@@ -34,6 +43,7 @@ Status: README only. No runnable implementation exists here yet.
 
 缓存是 consumer view。它们必须声明新鲜度、失败策略、重建路径，以及 cursor/gap
 行为。
+mark price 和 market state 是估值和风控的模型输入。缓存更新本身不会过账资金。
 
 ## 状态
 
@@ -47,3 +57,9 @@ Status: README only. No runnable implementation exists here yet.
 - snapshot 加 versioned deltas；
 - gap detection 和 rebuild；
 - fail-open 与 fail-closed 策略。
+
+## 边界
+
+- cache values 可以影响准入和 projections；
+- cache 过期或缺失时必须产生显式 fail-open/fail-closed 行为；
+- cache refresh 不创建 ledger entries。
