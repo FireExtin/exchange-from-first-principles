@@ -61,14 +61,18 @@ Examples of values that should not post entries by themselves:
 - liquidation warning;
 - risk projection alert.
 
+## Chapter 18 Contract Lab
+
+Chapter 18 is the contract lab for this extension:
+
+18. [`18-credit-and-collateral-accounts-go`](../chapters/18-credit-and-collateral-accounts-go/README.md)
+    - Defines the shared `credit` contract surface.
+    - Adds TODO contract tests behind `credit_contract_todo`.
+    - Keeps all credit, funding, liquidation, and posting implementation blank.
+
 ## Planned Notes
 
-These are planned notes, not active chapter directories:
-
-18. `18-credit-and-collateral-accounts`
-    - Define collateral, borrow liability, insurance fund, and funding revenue
-      account purposes.
-    - Keep user liabilities, platform assets, and platform revenue separate.
+These remain planned notes, not active chapter directories:
 
 19. `19-funding-and-interest-accrual`
     - Explain accrual boundaries for funding, interest, and carry cost.
@@ -146,13 +150,18 @@ future schedules、accruals、collateral、risk views 和 settlement events 之�
 - liquidation warning；
 - risk projection alert。
 
+## 第 18 章契约实验
+
+第 18 章是这个扩展的契约实验：
+
+18. [`18-credit-and-collateral-accounts-go`](../chapters/18-credit-and-collateral-accounts-go/README.md)
+    - 定义共享 `credit` contract surface。
+    - 在 `credit_contract_todo` 后增加 TODO 契约测试。
+    - 保持所有信用、资金费率、强平和过账实现空白。
+
 ## 规划笔记
 
-这些是规划笔记，不是 active chapter directories：
-
-18. `18-credit-and-collateral-accounts`
-    - 定义 collateral、borrow liability、insurance fund 和 funding revenue 账户用途。
-    - 保持 user liabilities、platform assets 和 platform revenue 分离。
+这些仍然是规划笔记，不是 active chapter directories：
 
 19. `19-funding-and-interest-accrual`
     - 解释 funding、interest 和 carry cost 的 accrual 边界。

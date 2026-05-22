@@ -18,6 +18,8 @@ next architecture step becomes necessary.
 - Chapter READMEs own chapter-local behavior, pressure, and run commands.
 - `shared/README.md`, `shared/go/exchange`, and
   `integration-tests/README.md` own cross-version semantic contracts.
+- `shared/go/credit` owns the optional credit/margin/funding extension
+  contract.
 - `docs/history/change_brief_*.md` files are append-only historical records.
   Add a new brief for a meaningful documentation or architecture
   reorganization; do not rewrite old briefs to describe the latest state.
@@ -61,6 +63,7 @@ Useful focused commands:
 make test-todo-go
 cd chapters/92-wallet-idempotency-prototype-go && go test -tags reconciliation_lab_todo ./internal/reconciliation
 cd shared/go && go test -tags exchange_contract_todo ./exchange
+cd shared/go && go test -tags credit_contract_todo ./credit
 cd chapters/08-replicated-log-core-aeron-java && gradle --no-daemon clean test
 ```
 
@@ -74,6 +77,10 @@ implemented.
 
 The exchange contract tests are intentionally behind the
 `exchange_contract_todo` build tag and are expected to fail until adapters and
+implementations are written by the project owner.
+
+The credit extension contract tests are intentionally behind the
+`credit_contract_todo` build tag and are expected to fail until adapters and
 implementations are written by the project owner.
 
 For exercise, lab, and contract chapters, agents may add or refine interfaces,

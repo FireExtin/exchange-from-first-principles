@@ -144,13 +144,20 @@ tests are expected to fail at TODO boundaries until implemented.
 
 ## Credit, Margin, And Funding Extension
 
-These planned notes are optional exchange-core extensions. They borrow only the
-lending concepts needed for margin and funding semantics; they are not a
-Modern Lending product track.
+These are optional exchange-core extensions. They borrow only the lending
+concepts needed for margin and funding semantics; they are not a Modern Lending
+product track.
 
-18. `18-credit-and-collateral-accounts`
+18. `18-credit-and-collateral-accounts-go`
+    - Purpose: define collateral, borrow liability, funding accrual, repayment,
+      and liquidation settlement contract boundaries.
+    - Status: contract scaffold.
+
 19. `19-funding-and-interest-accrual`
+    - Status: planned note.
+
 20. `20-liquidation-and-repayment-settlement`
+    - Status: planned note.
 
 ## Trading Desk Extension
 
@@ -329,12 +336,19 @@ Go 资金附录章节保留为契约脚手架。它们是有用练习，但不�
 
 ## Credit, Margin, And Funding 扩展
 
-这些规划笔记是可选 exchange-core 扩展。它们只借用解释 margin 和 funding 语义所需的
+这些是可选 exchange-core 扩展。它们只借用解释 margin 和 funding 语义所需的
 lending 概念；不是 Modern Lending 产品线。
 
-18. `18-credit-and-collateral-accounts`
+18. `18-credit-and-collateral-accounts-go`
+    - 目的：定义 collateral、borrow liability、funding accrual、repayment 和
+      liquidation settlement 的契约边界。
+    - 状态：契约脚手架。
+
 19. `19-funding-and-interest-accrual`
+    - 状态：规划笔记。
+
 20. `20-liquidation-and-repayment-settlement`
+    - 状态：规划笔记。
 
 ## 交易台扩展
 

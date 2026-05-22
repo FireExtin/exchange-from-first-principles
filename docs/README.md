@@ -74,6 +74,7 @@ changes.
 | 15 | [Market And Execution Push](../chapters/15-market-execution-push/README.md) | README only |
 | 16 | [Rust Hot Path](../chapters/16-rust-hot-path/README.md) | README only |
 | 17 | [Low-Latency Runtime And Networking](../chapters/17-low-latency-runtime-networking/README.md) | README only |
+| 18 | [Credit And Collateral Accounts](../chapters/18-credit-and-collateral-accounts-go/README.md) | Contract scaffold |
 
 ## Appendix Prototypes
 
@@ -104,6 +105,7 @@ changes.
 | [history/change_brief_04.md](./history/change_brief_04.md) | Business semantic ramp before architecture migration. |
 | [history/change_brief_05.md](./history/change_brief_05.md) | Posted facts versus derived/prospective state boundary. |
 | [history/change_brief_06.md](./history/change_brief_06.md) | Credit, margin, and funding extension before trading desk. |
+| [history/change_brief_07.md](./history/change_brief_07.md) | Credit/margin/funding contract lab. |
 
 ## Maintenance Rules
 
@@ -188,6 +190,7 @@ changes.
 | 15 | [Market And Execution Push](../chapters/15-market-execution-push/README.md) | 仅 README |
 | 16 | [Rust Hot Path](../chapters/16-rust-hot-path/README.md) | 仅 README |
 | 17 | [Low-Latency Runtime And Networking](../chapters/17-low-latency-runtime-networking/README.md) | 仅 README |
+| 18 | [信用与抵押账户](../chapters/18-credit-and-collateral-accounts-go/README.md) | 契约脚手架 |
 
 ## 附录原型
 
@@ -218,6 +221,7 @@ changes.
 | [history/change_brief_04.md](./history/change_brief_04.md) | 架构迁移前增加业务语义爬坡。 |
 | [history/change_brief_05.md](./history/change_brief_05.md) | 已过账事实与派生/未来状态边界。 |
 | [history/change_brief_06.md](./history/change_brief_06.md) | 交易台之前增加 credit、margin 和 funding 扩展。 |
+| [history/change_brief_07.md](./history/change_brief_07.md) | Credit/margin/funding 契约实验。 |
 
 ## 维护规则
 

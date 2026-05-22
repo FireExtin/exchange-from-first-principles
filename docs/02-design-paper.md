@@ -521,7 +521,7 @@ about best execution. Pre-trade risk should not become a strategy engine.
 | Business semantic ramp | 01-04 | Custody/user liability, balance states, reservation/release, matching and settlement |
 | Architecture migration line | 05-09 | ACID SQL, SQL facts/outbox, memory core, replicated log, SQL projections |
 | Domain and runtime deep dives | 10-17 | Order book mechanics, position/PnL, margin/risk, risk projection, cache coherence, push, Rust, runtime/networking |
-| Credit/margin/funding extension | 18-20 | Collateral, borrow liability, funding accrual, repayment, liquidation settlement |
+| Credit/margin/funding extension | 18-20 | Chapter 18 contract lab, then planned funding accrual and liquidation settlement notes |
 | Desk extension | 21-25 | External market data, pricing, routing, hedging, best execution, simple strategy |
 | Appendix prototypes | 90-93 | Earlier Go funds contract scaffolds |
 
@@ -911,7 +911,7 @@ matching
 | 业务语义爬坡 | 01-04 | custody/user liability、余额状态、冻结/释放、撮合与结算 |
 | 架构迁移线 | 05-09 | ACID SQL、SQL facts/outbox、内存核心、复制日志、SQL projections |
 | 领域与运行时深挖 | 10-17 | 订单簿机制、仓位/PnL、保证金/风控、风险投影、缓存一致性、推送、Rust、运行时/网络 |
-| Credit/margin/funding 扩展 | 18-20 | collateral、borrow liability、funding accrual、repayment、liquidation settlement |
+| Credit/margin/funding 扩展 | 18-20 | 第 18 章契约实验，随后是 funding accrual 和 liquidation settlement 规划笔记 |
 | 交易台扩展 | 21-25 | 外部行情、定价、路由、对冲、最优执行、简单策略 |
 | 附录原型 | 90-93 | 早期 Go 资金契约脚手架 |
 
