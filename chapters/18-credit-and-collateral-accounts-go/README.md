@@ -36,6 +36,26 @@ journal entries.
 | `Platform_FundingRevenue_USD` | platform | funding revenue | Funding or interest revenue once accrual posts. |
 | `Platform_InsuranceFund_USD` | platform | insurance fund | Buffer used for liquidation loss or bad debt workflows. |
 
+## Posting Matrix
+
+```text
+Collateral pledge
+
+Accounts                  User_A_USD_Available   User_A_USD_Collateral
+Account type              Credit normal          Credit normal
+                           Debits     Credits     Debits     Credits
+User pledges 100 USD       100                   -          100
+```
+
+```text
+Funding accrual
+
+Accounts                  User_A_USD_Available   Platform_FundingRevenue_USD
+Account type              Credit normal          Credit normal
+                           Debits     Credits     Debits     Credits
+Accrue 5 USD funding       5                     -          5
+```
+
 ## Journal Boundaries
 
 Examples that may post entries:
@@ -124,6 +144,26 @@ owner implements adapters and exercise logic.
 | `User_A_USD_BorrowLiability` | 用户 A | borrow liability | 借款提款后用户欠下的金额。 |
 | `Platform_FundingRevenue_USD` | 平台 | funding revenue | 计提过账后的资金费率或利息收入。 |
 | `Platform_InsuranceFund_USD` | 平台 | insurance fund | 用于强平损失或坏账流程的缓冲。 |
+
+## 过账矩阵
+
+```text
+质押抵押品
+
+账户                      User_A_USD_Available   User_A_USD_Collateral
+账户类型                  Credit normal          Credit normal
+                           Debits     Credits     Debits     Credits
+用户质押 100 USD           100                   -          100
+```
+
+```text
+资金费率计提
+
+账户                      User_A_USD_Available   Platform_FundingRevenue_USD
+账户类型                  Credit normal          Credit normal
+                           Debits     Credits     Debits     Credits
+计提 5 USD 资金费率         5                     -          5
+```
 
 ## 分录边界
 

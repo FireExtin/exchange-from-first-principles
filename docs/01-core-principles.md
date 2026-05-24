@@ -90,6 +90,22 @@ journal entries. Until then:
 - SQL projections can combine facts and model inputs, but must preserve where
   each value came from.
 
+```mermaid
+flowchart LR
+    Events[Business events]
+    Posted[Posted ledger facts]
+    Model[Models and schedules]
+    Views[Derived views]
+    UI[User and operator views]
+
+    Events -->|post journal entries| Posted
+    Posted -->|historical information| Model
+    Model -->|marks, requirements, schedules| Views
+    Posted -->|balances and audit trail| Views
+    Views --> UI
+    Views -. must not silently mutate .-> Posted
+```
+
 Modern Treasury's lending ledger article is a useful external reference for
 this boundary between posted historical data and model/prospective data:
 [Accounting For Developers, Part III](https://www.moderntreasury.com/journal/accounting-for-developers-part-iii).
@@ -267,6 +283,22 @@ ledger truth。
 - 未实现 PnL 解释敞口，不代表已结算利润；
 - risk projection 可以拒绝或报警，不能偷偷改余额；
 - SQL projection 可以组合事实和模型输入，但必须保留每个值的来源。
+
+```mermaid
+flowchart LR
+    Events[业务事件]
+    Posted[已过账账本事实]
+    Model[模型与计划]
+    Views[派生视图]
+    UI[用户和运营视图]
+
+    Events -->|提交 journal entries| Posted
+    Posted -->|历史信息| Model
+    Model -->|mark、要求、计划| Views
+    Posted -->|余额和审计轨迹| Views
+    Views --> UI
+    Views -. 不能偷偷改写 .-> Posted
+```
 
 Modern Treasury 的 lending ledger 文章是一个有用的外部参考，用来理解已过账历史数据
 和模型/未来数据之间的边界：

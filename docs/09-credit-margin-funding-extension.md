@@ -41,6 +41,26 @@ accruals, collateral, risk views, and settlement events.
 | Margin requirement | Risk model output used for admission and liquidation checks | Derived/prospective; not ledger truth by itself. |
 | Liquidation | Forced settlement that reduces risk after margin failure | Ledger event when execution, fee, or seizure posts. |
 
+## Extension Flow
+
+```mermaid
+flowchart LR
+    Spot[Spot exchange facts]
+    Credit[Credit contract lab]
+    Model[Funding schedule and margin model]
+    Accrual[Explicit accrual or settlement event]
+    Ledger[Posted ledger entries]
+    Views[Credit and risk views]
+
+    Spot --> Credit
+    Credit -->|collateral, borrow, repayment commands| Accrual
+    Credit --> Model
+    Model -->|derived requirements and warnings| Views
+    Accrual --> Ledger
+    Ledger --> Views
+    Views -. no silent mutation .-> Ledger
+```
+
 ## Journal Boundaries
 
 Examples of events that may post entries:
@@ -129,6 +149,26 @@ future schedules、accruals、collateral、risk views 和 settlement events 之�
 | Funding / interest | 持仓或借款的持有成本 | 在显式 accrual 提交 entries 前是派生值。 |
 | Margin requirement | 用于准入和强平检查的风险模型输出 | 派生/未来状态，本身不是 ledger truth。 |
 | Liquidation | margin failure 后降低风险的强制结算 | execution、fee 或 seizure 过账时成为 ledger event。 |
+
+## 扩展流程
+
+```mermaid
+flowchart LR
+    Spot[现货交易所事实]
+    Credit[Credit 契约实验]
+    Model[资金费率计划和保证金模型]
+    Accrual[显式计提或结算事件]
+    Ledger[已过账 ledger entries]
+    Views[信用和风控视图]
+
+    Spot --> Credit
+    Credit -->|抵押、借款、还款命令| Accrual
+    Credit --> Model
+    Model -->|派生要求和预警| Views
+    Accrual --> Ledger
+    Ledger --> Views
+    Views -. 不能偷偷改写 .-> Ledger
+```
 
 ## 分录边界
 
