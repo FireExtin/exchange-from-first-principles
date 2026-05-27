@@ -57,26 +57,26 @@ that page for reading order, source-of-truth ownership, and chapter status.
 
 | Chapter | Topic | Status |
 | --- | --- | --- |
-| 01 | [Custody and user ledger](./chapters/01-custody-and-user-ledger-go/README.md) | Contract scaffold |
-| 02 | [Balance states](./chapters/02-balance-states-go/README.md) | Contract scaffold |
-| 03 | [Order reservation](./chapters/03-order-reservation-go/README.md) | Contract scaffold |
-| 04 | [Match and settlement](./chapters/04-match-and-settlement-go/README.md) | Contract scaffold |
-| 05 | [ACID SQL exchange](./chapters/05-acid-sql-exchange-go/README.md) | Contract scaffold |
-| 06 | [SQL facts and outbox](./chapters/06-sql-facts-outbox-go/README.md) | Contract scaffold |
-| 07 | [Single-node memory core](./chapters/07-single-node-memory-core-java/README.md) | README scaffold |
+| 01 | [Custody and user ledger](./chapters/01-custody-and-user-ledger-go/README.md) | Interface contracts |
+| 02 | [Balance states](./chapters/02-balance-states-go/README.md) | Interface contracts |
+| 03 | [Order reservation](./chapters/03-order-reservation-go/README.md) | Interface contracts |
+| 04 | [Match and settlement](./chapters/04-match-and-settlement-go/README.md) | Interface contracts |
+| 05 | [ACID SQL exchange](./chapters/05-acid-sql-exchange-go/README.md) | Interface contracts |
+| 06 | [SQL facts and outbox](./chapters/06-sql-facts-outbox-go/README.md) | Interface contracts |
+| 07 | [Single-node memory core](./chapters/07-single-node-memory-core-java/README.md) | Architecture specification |
 | 08 | [Replicated log core](./chapters/08-replicated-log-core-aeron-java/README.md) | Runnable Java skeleton |
-| 09 | [SQL projection consumers](./chapters/09-sql-projection-consumers/README.md) | README scaffold |
-| 10 | [Order book mechanics](./chapters/10-order-book-mechanics/README.md) | README only |
-| 11 | [Position and PnL](./chapters/11-position-and-pnl/README.md) | README only |
-| 12 | [Margin and pre-trade risk](./chapters/12-margin-and-pretrade-risk/README.md) | README only |
-| 13 | [Risk cluster projection](./chapters/13-risk-cluster-projection/README.md) | README only |
-| 14 | [Cache coherence and market state](./chapters/14-cache-coherence-and-market-state/README.md) | README only |
-| 15 | [Market and execution push](./chapters/15-market-execution-push/README.md) | README only |
-| 16 | [Rust hot path](./chapters/16-rust-hot-path/README.md) | README only |
-| 17 | [Low-latency runtime and networking](./chapters/17-low-latency-runtime-networking/README.md) | README only |
-| 18 | [Credit and collateral accounts](./chapters/18-credit-and-collateral-accounts-go/README.md) | Contract scaffold |
-| 19-20 | Credit, margin, and funding extension ideas | Planned notes only |
-| 21-25 | Trading desk extension ideas | Planned notes only |
+| 09 | [SQL projection consumers](./chapters/09-sql-projection-consumers/README.md) | Architecture specification |
+| 10 | [Order book mechanics](./chapters/10-order-book-mechanics/README.md) | Architecture specification |
+| 11 | [Position and PnL](./chapters/11-position-and-pnl/README.md) | Architecture specification |
+| 12 | [Margin and pre-trade risk](./chapters/12-margin-and-pretrade-risk/README.md) | Architecture specification |
+| 13 | [Risk cluster projection](./chapters/13-risk-cluster-projection/README.md) | Architecture specification |
+| 14 | [Cache coherence and market state](./chapters/14-cache-coherence-and-market-state/README.md) | Architecture specification |
+| 15 | [Market and execution push](./chapters/15-market-execution-push/README.md) | Architecture specification |
+| 16 | [Rust hot path](./chapters/16-rust-hot-path/README.md) | Architecture specification |
+| 17 | [Low-latency runtime and networking](./chapters/17-low-latency-runtime-networking/README.md) | Architecture specification |
+| 18 | [Credit and collateral accounts](./chapters/18-credit-and-collateral-accounts-go/README.md) | Interface contracts |
+| 19-20 | Credit, margin, and funding extension ideas | Architecture notes |
+| 21-25 | Trading desk extension ideas | Architecture notes |
 
 ### Appendix Prototypes
 
@@ -85,10 +85,10 @@ useful exercises, but they are not the new canonical teaching sequence.
 
 | Chapter | Topic | Status |
 | --- | --- | --- |
-| 90 | [Funds double-entry prototype](./chapters/90-funds-double-entry-prototype-go/README.md) | Contract scaffold |
-| 91 | [Spot settlement transaction prototype](./chapters/91-spot-settlement-transaction-prototype-go/README.md) | Contract scaffold |
-| 92 | [Wallet idempotency prototype](./chapters/92-wallet-idempotency-prototype-go/README.md) | Contract scaffold plus reconciliation lab |
-| 93 | [Command log replay prototype](./chapters/93-command-log-replay-prototype-go/README.md) | Contract scaffold |
+| 90 | [Funds double-entry prototype](./chapters/90-funds-double-entry-prototype-go/README.md) | Interface contracts |
+| 91 | [Spot settlement transaction prototype](./chapters/91-spot-settlement-transaction-prototype-go/README.md) | Interface contracts |
+| 92 | [Wallet idempotency prototype](./chapters/92-wallet-idempotency-prototype-go/README.md) | Interface contracts with reconciliation lab |
+| 93 | [Command log replay prototype](./chapters/93-command-log-replay-prototype-go/README.md) | Interface contracts |
 
 ### Repository Layout
 
@@ -210,26 +210,26 @@ recovery 都必须在架构迁移中保持可解释。
 
 | 章节 | 主题 | 状态 |
 | --- | --- | --- |
-| 01 | [托管与用户账本](./chapters/01-custody-and-user-ledger-go/README.md) | 契约脚手架 |
-| 02 | [余额状态](./chapters/02-balance-states-go/README.md) | 契约脚手架 |
-| 03 | [订单冻结](./chapters/03-order-reservation-go/README.md) | 契约脚手架 |
-| 04 | [撮合与结算](./chapters/04-match-and-settlement-go/README.md) | 契约脚手架 |
-| 05 | [ACID SQL exchange](./chapters/05-acid-sql-exchange-go/README.md) | 契约脚手架 |
-| 06 | [SQL facts and outbox](./chapters/06-sql-facts-outbox-go/README.md) | 契约脚手架 |
-| 07 | [单机内存核心](./chapters/07-single-node-memory-core-java/README.md) | README 脚手架 |
+| 01 | [托管与用户账本](./chapters/01-custody-and-user-ledger-go/README.md) | 接口契约 |
+| 02 | [余额状态](./chapters/02-balance-states-go/README.md) | 接口契约 |
+| 03 | [订单冻结](./chapters/03-order-reservation-go/README.md) | 接口契约 |
+| 04 | [撮合与结算](./chapters/04-match-and-settlement-go/README.md) | 接口契约 |
+| 05 | [ACID SQL exchange](./chapters/05-acid-sql-exchange-go/README.md) | 接口契约 |
+| 06 | [SQL facts and outbox](./chapters/06-sql-facts-outbox-go/README.md) | 接口契约 |
+| 07 | [单机内存核心](./chapters/07-single-node-memory-core-java/README.md) | 架构规范 |
 | 08 | [复制日志核心](./chapters/08-replicated-log-core-aeron-java/README.md) | 可运行 Java 骨架 |
-| 09 | [SQL projection consumers](./chapters/09-sql-projection-consumers/README.md) | README 脚手架 |
-| 10 | [订单簿机制](./chapters/10-order-book-mechanics/README.md) | 仅 README |
-| 11 | [仓位和 PnL](./chapters/11-position-and-pnl/README.md) | 仅 README |
-| 12 | [保证金与下单前风控](./chapters/12-margin-and-pretrade-risk/README.md) | 仅 README |
-| 13 | [风控集群 projection](./chapters/13-risk-cluster-projection/README.md) | 仅 README |
-| 14 | [缓存一致性与市场状态](./chapters/14-cache-coherence-and-market-state/README.md) | 仅 README |
-| 15 | [行情与成交推送](./chapters/15-market-execution-push/README.md) | 仅 README |
-| 16 | [Rust 热路径](./chapters/16-rust-hot-path/README.md) | 仅 README |
-| 17 | [低延迟运行时与网络](./chapters/17-low-latency-runtime-networking/README.md) | 仅 README |
-| 18 | [信用与抵押账户](./chapters/18-credit-and-collateral-accounts-go/README.md) | 契约脚手架 |
-| 19-20 | 信用、保证金和资金费率扩展想法 | 仅规划笔记 |
-| 21-25 | 交易台扩展想法 | 仅规划笔记 |
+| 09 | [SQL projection consumers](./chapters/09-sql-projection-consumers/README.md) | 架构规范 |
+| 10 | [订单簿机制](./chapters/10-order-book-mechanics/README.md) | 架构规范 |
+| 11 | [仓位和 PnL](./chapters/11-position-and-pnl/README.md) | 架构规范 |
+| 12 | [保证金与下单前风控](./chapters/12-margin-and-pretrade-risk/README.md) | 架构规范 |
+| 13 | [风控集群 projection](./chapters/13-risk-cluster-projection/README.md) | 架构规范 |
+| 14 | [缓存一致性与市场状态](./chapters/14-cache-coherence-and-market-state/README.md) | 架构规范 |
+| 15 | [行情与成交推送](./chapters/15-market-execution-push/README.md) | 架构规范 |
+| 16 | [Rust 热路径](./chapters/16-rust-hot-path/README.md) | 架构规范 |
+| 17 | [低延迟运行时与网络](./chapters/17-low-latency-runtime-networking/README.md) | 架构规范 |
+| 18 | [信用与抵押账户](./chapters/18-credit-and-collateral-accounts-go/README.md) | 接口契约 |
+| 19-20 | 信用、保证金和资金费率扩展想法 | 架构笔记 |
+| 21-25 | 交易台扩展想法 | 架构笔记 |
 
 ### 附录原型
 
@@ -237,10 +237,10 @@ recovery 都必须在架构迁移中保持可解释。
 
 | 章节 | 主题 | 状态 |
 | --- | --- | --- |
-| 90 | [资金 double-entry 原型](./chapters/90-funds-double-entry-prototype-go/README.md) | 契约脚手架 |
-| 91 | [现货结算事务原型](./chapters/91-spot-settlement-transaction-prototype-go/README.md) | 契约脚手架 |
-| 92 | [钱包幂等原型](./chapters/92-wallet-idempotency-prototype-go/README.md) | 契约脚手架，含对账实验 |
-| 93 | [命令日志重放原型](./chapters/93-command-log-replay-prototype-go/README.md) | 契约脚手架 |
+| 90 | [资金 double-entry 原型](./chapters/90-funds-double-entry-prototype-go/README.md) | 接口契约 |
+| 91 | [现货结算事务原型](./chapters/91-spot-settlement-transaction-prototype-go/README.md) | 接口契约 |
+| 92 | [钱包幂等原型](./chapters/92-wallet-idempotency-prototype-go/README.md) | 接口契约，含对账实验 |
+| 93 | [命令日志重放原型](./chapters/93-command-log-replay-prototype-go/README.md) | 接口契约 |
 
 ### 仓库结构
 
